@@ -30,6 +30,4 @@ export default {
 
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubSecret: process.env.GITHUB_SECRET,
-
-
 };
