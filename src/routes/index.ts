@@ -12,4 +12,4 @@ router.use('/my', myRouter);
 router.use('/reminder', reminderRouter);
 
 
-module.exports = router;
+export default router;

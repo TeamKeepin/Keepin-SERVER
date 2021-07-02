@@ -1,7 +1,9 @@
 import express from "express";
+import indexRouter from "./routes";
 import connectDB from "./loader/db";
 
 const app = express();
+
 
 // Connect Database
 connectDB();
@@ -9,7 +11,7 @@ connectDB();
 app.use(express.json());
 
 // Define Routes
-
+app.use("/", indexRouter);
 
 // error handler
 app.use(function (err, req, res, next) {
