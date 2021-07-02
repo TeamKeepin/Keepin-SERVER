@@ -1,9 +1,10 @@
 import express from "express";
+import connectDB from "./loader/db";
+
 const app = express();
-// import connectDB from "./loader/db";
 
 // Connect Database
-// connectDB();
+connectDB();
 
 app.use(express.json());
 

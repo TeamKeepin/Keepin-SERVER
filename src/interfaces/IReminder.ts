@@ -6,4 +6,4 @@ export interface IReminder {
     alarm: boolean;
     important: boolean;
     userIdx: mongoose.Types.ObjectId;
-}
+} 
