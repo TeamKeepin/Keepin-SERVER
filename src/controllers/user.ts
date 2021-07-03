@@ -52,9 +52,7 @@ const signUp = async (req: Request, res: Response) => {
 
         //Return jsonwebtoken
         const payload = {
-            user: {
-                email: user.email,
-            },
+            email: email
         };
         jwt.sign(
             payload,
@@ -88,6 +86,9 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
     try {
         let user = await userService.findUser({email});
+        console.log(user)
+        console.log(user._id)
+        console.log(user.email)
         if(!user) {
             res.status(400).json({
                 errors: [{ msg: "User data 없음" }],
@@ -105,9 +106,8 @@ const signIn = async (req, res) => {
 
         // Return jsonwebtoken
         const payload = {
-            user: {
-            email: user.email,
-            },
+            id: user._id,
+            email: user.email
         };
         jwt.sign(
             payload,
