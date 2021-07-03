@@ -13,18 +13,27 @@ export interface userFindInput {
     email: string
 }
 
+export interface userIdxInput {
+  userIdx: string
+}
+
 const saveUser = (data: userCreateInput) => {
     // console.log(data);
     return User.create( data );
 }
 
 const findUser = (data: userFindInput) => {
-  const num = User.findOne({email:data.email});
-  // console.log(num);
-  return num
+  const user = User.findOne({email:data.email});
+  return user
+}
+
+const findUserbyIdx = (data: userIdxInput) => {
+  const user = User.findOne({userIdx:data.userIdx});
+  return user
 }
 
 export default {
   saveUser,
-  findUser
+  findUser,
+  findUserbyIdx
 }

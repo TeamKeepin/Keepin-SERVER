@@ -9,16 +9,16 @@ const ReminderSchema = new mongoose.Schema({
     date: {
       type: String,
       required: true,
-      unique: true,
     },
     sendDate: {
       type: String,
+      default: 0
     },
-    alarm: {
+    isAlarm: {
         type: Boolean,
         default: 0,
     },
-    important: {
+    isImportant: {
         type: Boolean,
         default: 0,
     },
