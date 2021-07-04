@@ -11,9 +11,9 @@ const createReminder = async (req, res) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
-        res.status(400).json({
+        res.status(returnCode.BAD_REQUEST).json({
             status: returnCode.BAD_REQUEST,
-            errors: [{ msg: "요청바디가 없습니다." }],
+            errors: [{ status: returnCode.BAD_REQUEST, message: "요청바디가 없습니다." }],
         });
     }
 
@@ -21,8 +21,9 @@ const createReminder = async (req, res) => {
     // 파라미터 확인
     if (!title || !date || isAlarm==undefined || isImportant==undefined) {
         console.log({title,date,isAlarm,isImportant});
-        res.status(400).json({
-            msg: '필수 정보를 입력하세요.'
+        res.status(returnCode.BAD_REQUEST).json({
+            status: returnCode.BAD_REQUEST,
+            message: '필수 정보를 입력하세요.'
         });
         return;
       }
@@ -34,8 +35,8 @@ const createReminder = async (req, res) => {
             var realDate = moment(date).subtract(daysAgo, 'd').format('YYYYMMDD');
 
         } else {
-            res.status(400).json({
-                msg: 'daysAgo 값이 유효하지 않습니다.'
+            res.status(returnCode.BAD_REQUEST).json({
+                status: returnCode.BAD_REQUEST, message: 'daysAgo 값이 유효하지 않습니다.'
             });
             return;
         }
@@ -53,33 +54,41 @@ const createReminder = async (req, res) => {
         };
   
       await reminderService.saveReminder({  title, date, sendDate: realDate, isAlarm, isImportant, userIdx });
-      return res.status(200).json({msg: '리마인더 생성 성공', data});
+      return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 생성 성공', data});
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            errors: [{ msg: err.message }],
+            errors: [{ status: returnCode.INTERNAL_SERVER_ERROR, message: err.message }],
         });
     }
 }
 
+// 리마인더 모든 목록 조회
 const getAllReminder = async (req, res) => {
+    const userIdx = req._id;
     const errors = validationResult(req);
-    if (!errors.isEmpty()){
-        res.status(400).json({
+
+    if(!errors.isEmpty()){
+        res.status(returnCode.BAD_REQUEST).json({
             status: returnCode.BAD_REQUEST,
-            errors: [{ msg: "요청바디가 없습니다." }],
+            errors: [{status: returnCode.BAD_REQUEST, message: "요청바디가 없습니다." }],
         });
     }
-    const { email, password } = req.body;
+
     try {
-        
+
+        const result = await reminderService.findReminder({userIdx:userIdx});
+        const data = {result:result}; 
+  
+      return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 목록 조회 성공', data});
+
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            errors: [{ msg: err.message }],
+            errors: [{status: returnCode.INTERNAL_SERVER_ERROR, message: err.message }],
         });
     }
 }
