@@ -24,6 +24,7 @@ const saveUser = (data: userCreateInput) => {
 
 const findUser = (data: userFindInput) => {
   const user = User.findOne({email:data.email});
+  console.log("user: "+user)
   return user
 }
 

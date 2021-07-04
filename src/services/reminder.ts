@@ -10,18 +10,18 @@ export interface reminderCreateInput {
     userIdx: string
 }
 export interface reminderFindInput {
-    _id: string
+  userIdx: string
 }
 
 const saveReminder = (data: reminderCreateInput) => {
-    // console.log(data);
-    return Reminder.create( data );
+  return Reminder.create(data);
 }
 
 const findReminder = (data: reminderFindInput) => {
-  // const num = Reminder.findOne({email:data.email});
-  // // console.log(num);
-  // return num
+  const result = Reminder.find({
+    userIdx: data.userIdx,
+  }).sort({ date: 1 }); //가까운 순으로 정렬
+  return result;
 }
 
 export default {
