@@ -8,6 +8,44 @@ import { userService } from "../services";
 const returnCode = require('../library/returnCode');
 
 
+/**
+ * @api {post} /user/signup 회원가입
+ * 
+ * @apiVersion 1.0.0
+ * @apiName SignUp
+ * @apiGroup User
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "email": "keepin@gmail.com",
+ *  "password": "1234abcd",
+ *  // ...
+ * }
+ *
+ * @apiSuccess {String} jwt
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * 200 OK
+ * {
+ *  "status": 200,
+ *  "data": {
+ *    "jwt":""
+ *  }
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * 400 아이디 중복
+ * {
+ *  "status": 400,
+ *  "message": "이미 사용 중인 아이디입니다."
+ * }
+ */
+
 const signUp = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -73,6 +111,7 @@ const signUp = async (req: Request, res: Response) => {
     }
 }
 
+
 const signIn = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()){
@@ -125,11 +164,12 @@ const signIn = async (req, res) => {
 const getProfile = async(req,res) => {
     const userIdx = req._id;
     try{
-        const profile = await userService.findUserProfile({userIdx});
+        const data = await userService.findUserProfile({userIdx});
 
         return res.status(200).json({
+            status: 200,
             msg: '프로필 조회 성공',
-            profile //이름, 이메일, 비밀번호, 생일 
+            data  //이름, 이메일, 비밀번호, 생일 
         });
     }catch(err){
         console.error(err.message);
