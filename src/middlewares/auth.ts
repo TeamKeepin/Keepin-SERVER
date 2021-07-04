@@ -26,7 +26,6 @@ export default {
       return res.status(405).json({message: '유효하지 않은 토큰입니다.'});
     }
 
-  
     const userEmail = user.email;
     const userIdx = user.id;
     
