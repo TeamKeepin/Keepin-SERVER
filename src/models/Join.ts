@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import {IJoin} from "../interfaces/IJoin";
 
 const JoinSchema = new mongoose.Schema({
-    userIdx: {
+    keepinIdx: {
         type: mongoose.SchemaTypes.ObjectId,  //foreign key느낌 
-        ref: "User", 
+        ref: "Keepin", 
         required: true,
       },
     friendIdx: {
@@ -14,4 +14,5 @@ const JoinSchema = new mongoose.Schema({
       },
   });
   
+
   export default mongoose.model<IJoin & mongoose.Document>("Join", JoinSchema);

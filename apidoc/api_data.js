@@ -39,7 +39,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "200 OK\n{\n \"status\": 200,\n \"data\": {\n   \"jwt\":\"\"\n }\n}",
+          "content": "200 OK\n{\n \"status\": 200,\n \"message\":    ,\n \"data\": {\n   \"jwt\":\"\"\n }\n}",
           "type": "json"
         }
       ]

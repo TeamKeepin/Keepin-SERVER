@@ -33,6 +33,7 @@ const returnCode = require('../library/returnCode');
  * 200 OK
  * {
  *  "status": 200,
+ *  "message":    ,
  *  "data": {
  *    "jwt":""
  *  }
@@ -123,9 +124,9 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
     try {
         let user = await userService.findUser({email});
-        console.log(user)
-        console.log(user._id)
-        console.log(user.email)
+        // console.log(user)
+        // console.log(user._id)
+        // console.log(user.email)
         if(!user) {
             res.status(400).json({
                 errors: [{ msg: "User data 없음" }],
@@ -137,8 +138,9 @@ const signIn = async (req, res) => {
 
         if(!isMatch){
             res.status(400).json({
-                errors: [{ msg: "비밀번호 일치하지 않음" }],
-            });
+                status: 400,
+                message: "비밀번호 일치하지 않음" 
+              });
         }
 
         // Return jsonwebtoken
@@ -161,21 +163,104 @@ const signIn = async (req, res) => {
     }
 }
 
+//프로필 조회 
 const getProfile = async(req,res) => {
     const userIdx = req._id;
+    // console.log(userIdx);
     try{
         const data = await userService.findUserProfile({userIdx});
+        if(!data) {
+            res.status(400).json({
+                status: 400,
+                message: "User data 없음" 
+              });
+        }
 
         return res.status(200).json({
-            status: 200,
+            status: returnCode.OK,
             msg: '프로필 조회 성공',
             data  //이름, 이메일, 비밀번호, 생일 
         });
     }catch(err){
-        console.error(err.message);
+        // console.error(err.message);
         res.status(500).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            errors: [{ msg: err.message }],
+            message: err.message 
+        });
+    }
+}
+
+const editProfile = async(req,res) => {
+    const userIdx = req._id;
+    const {name} = req.body;
+    // console.log(req.body.name);
+    try{
+        const user = await userService.findUserbyIdx({userIdx});
+        if(!user) {
+            return res.status(400).json({
+                status: 400,
+                message: "User data 없음" 
+              });
+        }
+        user.name = name;
+        await user.save();
+
+        return res.status(200).json({
+            status: returnCode.OK,
+            msg: '이름수정 성공'
+        });
+    }catch(err){
+        res.status(500).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message 
+        });
+    }
+}
+
+// 비밀번호 변경 
+const editPassword = async(req,res) => {
+    const userIdx = req._id;
+    try{
+        const user = await userService.findUserbyIdx({userIdx});
+        const {currentPassword, newPassword} = req.body;
+
+        if(!user) {
+            return res.status(400).json({
+                status: 400,
+                message: "User data 없음" 
+              });
+        }
+
+        // Encrpyt password
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+        if(!isMatch){
+            return res.status(400).json({
+                status: 400,
+                message: "기존 비밀번호 일치하지 않음" 
+              });
+        }
+
+        if(newPassword.length<6){
+            return res.status(400).json({
+                status: 400,
+                message: "6자리 이상의 비밀번호로 설정해 주세요" 
+              });
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashPwd = await bcrypt.hash(newPassword, salt);
+
+        user.password = hashPwd;
+        await user.save();
+        
+        return res.status(200).json({
+            status: returnCode.OK,
+            msg: '비밀번호 수정 성공'
+        });
+    }catch(err){
+        res.status(500).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message 
         });
     }
 }
@@ -183,5 +268,7 @@ const getProfile = async(req,res) => {
 export default {
     signUp,
     signIn,
-    getProfile
+    getProfile,
+    editProfile,
+    editPassword
 }
