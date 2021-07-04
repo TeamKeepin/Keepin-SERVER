@@ -9,7 +9,11 @@ const getRandom= async(req,res) => {
     try{
         // keepin에서 뽑아서 title, photo, taken, date, category, record, friend 주기 
         // 뽑은 유저 keepin 중에서 random으로 하나만 보여주기 
-        const data = randomService.findRandom(userIdx);
+        const randoms = await randomService.findRandoms({userIdx});
+        const randomNumber = Math.floor(Math.random() * randoms.length+1);
+        const randomId = randoms[randomNumber]._id;
+        const data = await randomService.findRandom({randomId});
+
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
             message:"랜덤 키핀 조회 성공",

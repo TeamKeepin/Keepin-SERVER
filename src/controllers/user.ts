@@ -5,7 +5,11 @@ import jwt from "jsonwebtoken"
 import config from "../config"
 import { check, validationResult } from "express-validator"
 import { userService } from "../services";
+import { keepinService } from "../services";
 const returnCode = require('../library/returnCode');
+
+
+
 
 
 /**
@@ -169,13 +173,17 @@ const getProfile = async(req,res) => {
     // console.log(userIdx);
     try{
         const data = await userService.findUserProfile({userIdx});
+
+        // const users = await User.find();
+        // console.log(users[1]);
+        
         if(!data) {
             res.status(400).json({
                 status: 400,
                 message: "User data 없음" 
               });
         }
-
+       
         return res.status(200).json({
             status: returnCode.OK,
             msg: '프로필 조회 성공',
@@ -197,8 +205,8 @@ const editProfile = async(req,res) => {
     try{
         const user = await userService.findUserbyIdx({userIdx});
         if(!user) {
-            return res.status(400).json({
-                status: 400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status: returnCode.BAD_REQUEST,
                 message: "User data 없음" 
               });
         }
@@ -207,7 +215,7 @@ const editProfile = async(req,res) => {
 
         return res.status(200).json({
             status: returnCode.OK,
-            msg: '이름수정 성공'
+            message: '이름수정 성공'
         });
     }catch(err){
         res.status(500).json({
@@ -235,8 +243,8 @@ const editPassword = async(req,res) => {
         const isMatch = await bcrypt.compare(currentPassword, user.password);
 
         if(!isMatch){
-            return res.status(400).json({
-                status: 400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status: returnCode.BAD_REQUEST,
                 message: "기존 비밀번호 일치하지 않음" 
               });
         }
@@ -265,10 +273,42 @@ const editPassword = async(req,res) => {
     }
 }
 
+//유저이름, 받은 선물 수, 준 선물 수 return 
+const getKeepinCount = async(req,res) => {
+    const userIdx = req._id;
+    try{
+        const user = await userService.findUserbyIdx({userIdx});
+        if(!user) {
+            return res.status(returnCode.BAD_REQUEST).json({
+                status: returnCode.BAD_REQUEST,
+                message: "User data 없음" 
+              });
+        }
+        const name = user.name;
+        const {total, taken, given} = await keepinService.findKeepinCount(userIdx);
+        // console.log(total);
+        // console.log(taken);
+        // console.log(given);
+        const data = {name, total, taken, given};
+        return res.status(200).json({
+            status: returnCode.OK,
+            message: '선물 수 조회 성공',
+            data  
+        });
+
+    }catch(err){
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message 
+        });
+    }
+}
+
 export default {
     signUp,
     signIn,
     getProfile,
     editProfile,
-    editPassword
+    editPassword,
+    getKeepinCount
 }
