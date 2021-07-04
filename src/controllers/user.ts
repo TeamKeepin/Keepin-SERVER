@@ -27,7 +27,7 @@ const signUp = async (req: Request, res: Response) => {
   
     try {
         // 1. 유저가 중복일 경우
-        let user = await User.findOne({ email });
+        let user = await userService.findUser({email});
         if(user) {
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
