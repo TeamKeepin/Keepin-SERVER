@@ -35,7 +35,6 @@ const signUp = async (req: Request, res: Response) => {
             });
 
         }
-        
         user = new User({
             email,
             password,
@@ -63,7 +62,6 @@ const signUp = async (req: Request, res: Response) => {
                 res.json({
                     jwt
                 });
-               
             }
         );
     } catch (err) {
@@ -124,7 +122,26 @@ const signIn = async (req, res) => {
     }
 }
 
+const getProfile = async(req,res) => {
+    const userIdx = req._id;
+    try{
+        const profile = await userService.findUserProfile({userIdx});
+
+        return res.status(200).json({
+            msg: '프로필 조회 성공',
+            profile //이름, 이메일, 비밀번호, 생일 
+        });
+    }catch(err){
+        console.error(err.message);
+        res.status(500).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            errors: [{ msg: err.message }],
+        });
+    }
+}
+
 export default {
     signUp,
-    signIn
+    signIn,
+    getProfile
 }
