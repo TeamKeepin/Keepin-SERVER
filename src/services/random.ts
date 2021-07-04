@@ -14,7 +14,7 @@ const findRandoms = (data: keepinFindUserIdxInput) => {
 }
 
 const findRandom = (data: keepinFindIdxInput) => {
-  const random =  Keepin.findOne({_id:data.id});
+  const random =  Keepin.findOne({_id:data.randomId}).select('-__v0');
   return random;
 }
 
