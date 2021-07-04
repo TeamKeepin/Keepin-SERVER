@@ -18,7 +18,7 @@ export default {
   
     // Verify token
     const user = await jwt.verify(token, config.jwtSecret);
-    console.log(user)
+    // console.log(user)
     if (user === TOKEN_EXPIRED) {
       return res.status(405).json({message: '만료된 토큰입니다.'});
     }
