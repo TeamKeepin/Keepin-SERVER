@@ -165,9 +165,7 @@ const deleteReminder = async (req, res) => {
     }
 
     try {
-
         await reminderService.deleteReminderbyReminderId({_id: reminderId});
-  
         return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 삭제 완료' });
 
     } catch (err) {
