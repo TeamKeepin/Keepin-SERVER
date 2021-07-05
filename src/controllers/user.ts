@@ -20,7 +20,8 @@ const signUp = async (req: Request, res: Response) => {
     // 파라미터 확인
     if (!email || !password || !name || !birth || !token || !phone ) {
         res.status(400).json({
-            msg: '필수 정보를 입력하세요.'
+            status: returnCode.BAD_REQUEST,
+            message: '필수 정보를 입력하세요.'
         });
         return;
       }
@@ -31,7 +32,7 @@ const signUp = async (req: Request, res: Response) => {
         if(user) {
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
-                errors: [{ msg: "User already exists" }],
+                msg: "유저가 이미 있습니다."
             });
 
         }
@@ -61,7 +62,11 @@ const signUp = async (req: Request, res: Response) => {
             (err, jwt) => {
                 if(err) throw err;
                 res.json({
-                    jwt
+                    status: returnCode.OK,
+                    message: "회원가입 성공",
+                    data: {
+                        "jwt": jwt
+                    }
                 });
                
             }
@@ -70,7 +75,7 @@ const signUp = async (req: Request, res: Response) => {
         console.error(err.message);
         res.status(500).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            errors: [{ msg: err.message }],
+            message: err.message
         });
     }
 }
@@ -80,7 +85,7 @@ const signIn = async (req, res) => {
     if (!errors.isEmpty()){
         res.status(400).json({
             status: returnCode.BAD_REQUEST,
-            errors: [{ msg: "요청바디가 없습니다." }],
+            message: "요청바디가 없습니다."
         });
     }
     const { email, password } = req.body;
@@ -91,7 +96,8 @@ const signIn = async (req, res) => {
         console.log(user.email)
         if(!user) {
             res.status(400).json({
-                errors: [{ msg: "User data 없음" }],
+                status: returnCode.BAD_REQUEST,
+                message: "유저가 없습니다."
               });
         }
 
@@ -100,7 +106,8 @@ const signIn = async (req, res) => {
 
         if(!isMatch){
             res.status(400).json({
-                errors: [{ msg: "비밀번호 일치하지 않음" }],
+                status: returnCode.BAD_REQUEST,
+                message: "비밀번호가 일치하지 않습니다."
             });
         }
 
@@ -115,7 +122,13 @@ const signIn = async (req, res) => {
             { expiresIn: 36000 },
             (err, jwt) => {
               if (err) throw err;
-              res.json({ jwt });
+              res.json({
+                status: returnCode.OK,
+                message: "로그인 성공",
+                data: {
+                    "jwt": jwt
+                }
+            });
             }
           );
     } catch (err) {
