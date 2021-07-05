@@ -56,6 +56,29 @@ const getFriends= async(req,res) => {
     }
 }
 
+const getFriendDetail= async(req,res) => {
+    const userIdx = req._id;
+    const friendIdx = req.params.friendId;
+    try{
+        const friends = await friendService.findFriendByFriendIdx({friendIdx,userIdx});
+        console.log(friends);
+        
+
+        const data = {friends};
+
+        return res.status(returnCode.OK).json({
+            status:returnCode.OK,
+            message:"친구 조회 성공",
+            data
+        })
+    }catch(err){
+        res.status(500).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message
+        });
+    }
+}
+
 //친구와의 키핀 수 조회 
 
 //친구와의 키핀 조회 
@@ -65,5 +88,6 @@ const getFriends= async(req,res) => {
 
 export default {
    createFriend,
-   getFriends
+   getFriends,
+   getFriendDetail
 }

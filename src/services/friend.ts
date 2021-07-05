@@ -14,6 +14,11 @@ export interface frinedCreateInput{
     userIdx: string
 }
 
+export interface friendFindFriendIdxInput{
+    friendIdx:string,
+    userIdx:string
+}
+
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
     const frineds = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx');
     return frineds;
@@ -24,12 +29,21 @@ const findFriendByName = (data: friendFindNameInput) => {
     return friend;
 }
 
+const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
+    const friend = Friend.findOne({_id:data.friendIdx});
+
+    // friend의 keepin에서 userIdx가 일치하는 거만 골라서 카운트
+    return friend;
+}
+
 const saveFrined = (data: frinedCreateInput) => {
     Friend.create(data);
 }
 
+
 export default {
   findFriendsByUserIdx,
   findFriendByName,
+  findFriendByFriendIdx,
   saveFrined
 }
