@@ -14,6 +14,12 @@ const FriendSchema = new mongoose.Schema({
         ref: "User", 
         required: true,
       },
+    Keepins: [{
+      keepin: {
+        type: mongoose.SchemaTypes.ObjectId, 
+        ref: "Keepin", 
+      }
+    }]
   });
   
   export default mongoose.model<IFriend & mongoose.Document>("Friend", FriendSchema);

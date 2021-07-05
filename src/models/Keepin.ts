@@ -17,8 +17,8 @@ const KeepinSchema = new mongoose.Schema({
       type: String,
       required: true,
   },
-  category: { // 0~7
-    type: Number,
+  category: { // 생일, 기념일, 축하, 칭찬, 사이드 킥, 응원, 감사, 깜짝, 기타"
+    type: [String],
   },
   record: {
     type: String,
@@ -28,6 +28,13 @@ const KeepinSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,  //foreign key느낌 
     ref: "User", 
   },
+  Friends: [{
+    friend: {
+      type: mongoose.SchemaTypes.ObjectId,  //foreign key느낌 
+      ref: "Friend", 
+    }
+  }]
+
 
 });
 

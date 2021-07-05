@@ -18,22 +18,30 @@ export interface userIdxInput {
 }
 
 const saveUser = (data: userCreateInput) => {
-    // console.log(data);
     return User.create( data );
 }
 
 const findUser = (data: userFindInput) => {
   const user = User.findOne({email:data.email});
+  console.log("user: "+user)
   return user
 }
 
 const findUserbyIdx = (data: userIdxInput) => {
-  const user = User.findOne({userIdx:data.userIdx});
+  const user = User.findOne({_id:data.userIdx});
   return user
 }
+
+const findUserProfile = (data: userIdxInput) => {
+  const user = User.findOne({_id:data.userIdx}).select('-__v -token');
+  return user
+}
+
+
 
 export default {
   saveUser,
   findUser,
-  findUserbyIdx
+  findUserbyIdx,
+  findUserProfile
 }

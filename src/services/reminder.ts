@@ -7,24 +7,55 @@ export interface reminderCreateInput {
     sendDate: string,
     isAlarm: boolean,
     isImportant: boolean,
-    userIdx: string
+    userIdx: string,
+    year: string,
+    month: string
 }
+
 export interface reminderFindInput {
-    _id: string
+  userIdx: string
+}
+export interface reminderMonthFindInput {
+  userIdx: string,
+  month: string
+}
+export interface reminderFindInputByReminderId {
+  _id: string
 }
 
 const saveReminder = (data: reminderCreateInput) => {
-    // console.log(data);
-    return Reminder.create( data );
+  return Reminder.create(data);
 }
 
 const findReminder = (data: reminderFindInput) => {
-  // const num = Reminder.findOne({email:data.email});
-  // // console.log(num);
-  // return num
+  const result = Reminder.find({
+    userIdx: data.userIdx,
+  }).sort({ date: 1 }); //가까운 순으로 정렬
+  return result;
+}
+
+const findMonthReminder = (data: reminderMonthFindInput) => {
+  const result = Reminder.find({
+    userIdx: data.userIdx, 
+    month: data.month}).sort({ date: 1 }); //가까운 순으로 정렬
+  return result;
+}
+
+const findReminderLimitTwo = (data: reminderFindInput) => {
+  const result = Reminder.find({
+    userIdx: data.userIdx,
+  }).sort({ date: 1 }).limit(2); //가까운 순으로 정렬, 2개만 나오게
+  return result;
+}
+
+const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
+return Reminder.deleteOne({_id:data._id});
 }
 
 export default {
   saveReminder,
-  findReminder
+  findReminder,
+  findMonthReminder,
+  findReminderLimitTwo,
+  deleteReminderbyReminderId
 }

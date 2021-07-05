@@ -27,6 +27,14 @@ const ReminderSchema = new mongoose.Schema({
         ref: "User", 
         required: true,
       },
+    year: {
+        type: String,
+        required: true,
+    },
+    month: {
+        type: String,
+        required: true,
+  },
   });
   
   export default mongoose.model<IReminder & mongoose.Document>("Reminder", ReminderSchema);
