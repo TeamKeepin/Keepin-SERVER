@@ -1,7 +1,7 @@
 import userService from './user'
+import keepinService from './keepin'
 import reminderService from './reminder'
 import randomService from './random'
-import keepinService from './keepin'
 import friendService from './friend'
 
 

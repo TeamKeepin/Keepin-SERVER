@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 import { IKeepin } from "../interfaces/IKeepin";
 
 const KeepinSchema = new mongoose.Schema({
-  name: { 
-    type: String,
-    required: true, //required는 필수여부, default는 기본값, unique는 고유여부  
-  },
   title: { 
     type: String,
   },
@@ -21,8 +17,8 @@ const KeepinSchema = new mongoose.Schema({
       type: String,
       required: true,
   },
-  category: { // 0~7
-    type: Number,
+  category: { // 생일, 기념일, 축하, 칭찬, 사이드 킥, 응원, 감사, 깜짝, 기타"
+    type: [String],
   },
   record: {
     type: String,
@@ -32,6 +28,11 @@ const KeepinSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,  //foreign key느낌 
     ref: "User", 
   },
+  friendIdx: [{
+    type: mongoose.SchemaTypes.ObjectId, 
+    ref: "Friend", 
+  }]
+
 
 });
 

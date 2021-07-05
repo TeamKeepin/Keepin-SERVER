@@ -13,13 +13,13 @@ router.post('/', auth.checkToken, reminderController.createReminder);
 router.get('/', auth.checkToken, reminderController.getAllReminder);
 
 // 가장 가까운 2개 리마인더 조회
-router.get('/latest', auth.checkToken, reminderController.getLatestReminder);
+router.get('/oncomming', auth.checkToken, reminderController.getOncommingReminder);
 
 // 월별 목록 조회
-router.get('/month/:month', auth.checkToken, reminderController.getMonthReminder);
+router.get('/date/:year/:month', auth.checkToken, reminderController.getMonthReminder);
 
-// 선택된 리마인더 삭제
-router.delete('/:reminderId', auth.checkToken, reminderController.deleteReminder);
+// 선택된 리마인더 삭제(1개 or 복수개 선택 가능)
+router.delete('/', auth.checkToken, reminderController.deleteReminder);
 
 
 export default router;

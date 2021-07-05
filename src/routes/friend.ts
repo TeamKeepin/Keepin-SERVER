@@ -18,4 +18,7 @@ router.get('/friendId',auth.checkToken,friendController.getFriendDetail);
 // router.get('/taken/:friendId',auth.checkToken,friendController.getTakenList);
 // router.get('/given/:friendId',auth.checkToken,friendController.getGivenList);
 
+router.get('/search', auth.checkToken, friendController.searchFriends);
+
+
 export default router;

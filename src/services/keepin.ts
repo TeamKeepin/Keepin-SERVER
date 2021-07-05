@@ -1,9 +1,32 @@
-import Keepin from "../models/Keepin"
+import Keepin from "../models/Keepin";
 
-//서비스 로직 구현 시 인자로 받는 것에 대한 interface를 미리 만들어주는 것이 좋다.
+export interface keepinCreateInput {
+  title: string;
+  photo: string;
+  taken: boolean;
+  date: string;
+  category: [string];
+  record: string;
+  userIdx: string;
+  friendIdx: [string];
+}
+
+export interface keepinFindInput{
+  userIdx: string
+}
 
 export interface randomFindUserIdxInput {
-    userIdx: string //user _id 
+  userIdx: string //user _id 
+}
+
+//키핀하기 생성
+const saveKeepin = (data: keepinCreateInput) => {
+    return Keepin.create( data );
+}
+//키핀하기 받은/준
+const findKeepin = (data: keepinFindInput) => {
+  const taken =  Keepin.find({userIdx: data.userIdx}).find({taken: true});
+
 }
 
 const findKeepinCount = (data: randomFindUserIdxInput) => {
@@ -18,9 +41,7 @@ const findKeepinCount = (data: randomFindUserIdxInput) => {
 
 
 export default {
+  saveKeepin,
+  findKeepin,
   findKeepinCount
 }
-
-
-
-

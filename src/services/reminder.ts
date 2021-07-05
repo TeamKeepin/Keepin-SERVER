@@ -15,8 +15,15 @@ export interface reminderCreateInput {
 export interface reminderFindInput {
   userIdx: string
 }
+
+export interface reminderOncomingFindInput {
+  userIdx: string,
+  start: string, //시스템 시간 now() 이후.
+}
+
 export interface reminderMonthFindInput {
   userIdx: string,
+  year: string,
   month: string
 }
 export interface reminderFindInputByReminderId {
@@ -37,14 +44,17 @@ const findReminder = (data: reminderFindInput) => {
 const findMonthReminder = (data: reminderMonthFindInput) => {
   const result = Reminder.find({
     userIdx: data.userIdx, 
-    month: data.month}).sort({ date: 1 }); //가까운 순으로 정렬
+    year: data.year,
+    month: data.month},{_id:1, title:1, date:1, isAlarm:1, isImportant:1}).sort({ date: 1 }); //가까운 순으로 정렬
   return result;
 }
 
-const findReminderLimitTwo = (data: reminderFindInput) => {
+// 다가오는 리마인더 조회
+const findReminderOncoming = (data: reminderOncomingFindInput) => {
   const result = Reminder.find({
     userIdx: data.userIdx,
-  }).sort({ date: 1 }).limit(2); //가까운 순으로 정렬, 2개만 나오게
+    date: {'$gte' : data.start},
+  },{_id:1, title:1, date:1, isImportant:1}).sort({ date: 1 }).limit(2); //가까운 순으로 정렬, 2개만 나오게
   return result;
 }
 
@@ -56,6 +66,6 @@ export default {
   saveReminder,
   findReminder,
   findMonthReminder,
-  findReminderLimitTwo,
+  findReminderOncoming,
   deleteReminderbyReminderId
 }
