@@ -5,7 +5,8 @@ const router = express();
 
 /* User */
 router.post('/', auth.checkToken, keepinController.createKeepin)
-router.get('/', auth.checkToken, keepinController.getAllKeepin)
+router.get('/', auth.checkToken, keepinController.getTakenKeepin)
+router.get('/all', auth.checkToken, keepinController.searchKeepin)
 
 export default router;
 

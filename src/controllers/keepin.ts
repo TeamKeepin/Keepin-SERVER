@@ -52,8 +52,9 @@ const createKeepin = async (req, res) => {
 }
 }
 
-const getAllKeepin = async (req, res) => {
-  const userId = req._id;
+const getTakenKeepin = async (req, res) => {
+  const userIdx = req._id;
+  const taken = req.query.taken;
   const errors = validationResult(req);
 
   if(!errors.isEmpty()){
@@ -64,8 +65,8 @@ const getAllKeepin = async (req, res) => {
   }
 
   try {
-    const data = await keepinService.findKeepin({userIdx:userId});
-    console.log(data);
+    const data = await keepinService.findKeepin({taken, userIdx});
+    
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀 목록 조회 성공',
@@ -81,7 +82,39 @@ const getAllKeepin = async (req, res) => {
   }
 }
 
+const searchKeepin = async (req, res) => {
+  const userIdx = req._id;
+  const title = req.query.title;
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()){
+    res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: "요청바디가 없습니다." 
+    });
+  }
+
+  try {
+    const data = await keepinService.searchKeepinByKeyword({title, userIdx});
+    
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: '키핀 목록 조회 성공',
+      data
+    })
+    } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+      });
+      return;
+  }
+}
+
+
 export default {
   createKeepin,
-  getAllKeepin
+  getTakenKeepin,
+  searchKeepin
 }
