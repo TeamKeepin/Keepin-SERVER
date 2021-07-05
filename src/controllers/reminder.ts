@@ -235,7 +235,6 @@ const getAllReminder = async (req, res) => {
     "status": 400,
     "message": "파라미터(year, month) 형식을 맞춰주세요."
  * }
-
  * - 400 등록된 리마인더가 없음
  * 
  * {

@@ -19,11 +19,13 @@ const getRandom= async(req,res) => {
             message:"랜덤 키핀 조회 성공",
             data
         })
-    }catch(err){
-        res.status(500).json({
+    } catch (err) {
+        console.error(err.message);
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            errors: [{ msg: err.message }],
+            message: err.message,
         });
+        return;
     }
 }
 

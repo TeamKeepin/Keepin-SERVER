@@ -63,18 +63,19 @@ const signUp = async (req: Request, res: Response) => {
     // 파라미터 확인
     if (!email || !password || !name || !birth || !token || !phone ) {
         res.status(400).json({
-            msg: '필수 정보를 입력하세요.'
+            status: returnCode.BAD_REQUEST,
+            message: '필수 정보를 입력하세요.'
         });
         return;
       }
   
     try {
         // 1. 유저가 중복일 경우
-        let user = await User.findOne({ email });
+        let user = await userService.findUser({email});
         if(user) {
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
-                errors: [{ msg: "User already exists" }],
+                msg: "유저가 이미 있습니다."
             });
 
         }
@@ -103,16 +104,21 @@ const signUp = async (req: Request, res: Response) => {
             (err, jwt) => {
                 if(err) throw err;
                 res.json({
-                    jwt
+                    status: returnCode.OK,
+                    message: "회원가입 성공",
+                    data: {
+                        "jwt": jwt
+                    }
                 });
             }
         );
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            errors: [{ msg: err.message }],
+            message: err.message,
         });
+        return;
     }
 }
 
@@ -122,7 +128,7 @@ const signIn = async (req, res) => {
     if (!errors.isEmpty()){
         res.status(400).json({
             status: returnCode.BAD_REQUEST,
-            errors: [{ msg: "요청바디가 없습니다." }],
+            message: "요청바디가 없습니다."
         });
     }
     const { email, password } = req.body;
@@ -133,7 +139,8 @@ const signIn = async (req, res) => {
         // console.log(user.email)
         if(!user) {
             res.status(400).json({
-                errors: [{ msg: "User data 없음" }],
+                status: returnCode.BAD_REQUEST,
+                message: "유저가 없습니다."
               });
         }
 
@@ -142,9 +149,9 @@ const signIn = async (req, res) => {
 
         if(!isMatch){
             res.status(400).json({
-                status: 400,
-                message: "비밀번호 일치하지 않음" 
-              });
+                status: returnCode.BAD_REQUEST,
+                message: "비밀번호가 일치하지 않습니다."
+            });
         }
 
         // Return jsonwebtoken
@@ -158,13 +165,23 @@ const signIn = async (req, res) => {
             { expiresIn: 36000 },
             (err, jwt) => {
               if (err) throw err;
-              res.json({ jwt });
+              res.json({
+                status: returnCode.OK,
+                message: "로그인 성공",
+                data: {
+                    "jwt": jwt
+                }
+            });
             }
           );
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server Error");
-    }
+        } catch (err) {
+            console.error(err.message);
+            res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+                status: returnCode.INTERNAL_SERVER_ERROR,
+                message: err.message,
+            });
+            return;
+        }
 }
 
 //프로필 조회 
@@ -189,12 +206,13 @@ const getProfile = async(req,res) => {
             msg: '프로필 조회 성공',
             data  //이름, 이메일, 비밀번호, 생일 
         });
-    }catch(err){
-        // console.error(err.message);
-        res.status(500).json({
+    } catch (err) {
+        console.error(err.message);
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message 
+            message: err.message,
         });
+        return;
     }
 }
 
@@ -217,11 +235,13 @@ const editProfile = async(req,res) => {
             status: returnCode.OK,
             message: '이름수정 성공'
         });
-    }catch(err){
-        res.status(500).json({
+    } catch (err) {
+        console.error(err.message);
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message 
+            message: err.message,
         });
+        return;
     }
 }
 
@@ -265,11 +285,13 @@ const editPassword = async(req,res) => {
             status: returnCode.OK,
             msg: '비밀번호 수정 성공'
         });
-    }catch(err){
-        res.status(500).json({
+    } catch (err) {
+        console.error(err.message);
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message 
+            message: err.message,
         });
+        return;
     }
 }
 
@@ -296,11 +318,13 @@ const getKeepinCount = async(req,res) => {
             data  
         });
 
-    }catch(err){
+    } catch (err) {
+        console.error(err.message);
         res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message 
+            message: err.message,
         });
+        return;
     }
 }
 

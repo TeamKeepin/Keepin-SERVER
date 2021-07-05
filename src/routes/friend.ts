@@ -14,6 +14,7 @@ router.post('/',auth.checkToken,[
   ],friendController.createFriend);
 
 router.get('/',auth.checkToken, friendController.getFriends);
+router.get('/search', auth.checkToken, friendController.searchFriends);
 
 
 export default router;
