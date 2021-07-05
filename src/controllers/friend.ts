@@ -4,7 +4,7 @@ const returnCode = require('../library/returnCode');
 const createFriend= async(req,res) => {
     const userIdx = req._id;
     //이름  
-    const {name} = req.body;
+    const {name, keepinIdx} = req.body;
     try{
         //중복 check
         const friend = await friendService.findFriendByName({name});
@@ -15,7 +15,7 @@ const createFriend= async(req,res) => {
             });
         }
 
-        await friendService.saveFriend({name,userIdx});
+        await friendService.saveFriend({name, userIdx, keepinIdx});
         
         return res.status(201).json({
             status:201,

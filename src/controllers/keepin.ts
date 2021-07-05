@@ -1,9 +1,9 @@
 import { validationResult } from "express-validator"
-import { keepinService } from "../services";
+import { friendService, keepinService } from "../services";
 const returnCode = require('../library/returnCode')
 
 const createKeepin = async (req, res) => {
-  const userId = req._id;
+  const userIdx = req._id;
   const errors = validationResult(req);
 
   if(!errors.isEmpty()){
@@ -13,9 +13,9 @@ const createKeepin = async (req, res) => {
     });
   }
 
-  let {title, photo, taken, date, category, record, friends} = req.body;
+  let {title, photo, taken, date, category, record, friendIdx} = req.body;
   if( !title || !photo || taken==undefined || !date || category==undefined || !record){
-    console.log(title, photo, taken, date, category, record, friends.friend);
+    console.log(title, photo, taken, date, category, record, friendIdx);
     res.status(400).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.'
@@ -23,22 +23,20 @@ const createKeepin = async (req, res) => {
     return;
   }
 
-  console.log(friends)
-  console.log(friends.friend)
-
   try {
     const data = {
-      _id: userId,
+      _id: userIdx,
       title, 
       photo, 
       taken, 
       date, 
       category,
-      record
+      record,
+      friendIdx
     };
 
 
-    await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx: userId, friends });
+    await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
     return res.status(200).json({
       status: returnCode.OK,
       message: "키핀하기 생성 성공",
@@ -67,7 +65,7 @@ const getAllKeepin = async (req, res) => {
 
   try {
     const data = await keepinService.findKeepin({userIdx:userId});
-    
+    console.log(data);
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀 목록 조회 성공',

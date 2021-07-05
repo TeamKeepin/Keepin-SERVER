@@ -28,11 +28,9 @@ const KeepinSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,  //foreign key느낌 
     ref: "User", 
   },
-  friends: [{
-    friend: {
-      type: mongoose.SchemaTypes.ObjectId, 
-      ref: "Friend", 
-    }
+  friendIdx: [{
+    type: mongoose.SchemaTypes.ObjectId, 
+    ref: "Friend", 
   }]
 
 

@@ -1,4 +1,4 @@
-import Keepin from "../models/Keepin"
+import Keepin from "../models/Keepin";
 
 export interface keepinCreateInput {
   title: string;
@@ -8,7 +8,7 @@ export interface keepinCreateInput {
   category: [string];
   record: string;
   userIdx: string;
-  friends: [string];
+  friendIdx: [string];
 }
 
 export interface keepinFindInput{
@@ -23,12 +23,10 @@ export interface randomFindUserIdxInput {
 const saveKeepin = (data: keepinCreateInput) => {
     return Keepin.create( data );
 }
-
+//키핀하기 받은/준
 const findKeepin = (data: keepinFindInput) => {
-  const result = Keepin.find({
-    userIdx: data.userIdx,
-  }).sort({ date: 1 });
-  return result;
+  const taken =  Keepin.find({userIdx: data.userIdx}).find({taken: true});
+
 }
 
 const findKeepinCount = (data: randomFindUserIdxInput) => {

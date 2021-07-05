@@ -11,12 +11,17 @@ export interface friendFindNameInput {
 
 export interface frinedCreateInput{
     name: string,
-    userIdx: string
+    userIdx: string,
+    keepinIdx: [string]
 }
 
 export interface friendSearchInput{
     userIdx: string,
     name: string
+}
+
+export interface friendKeepinInput{
+    friendIdx: string
 }
 
 
@@ -37,11 +42,16 @@ const saveFriend = (data: frinedCreateInput) => {
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {
     const result = Friend.find({name:{$regex:data.name}}).where('userIdx').equals(data.userIdx).select('-__v -userIdx');
-    return result
+    return result;
+}
+const findKeepinFreind = (data: friendKeepinInput) => {
+    const result = Friend.find().where('friendIdx').equals(data.friendIdx);
+    return result;
 }
 export default {
   findFriendsByUserIdx,
   findFriendByName,
   searchFriendByKeyword,
-  saveFriend
+  saveFriend,
+  findKeepinFreind
 }
