@@ -4,7 +4,7 @@ import auth from "../middlewares/auth"
 const router = express();
 
 /* User */
-router.post('/', auth.checktoken, keepinController.createKeepin)
+router.post('/', keepinController.createKeepin)
 
 export default router;
 
