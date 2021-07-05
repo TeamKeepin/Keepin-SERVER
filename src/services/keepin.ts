@@ -5,9 +5,10 @@ export interface keepinCreateInput {
   photo: string;
   taken: boolean;
   date: string;
-  category: Number;
+  category: [string];
   record: string;
   userIdx: string;
+  friends: [string];
 }
 
 export interface keepinFindInput{
