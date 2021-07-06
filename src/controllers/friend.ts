@@ -111,7 +111,7 @@ const searchFriends= async(req,res) => {
         }
 
         const data = {friends};
-
+        
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
             message:"친구 검색 성공",
