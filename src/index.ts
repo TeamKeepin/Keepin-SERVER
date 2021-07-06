@@ -1,14 +1,23 @@
 import express from "express";
+import indexRouter from "./routes";
+import connectDB from "./loader/db";
+import path from "path";
 const app = express();
-// import connectDB from "./loader/db";
+
+// __dirname 은 현재 폴더의 경로
+const apidocPath = path.join(__dirname, "../apidoc");
+
+// 문서를 보여줄 경로를 적고, static 파일을 연다.
+app.use("/apidoc", express.static(apidocPath))
+
 
 // Connect Database
-// connectDB();
+connectDB();
 
 app.use(express.json());
 
 // Define Routes
-
+app.use("/", indexRouter);
 
 // error handler
 app.use(function (err, req, res, next) {

@@ -4,24 +4,28 @@ import {IUser} from "../interfaces/IUser";
 const UserSchema = new mongoose.Schema({
     name: {
       type: String,
-      required: true,
+      required: true
     },
-    id: {
+    email: {
       type: String,
-      required: true,
       unique: true,
+      required: true
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
     birth: {
-        type: String,
-        required: true,
+      type: String,
+      required: true
+    },
+    phone: {
+      type: String,
+      required: true
     },
     token: {
-        type: String,
-        required: true,
+      type: String,
+      required: true
     }
   });
   

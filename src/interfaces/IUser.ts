@@ -1,14 +1,17 @@
-import mongoose from "mongoose";
 export interface IUser {
     name: string;
-    id: string;
+    email: string;
     password: string;
     birth: string;
+    phone: string;
     token: string;
   }
   
   export interface IUserInputDTO {
     name: string;
-    id: string;
+    email: string;
     password: string;
+    birth: string;
+    phone: string;
+    token: string;
   }
