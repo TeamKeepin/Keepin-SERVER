@@ -16,8 +16,12 @@ export interface friendCreateInput{
 
 
 export interface friendFindFriendIdxInput{
+    friendIdx:string
+}
+
+export interface friendFindFriendIdxAndAddKeepinInput{
     friendIdx:string,
-    userIdx:string
+    keepinIdx:string
 }
 
 
@@ -44,8 +48,6 @@ const findFriendByName = (data: friendFindNameInput) => {
 
 const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
     const friend= Friend.findOne({_id:data.friendIdx});
-
-    // friend의 keepin에서 userIdx가 일치하는 거만 골라서 카운트
     return friend;
 }
 
@@ -53,6 +55,11 @@ const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
 const saveFriend = (data: friendCreateInput) => {
     Friend.create(data);
 }
+
+// const findFriendByFriendIdxAndAddKeepin = (data: friendFindFriendIdxAndAddKeepinInput) => {
+//     const friend= Friend.findOne({_id:data.friendIdx});
+
+// }
 
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {

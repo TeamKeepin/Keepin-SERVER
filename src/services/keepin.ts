@@ -32,8 +32,8 @@ export interface randomFindUserIdxInput {
 
 //키핀하기 생성
 const saveKeepin = (data: keepinCreateInput) => {
-    Keepin.create( data );
-    return data.friendIdx;
+    const keepin = Keepin.create( data );
+    return keepin;
 }
 
 //모아보기 받은/준
