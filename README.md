@@ -4,7 +4,6 @@
 
 
 ![node_badge](https://img.shields.io/badge/node-%3E%3D%2012.13.0-green)
-![npm_bedge](https://img.shields.io/badge/npm-v6.14.2-blue) 
 <br>
 
 
@@ -23,13 +22,14 @@
 <br />
 잊어버리기 쉬운 감사한 순간들! 이제는 Keepin해 보세요. <br>
 주고받은 선물들을 간직하고, 챙겨야 할 이벤트들을 리마인드하도록 도와드려요.
+
+
 <br>
 
 ## :bookmark_tabs: 기능 명세서
 
 * <b>[기능 명세서 노션 링크](https://www.notion.so/3a87d177950c4cd9a499a06e266ac535) </b>
 
-<br>
 <br>
 
 ## :earth_americas: Team Role 
