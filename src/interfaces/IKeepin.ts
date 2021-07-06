@@ -7,5 +7,5 @@ export interface IKeepin {
     category: [String];
     record: string;
     userIdx: mongoose.Types.ObjectId;
-    friendIdx: mongoose.Types.ObjectId;
+    friendIdx: [mongoose.Types.ObjectId];
 }

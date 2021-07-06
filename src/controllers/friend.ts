@@ -64,7 +64,7 @@ const getFriendDetail= async(req,res) => {
     const userIdx = req._id;
     const friendIdx = req.params.friendId;
     try{
-        const friend = await friendService.findFriendByFriendIdx({friendIdx});
+        const friend = await friendService.findFriendByFriendIdx({userIdx, friendIdx});
         console.log(friend);
         if(!friend){
             return res.status(400).json({
