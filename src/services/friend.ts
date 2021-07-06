@@ -9,7 +9,7 @@ export interface friendFindNameInput {
     name: string 
 }
 
-export interface frinedCreateInput{
+export interface friendCreateInput{
     name: string,
     userIdx: string
 }
@@ -50,16 +50,18 @@ const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
 }
 
 //친구 등록
-const saveFriend = (data: frinedCreateInput) => {
+const saveFriend = (data: friendCreateInput) => {
     Friend.create(data);
 }
+
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {
     const result = Friend.find({name:{$regex:data.name}}).where('userIdx').equals(data.userIdx).select('-__v -userIdx');
     return result;
 }
-const findKeepinFreind = (data: friendKeepinInput) => {
-    const result = Friend.find().where('friendIdx').equals(data.friendIdx);
+
+const findKeepinFriend = (data: friendKeepinInput) => {
+    const result = Friend.findOne({_id:data.friendIdx});
     return result;
 }
 export default {
@@ -67,6 +69,6 @@ export default {
   findFriendByName,
   searchFriendByKeyword,
   saveFriend,
-  findKeepinFreind,
+  findKeepinFriend,
   findFriendByFriendIdx
 }

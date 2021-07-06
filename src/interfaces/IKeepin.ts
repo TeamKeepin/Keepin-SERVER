@@ -4,8 +4,8 @@ export interface IKeepin {
     photo: string;
     taken: boolean;
     date: string;
-    category: [String];
+    category: [string];
     record: string;
     userIdx: mongoose.Types.ObjectId;
-    friendIdx: mongoose.Types.ObjectId;
+    friendIdx: [mongoose.Types.ObjectId];
 }
