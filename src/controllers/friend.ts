@@ -4,7 +4,7 @@ const returnCode = require('../library/returnCode');
 const createFriend= async(req,res) => {
     const userIdx = req._id;
     //이름  
-    const {name, keepinIdx} = req.body;
+    const {name} = req.body;
     try{
         //중복 check
         const friend = await friendService.findFriendByName({name});
@@ -15,7 +15,7 @@ const createFriend= async(req,res) => {
             });
         }
 
-        await friendService.saveFriend({name, userIdx, keepinIdx});
+        await friendService.saveFriend({name, userIdx});
         
         return res.status(201).json({
             status:201,
@@ -60,6 +60,36 @@ const getFriends= async(req,res) => {
     }
 }
 
+const getFriendDetail= async(req,res) => {
+    const userIdx = req._id;
+    const friendIdx = req.params.friendId;
+    try{
+        const friend = await friendService.findFriendByFriendIdx({friendIdx});
+        console.log(friend);
+        if(!friend){
+            return res.status(400).json({
+                status:400,
+                message:"등록된 친구가 없음"
+            });
+        }
+
+        console.log(friend.keepinIdx);
+
+        const data = {friend};
+
+        return res.status(returnCode.OK).json({
+            status:returnCode.OK,
+            message:"친구 조회 성공",
+            data
+        })
+    }catch(err){
+        res.status(500).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message
+        });
+    }
+}
+
 //친구와의 키핀 수 조회 
 
 //친구와의 키핀 조회 
@@ -97,5 +127,6 @@ const searchFriends = async(req,res) => {
 export default {
    createFriend,
    getFriends,
-   searchFriends,
+   getFriendDetail,
+   searchFriends
 }

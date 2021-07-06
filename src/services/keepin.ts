@@ -1,4 +1,5 @@
 import Keepin from "../models/Keepin";
+import Friend from "../models/Friend";
 
 export interface keepinCreateInput {
   title: string;
@@ -27,7 +28,8 @@ export interface randomFindUserIdxInput {
 
 //키핀하기 생성
 const saveKeepin = (data: keepinCreateInput) => {
-    return Keepin.create( data );
+    Keepin.create( data );
+    return data.friendIdx;
 }
 //키핀하기 받은/준
 const findKeepin = (data: keepinFindInput) => {

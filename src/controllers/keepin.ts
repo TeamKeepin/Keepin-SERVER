@@ -37,6 +37,9 @@ const createKeepin = async (req, res) => {
 
 
     await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
+  
+
+
     return res.status(200).json({
       status: returnCode.OK,
       message: "키핀하기 생성 성공",
