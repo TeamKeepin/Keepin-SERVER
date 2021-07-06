@@ -16,4 +16,5 @@ router.use('/random',randomRouter);
 router.use('/friend',friendRouter);
 router.use('/setting',settingRouter);
 
+
 export default router;
