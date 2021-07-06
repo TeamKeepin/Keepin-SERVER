@@ -2,7 +2,7 @@ import Friend from "../models/Friend";
 
 
 export interface friendsFindUserIdxInput {
-    userIdx: string //user _id 
+    userIdx: string 
 }
 
 export interface friendFindNameInput {
@@ -14,16 +14,19 @@ export interface friendCreateInput{
     userIdx: string
 }
 
+export interface friendFinduserIdxAndNameInput{
+    name: string,
+    userIdx: string
+}
 
 export interface friendFindFriendIdxInput{
     friendIdx:string
 }
 
-export interface friendFindFriendIdxAndAddKeepinInput{
+export interface friendFindIdxAndUserIdxInput{
     friendIdx:string,
-    keepinIdx:string
+    userIdx:string
 }
-
 
 export interface friendSearchInput{
     userIdx: string,
@@ -35,14 +38,18 @@ export interface friendKeepinInput{
 }
 
 
-
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
-    const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx');
+    const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name:-1});
     return friends;
 }
 
 const findFriendByName = (data: friendFindNameInput) => {
     const friend = Friend.find().where('name').equals(data.name);
+    return friend;
+}
+
+const findFriendByNameAnduserIdx = (data: friendFinduserIdxAndNameInput) => {
+    const friend = Friend.find({userIdx: data.userIdx}).find({name: data.name});
     return friend;
 }
 
@@ -56,11 +63,6 @@ const saveFriend = (data: friendCreateInput) => {
     Friend.create(data);
 }
 
-// const findFriendByFriendIdxAndAddKeepin = (data: friendFindFriendIdxAndAddKeepinInput) => {
-//     const friend= Friend.findOne({_id:data.friendIdx});
-
-// }
-
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {
     const result = Friend.find({name:{$regex:data.name}}).where('userIdx').equals(data.userIdx).select('-__v -userIdx');
@@ -71,11 +73,18 @@ const findKeepinFriend = (data: friendKeepinInput) => {
     const result = Friend.findOne({_id:data.friendIdx});
     return result;
 }
+
+// const findFriendKeepinCountAndMemo = (data: friendFindFriendIdxInput) => {
+//     const friend = Friend.find({_id: data.friendIdx})
+//     return
+// }
+
 export default {
   findFriendsByUserIdx,
   findFriendByName,
   searchFriendByKeyword,
   saveFriend,
   findKeepinFriend,
-  findFriendByFriendIdx
+  findFriendByFriendIdx,
+  findFriendByNameAnduserIdx
 }

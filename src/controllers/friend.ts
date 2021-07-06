@@ -53,8 +53,8 @@ const createFriend= async(req,res) => {
         });
     }
     try{
-        //중복 check
-        const alFriend = await friendService.findFriendByName({name});
+        //중복 check   //이거 name 하고 userIdx로 해야 함 !! 
+        const alFriend = await friendService.findFriendByNameAnduserIdx({name,userIdx});
         if(alFriend.length>0){
             return res.status(400).json({
                 status:400,
@@ -78,6 +78,7 @@ const createFriend= async(req,res) => {
     }
 }
 
+//친구 목록 조회 
 const getFriends= async(req,res) => {
     const userIdx = req._id;
     try{
@@ -107,12 +108,13 @@ const getFriends= async(req,res) => {
     }
 }
 
+//친구 상세 조회 -> 친구이름, total, taken, given, memo 
 const getFriendDetail= async(req,res) => {
     const userIdx = req._id;
     const friendIdx = req.params.friendId;
     try{
-        const friend = await friendService.findFriendByFriendIdx({userIdx, friendIdx});
-        // console.log(friend);
+        const friend = await friendService.findFriendByFriendIdx({friendIdx});
+        console.log(friend);
         if(!friend){
             return res.status(400).json({
                 status:400,
