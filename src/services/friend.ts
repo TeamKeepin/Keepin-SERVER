@@ -9,7 +9,7 @@ export interface friendFindNameInput {
     name: string 
 }
 
-export interface frinedCreateInput{
+export interface friendCreateInput{
     name: string,
     userIdx: string
 }
@@ -50,7 +50,7 @@ const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
 }
 
 //친구 등록
-const saveFriend = (data: frinedCreateInput) => {
+const saveFriend = (data: friendCreateInput) => {
     Friend.create(data);
 }
 

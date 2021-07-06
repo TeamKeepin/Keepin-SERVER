@@ -40,7 +40,7 @@ const createKeepin = async (req, res) => {
       date: realDate, 
       category,
       record,
-      friendIdx
+      friendIdx,
     };
 
 
@@ -156,6 +156,7 @@ const getDetailKeepin = async (req, res) => {
       record: detail.record,
       cateogry: detail.category,
       date: detail.date,
+      taken: detail.taken
     }
 
     return res.status(returnCode.OK).json({
