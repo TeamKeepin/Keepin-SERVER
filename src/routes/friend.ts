@@ -14,7 +14,7 @@ router.post('/',auth.checkToken,[
   ],friendController.createFriend);
 
 router.get('/',auth.checkToken, friendController.getFriends);
-router.get('/friendId',auth.checkToken,friendController.getFriendDetail);
+router.get('/:friendId',auth.checkToken,friendController.getFriendDetail);
 // router.get('/taken/:friendId',auth.checkToken,friendController.getTakenList);
 // router.get('/given/:friendId',auth.checkToken,friendController.getGivenList);
 

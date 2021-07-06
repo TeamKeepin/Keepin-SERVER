@@ -4,7 +4,7 @@ const returnCode = require('../library/returnCode');
 const createFriend= async(req,res) => {
     const userIdx = req._id;
     //이름  
-    const {name, keepinIdx} = req.body;
+    const {name} = req.body;
     try{
         //중복 check
         const friend = await friendService.findFriendByName({name});
@@ -15,7 +15,7 @@ const createFriend= async(req,res) => {
             });
         }
 
-        await friendService.saveFriend({name, userIdx, keepinIdx});
+        await friendService.saveFriend({name, userIdx});
         
         return res.status(201).json({
             status:201,
@@ -64,11 +64,18 @@ const getFriendDetail= async(req,res) => {
     const userIdx = req._id;
     const friendIdx = req.params.friendId;
     try{
-        const friends = await friendService.findFriendByFriendIdx({friendIdx,userIdx});
-        console.log(friends);
-        
+        const friend = await friendService.findFriendByFriendIdx({friendIdx});
+        console.log(friend);
+        if(!friend){
+            return res.status(400).json({
+                status:400,
+                message:"등록된 친구가 없음"
+            });
+        }
 
-        const data = {friends};
+        console.log(friend.keepinIdx);
+
+        const data = {friend};
 
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
