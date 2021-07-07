@@ -102,6 +102,7 @@
 - `var` 사용 지양하고, `let` 이나 `const` 사용
 - 비동기는 promise의 `then` 보다 `async/await` 사용
 
+<br>
 
 ## 🦖 commit, branch 전략
 
@@ -121,6 +122,7 @@
 - [refactor]: 코드 리팩토링
 - 설명은 한글로!
 
+<br>
 
 ## :bulb: 배포
 * AWS EC2 - 클라우드 컴퓨팅 시스템
