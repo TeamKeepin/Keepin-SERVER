@@ -1,4 +1,4 @@
-import { friendService } from "../services";
+import { friendService, keepinService } from "../services";
 import { validationResult } from "express-validator"
 const returnCode = require('../library/returnCode');
 
@@ -53,8 +53,8 @@ const createFriend= async(req,res) => {
         });
     }
     try{
-        //중복 check
-        const alFriend = await friendService.findFriendByName({name});
+        //중복 check   //이거 name 하고 userIdx로 해야 함 !
+        const alFriend = await friendService.findFriendByNameAnduserIdx({name,userIdx});
         if(alFriend.length>0){
             return res.status(400).json({
                 status:400,
@@ -78,6 +78,51 @@ const createFriend= async(req,res) => {
     }
 }
 
+/**
+ * @api {get} /friend 친구 목록 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getFriends
+ * @apiGroup Friend
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *  "status": 200,
+ *  "message": "친구 조회 성공",
+ *  "data": {
+ *            "friends": [
+ *             { 
+ *               "_id": "60e46c82c167c37c296bbf58",
+ *               "name": "코코"
+ *             },
+ *             { 
+ *               "_id": "60e46d82c167c37c26bbf23",
+ *               "name": "밀키"
+ *             },
+ *             ...
+ *           ]
+ * }
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 친구 목록 확인
+ * {
+ *  "status": 400,
+ *  "message": "등록된 친구들이 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const getFriends= async(req,res) => {
     const userIdx = req._id;
     try{
@@ -86,7 +131,7 @@ const getFriends= async(req,res) => {
         if(friends.length==0){
             return res.status(400).json({
                 status:400,
-                message:"등록된 친구들이 없음"
+                message:"등록된 친구들이 없습니다."
             });
         }
 
@@ -107,39 +152,91 @@ const getFriends= async(req,res) => {
     }
 }
 
+/**
+ * @api {get} /friend/:friendId 친구 상세 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getFriends
+ * @apiGroup Friend
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *  "status": 200,
+ *  "message": "친구 상세 조회 성공",
+ *  "data": {
+ *      "name": "코코",
+ *      "total": 3,
+ *      "taken": 2,
+ *      "given": 1,
+ *      "memo": "코코는 초콜릿을 너무 좋아한당"
+ *   }  
+ * }
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 친구 유무 확인
+ * {
+ *  "status": 400,
+ *  "message": "등록된 친구가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const getFriendDetail= async(req,res) => {
     const userIdx = req._id;
     const friendIdx = req.params.friendId;
     try{
-        const friend = await friendService.findFriendByFriendIdx({userIdx, friendIdx});
-        // console.log(friend);
+        const friend = await friendService.findFriendByFriendIdx({friendIdx});
         if(!friend){
             return res.status(400).json({
                 status:400,
-                message:"등록된 친구가 없음"
+                message:"등록된 친구가 없습니다"
             });
         }
-
-        console.log(friend.keepinIdx);
-
-        const data = {friend};
+        const name = friend.name;
+        const memo = friend.memo;
+        const keepins = friend.keepinIdx; 
+        const total = keepins.length;
+        let taken = 0;
+        let given = 0;
+        for(const keepinId of keepins){
+            const keepinIdx = keepinId.toString();
+            const keepin = await keepinService.findKeepinByKeepinIdx({keepinIdx});
+            if(keepin.taken==false){
+                given++;
+            }else{
+                taken++;
+            }
+        }
+        const data = {name, total, taken, given, memo};
 
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
-            message:"친구 조회 성공",
+            message:"친구 상세 조회 성공",
             data
         })
     }catch(err){
-        res.status(500).json({
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message
+            message: err.message,
         });
+        return;
     }
 }
 
-//친구와의 키핀 수 조회 
+//친구에게 받은 keepin 목록 조회
 
-//친구와의 키핀 조회 
+//친구에게 준 keepin 목록 조회
 
 //친구 메모 수정 
 
