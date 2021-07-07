@@ -67,7 +67,7 @@ const createKeepin = async (req, res) => {
   const errors = validationResult(req);
 
   let {title, photo, taken, date, category, record, friendIdx} = req.body;
-  if( !title || !photo || taken==undefined || !date || category==undefined || !record){
+  if( !title || !photo || taken==undefined || !date || category==undefined || !record ||!friendIdx){
     res.status(400).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.'
@@ -83,19 +83,19 @@ const createKeepin = async (req, res) => {
   // console.log(realDate);
 
   try {
-    const keepin = {
-      _id: userIdx,
-      title, 
-      photo, 
-      taken, 
-      date, 
-      category,
-      record,
-      friendIdx,
-    };
+    
+    const keepin = await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
 
-
-    await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
+    const friends = keepin.friendIdx;
+    const keepinIdx = keepin._id;
+    
+    for(const friendId of friends){
+      const friendIdx = friendId.toString();
+      const friend = await friendService.findFriendByFriendIdx({friendIdx});
+      const keepins = friend.keepinIdx;
+      keepins.push(keepinIdx);
+      await friend.save();
+    }
 
     return res.status(200).json({
       status: returnCode.OK,

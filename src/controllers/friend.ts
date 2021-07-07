@@ -1,4 +1,4 @@
-import { friendService } from "../services";
+import { friendService, keepinService } from "../services";
 import { validationResult } from "express-validator"
 const returnCode = require('../library/returnCode');
 
@@ -53,8 +53,8 @@ const createFriend= async(req,res) => {
         });
     }
     try{
-        //중복 check
-        const alFriend = await friendService.findFriendByName({name});
+        //중복 check   //이거 name 하고 userIdx로 해야 함 !
+        const alFriend = await friendService.findFriendByNameAnduserIdx({name,userIdx});
         if(alFriend.length>0){
             return res.status(400).json({
                 status:400,
@@ -78,6 +78,7 @@ const createFriend= async(req,res) => {
     }
 }
 
+//친구 목록 조회 
 const getFriends= async(req,res) => {
     const userIdx = req._id;
     try{
@@ -107,37 +108,47 @@ const getFriends= async(req,res) => {
     }
 }
 
+//친구 상세 조회 -> total, taken, given, memo 
 const getFriendDetail= async(req,res) => {
     const userIdx = req._id;
     const friendIdx = req.params.friendId;
     try{
-        const friend = await friendService.findFriendByFriendIdx({userIdx, friendIdx});
-        // console.log(friend);
+        const friend = await friendService.findFriendByFriendIdx({friendIdx});
         if(!friend){
             return res.status(400).json({
                 status:400,
                 message:"등록된 친구가 없음"
             });
         }
-
-        console.log(friend.keepinIdx);
-
-        const data = {friend};
+        const name = friend.name;
+        const keepins = friend.keepinIdx; 
+        const total = keepins.length;
+        let taken = 0;
+        let given = 0;
+        for(const keepinId of keepins){
+            const keepinIdx = keepinId.toString();
+            const keepin = await keepinService.findKeepinByKeepinIdx({keepinIdx});
+            if(keepin.taken==false){
+                given++;
+            }else{
+                taken++;
+            }
+        }
+        const data = {name, total, taken, given};
 
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
-            message:"친구 조회 성공",
+            message:"친구 상세 조회 성공",
             data
         })
     }catch(err){
-        res.status(500).json({
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
             status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message
+            message: err.message,
         });
+        return;
     }
 }
-
-//친구와의 키핀 수 조회 
 
 //친구와의 키핀 조회 
 

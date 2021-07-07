@@ -3,7 +3,7 @@ import {keepinController} from '../controllers'
 import auth from "../middlewares/auth"
 const router = express();
 
-/* User */
+/* KEEPIN */
 // 키핀하기 생성
 router.post('/', auth.checkToken, keepinController.createKeepin)
 // 모아보기 받은/준 필터링
