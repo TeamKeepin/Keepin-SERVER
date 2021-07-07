@@ -70,13 +70,12 @@ const searchFriendByKeyword = (data: friendSearchInput) => {
 }
 
 // 윤경 키핀 모아보기 상세
-const findFriendOfKeepin = (data: friendKeepinInput) => {
+const findKeepinFriend = (data: friendKeepinInput) => {
     const result = Friend.findOne({_id:data.friendIdx});
     return result;
 }
 
-// 영우 오빠 주석처리
-
+// 영우 오빠
 // const findKeepinFriend = (data: friendKeepinInput) => {
 //     const total= Friend.find().where('_id').equals(data.friendIdx).count();
 //     return; 
@@ -92,7 +91,7 @@ export default {
   findFriendByName,
   searchFriendByKeyword,
   saveFriend,
-  findFriendOfKeepin,
+  findKeepinFriend,
   findFriendByFriendIdx,
   findFriendByNameAnduserIdx
 }
