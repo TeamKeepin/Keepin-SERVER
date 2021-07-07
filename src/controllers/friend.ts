@@ -78,7 +78,51 @@ const createFriend= async(req,res) => {
     }
 }
 
-//친구 목록 조회 
+/**
+ * @api {get} /friend 친구 목록 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getFriends
+ * @apiGroup friend
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *  "status": 200,
+ *  "message": "친구 조회 성공",
+ *  "data": {
+ *            "friends": [
+ *             { 
+ *               "_id": "60e46c82c167c37c296bbf58",
+ *               "name": "코코"
+ *             },
+ *             { 
+ *               "_id": "60e46d82c167c37c26bbf23",
+ *               "name": "밀키"
+ *             },
+ *             ...
+ *           ]
+ * }
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 친구 목록 확인
+ * {
+ *  "status": 400,
+ *  "message": "등록된 친구들이 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const getFriends= async(req,res) => {
     const userIdx = req._id;
     try{
@@ -87,7 +131,7 @@ const getFriends= async(req,res) => {
         if(friends.length==0){
             return res.status(400).json({
                 status:400,
-                message:"등록된 친구들이 없음"
+                message:"등록된 친구들이 없습니다."
             });
         }
 
@@ -108,7 +152,46 @@ const getFriends= async(req,res) => {
     }
 }
 
-//친구 상세 조회 -> total, taken, given, memo 
+/**
+ * @api {get} /friend/:friendId 친구 상세 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getFriends
+ * @apiGroup friend
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *  "status": 200,
+ *  "message": "친구 상세 조회 성공",
+ *  "data": {
+ *      "name": "코코",
+ *      "total": 3,
+ *      "taken": 2,
+ *      "given": 1,
+ *      "memo": "코코는 초콜릿을 너무 좋아한당"
+ *   }  
+ * }
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 친구 유무 확인
+ * {
+ *  "status": 400,
+ *  "message": "등록된 친구가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const getFriendDetail= async(req,res) => {
     const userIdx = req._id;
     const friendIdx = req.params.friendId;
@@ -117,10 +200,11 @@ const getFriendDetail= async(req,res) => {
         if(!friend){
             return res.status(400).json({
                 status:400,
-                message:"등록된 친구가 없음"
+                message:"등록된 친구가 없습니다"
             });
         }
         const name = friend.name;
+        const memo = friend.memo;
         const keepins = friend.keepinIdx; 
         const total = keepins.length;
         let taken = 0;
@@ -134,7 +218,7 @@ const getFriendDetail= async(req,res) => {
                 taken++;
             }
         }
-        const data = {name, total, taken, given};
+        const data = {name, total, taken, given, memo};
 
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
@@ -150,7 +234,9 @@ const getFriendDetail= async(req,res) => {
     }
 }
 
-//친구와의 키핀 조회 
+//친구에게 받은 keepin 목록 조회
+
+//친구에게 준 keepin 목록 조회
 
 //친구 메모 수정 
 
