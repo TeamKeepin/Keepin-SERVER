@@ -47,6 +47,80 @@
   },
   {
     "type": "get",
+    "url": "/friend",
+    "title": "친구 목록 조회",
+    "version": "1.0.0",
+    "name": "getFriends",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구 조회 성공\",\n \"data\": {\n           \"friends\": [\n            { \n              \"_id\": \"60e46c82c167c37c296bbf58\",\n              \"name\": \"코코\"\n            },\n            { \n              \"_id\": \"60e46d82c167c37c26bbf23\",\n              \"name\": \"밀키\"\n            },\n            ...\n          ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 친구 목록 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구들이 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "get",
+    "url": "/friend/:friendId",
+    "title": "친구 상세 조회",
+    "version": "1.0.0",
+    "name": "getFriends",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구 상세 조회 성공\",\n \"data\": {\n     \"name\": \"코코\",\n     \"total\": 3,\n     \"taken\": 2,\n     \"given\": 1,\n     \"memo\": \"코코는 초콜릿을 너무 좋아한당\"\n  }  \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "get",
     "url": "/friend/search?name=keyword",
     "title": "친구 검색 조회",
     "version": "1.0.0",
@@ -766,79 +840,5 @@
     },
     "filename": "src/controllers/user.ts",
     "groupTitle": "User"
-  },
-  {
-    "type": "get",
-    "url": "/friend",
-    "title": "친구 목록 조회",
-    "version": "1.0.0",
-    "name": "getFriends",
-    "group": "friend",
-    "header": {
-      "examples": [
-        {
-          "title": "Header-Example:",
-          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구 조회 성공\",\n \"data\": {\n           \"friends\": [\n            { \n              \"_id\": \"60e46c82c167c37c296bbf58\",\n              \"name\": \"코코\"\n            },\n            { \n              \"_id\": \"60e46d82c167c37c26bbf23\",\n              \"name\": \"밀키\"\n            },\n            ...\n          ]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "-400 친구 목록 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구들이 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "src/controllers/friend.ts",
-    "groupTitle": "friend"
-  },
-  {
-    "type": "get",
-    "url": "/friend/:friendId",
-    "title": "친구 상세 조회",
-    "version": "1.0.0",
-    "name": "getFriends",
-    "group": "friend",
-    "header": {
-      "examples": [
-        {
-          "title": "Header-Example:",
-          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구 상세 조회 성공\",\n \"data\": {\n     \"name\": \"코코\",\n     \"total\": 3,\n     \"taken\": 2,\n     \"given\": 1,\n     \"memo\": \"코코는 초콜릿을 너무 좋아한당\"\n  }  \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "src/controllers/friend.ts",
-    "groupTitle": "friend"
   }
 ]
