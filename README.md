@@ -13,7 +13,7 @@
     
 * 프로젝트 기간: 2021.06.26 ~ 07.17
 
-* [API 명세서](keepin-alb-1248062252.ap-northeast-2.elb.amazonaws.com/apidoc)</b>
+* [API 명세서](http://keepin-alb-1248062252.ap-northeast-2.elb.amazonaws.com/apidoc/)</b>
 
 <br>
 
