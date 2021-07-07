@@ -28,7 +28,10 @@ const returnCode = require('../library/returnCode');
  * {
  *  "email": "keepin@gmail.com",
  *  "password": "1234abcd",
- *  // ...
+ *  "name": "유키핀",
+ *  "birth": "19970627",
+ *  "phone": "01012345678",
+ *    
  * }
  *
  * @apiSuccess {String} jwt
@@ -50,7 +53,6 @@ const returnCode = require('../library/returnCode');
  *  "message": "이미 사용 중인 아이디입니다."
  * }
  */
-
 const signUp = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -122,7 +124,52 @@ const signUp = async (req: Request, res: Response) => {
     }
 }
 
-
+/**
+ * @api {post} /user/signin 로그인
+ * 
+ * @apiVersion 1.0.0
+ * @apiName SignIn
+ * @apiGroup User
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "email": "keepin@gmail.com",
+ *  "password": "1234abcd",
+ *  "name": "유키핀",
+ *  "birth": "19970627",
+ *  "phone": "01012345678",
+ *    
+ * }
+ *
+ * @apiSuccess {String} jwt
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * 200 OK
+ * {
+ *  "status": 200,
+ *  "message": "로그인 성공"   ,
+ *  "data": {
+ *    "jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *  }
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * 400 아이디 확인
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * 400 비밀번호 확인
+ * {
+ *  "status": 400,
+ *  "message": "비밀번호가 일치하지 않습니다."
+ * }
+ */
 const signIn = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()){
@@ -184,20 +231,56 @@ const signIn = async (req, res) => {
         }
 }
 
-//프로필 조회 
+/**
+ * @api {get} /my/profile 프로필 조회 
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getProfile
+ * @apiGroup My 
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *   "status": 200,
+ *   "msg": "프로필 조회 성공",
+ *   "data": {
+ *       "_id": "60e349893460ec398ea1dc45",
+ *       "email": "fbduddn97@naver.com",
+ *       "password": "$2a$10$svbqi40QZQcWkRc2Jx8clOcoY5Q/urnAvdfcr0eVnIKk6M8.R9iRm",
+ *       "name": "yboy",
+ *       "birth": "19970322",
+ *       "phone": "01012345678"
+ *   }
+ *}
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 유저 유무 확인 
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const getProfile = async(req,res) => {
     const userIdx = req._id;
     // console.log(userIdx);
     try{
         const data = await userService.findUserProfile({userIdx});
-
-        // const users = await User.find();
-        // console.log(users[1]);
         
         if(!data) {
             res.status(400).json({
                 status: 400,
-                message: "User data 없음" 
+                message: "유저가 없습니다." 
               });
         }
        
@@ -216,6 +299,42 @@ const getProfile = async(req,res) => {
     }
 }
 
+/**
+ * @api {put} /my/profile 프로필 편집
+ * 
+ * @apiVersion 1.0.0
+ * @apiName editProfile
+ * @apiGroup My
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "name": "유키핀"
+ * } 
+ * @apiSuccessExample {json} Success-Response:
+ * -201 OK
+ *{
+ *   "status": 201,
+ *   "msg": "프로필 수정 성공",
+ *}
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 유저 유무 확인 
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const editProfile = async(req,res) => {
     const userIdx = req._id;
     const {name} = req.body;
@@ -225,7 +344,7 @@ const editProfile = async(req,res) => {
         if(!user) {
             return res.status(returnCode.BAD_REQUEST).json({
                 status: returnCode.BAD_REQUEST,
-                message: "User data 없음" 
+                message: "유저가 없습니다." 
               });
         }
         user.name = name;
@@ -233,7 +352,7 @@ const editProfile = async(req,res) => {
 
         return res.status(200).json({
             status: returnCode.OK,
-            message: '이름수정 성공'
+            message: '프로필 수정 성공'
         });
     } catch (err) {
         console.error(err.message);
@@ -245,7 +364,54 @@ const editProfile = async(req,res) => {
     }
 }
 
-// 비밀번호 변경 
+/**
+ * @api {put} /my/profile 비밀번호 수정
+ * 
+ * @apiVersion 1.0.0
+ * @apiName editProfile
+ * @apiGroup My 
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "currentPassword": "1234567",
+ *  "newPassword": "123456"
+ * }
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -201 OK
+ *{
+ *   "status": 201,
+ *   "msg": "비밀번호 수정 성공",
+ *}
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 유저 유무 확인 
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * -400 비밀번호 확인 
+ * {
+ *  "status": 400,
+ *  "message": "기존 비밀번호 일치하지 않습니다."
+ * }
+  * -400 변경할 비밀번호 자리수 확인 
+ * {
+ *  "status": 400,
+ *  "message": "6자리 이상의 비밀번호로 설정해 주세요."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const editPassword = async(req,res) => {
     const userIdx = req._id;
     try{
@@ -255,7 +421,7 @@ const editPassword = async(req,res) => {
         if(!user) {
             return res.status(400).json({
                 status: 400,
-                message: "User data 없음" 
+                message: "유저가 없습니다." 
               });
         }
 
@@ -265,14 +431,14 @@ const editPassword = async(req,res) => {
         if(!isMatch){
             return res.status(returnCode.BAD_REQUEST).json({
                 status: returnCode.BAD_REQUEST,
-                message: "기존 비밀번호 일치하지 않음" 
+                message: "기존 비밀번호 일치하지 않습니다." 
               });
         }
 
         if(newPassword.length<6){
             return res.status(400).json({
                 status: 400,
-                message: "6자리 이상의 비밀번호로 설정해 주세요" 
+                message: "6자리 이상의 비밀번호로 설정해 주세요." 
               });
         }
         const salt = await bcrypt.genSalt(10);
@@ -281,7 +447,7 @@ const editPassword = async(req,res) => {
         user.password = hashPwd;
         await user.save();
         
-        return res.status(200).json({
+        return res.status(201).json({
             status: returnCode.OK,
             msg: '비밀번호 수정 성공'
         });
@@ -295,7 +461,44 @@ const editPassword = async(req,res) => {
     }
 }
 
-//유저이름, 받은 선물 수, 준 선물 수 return 
+/**
+ * @api {get} /my 유저별 keepin 수 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName editProfile
+ * @apiGroup My 
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ * }
+ * x
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *   "status": 200,
+ *   "msg": "키핀 수 조회 성공",
+ *   "data": {
+ *       "name": "유키핀",
+ *       "total": 17,
+ *       "taken": 16,
+ *       "given": 1
+ *   }
+ *}
+ *  
+ * @apiErrorExample Error-Response:
+ * -400 유저 유무 확인 
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
 const getKeepinCount = async(req,res) => {
     const userIdx = req._id;
     try{
@@ -303,7 +506,7 @@ const getKeepinCount = async(req,res) => {
         if(!user) {
             return res.status(returnCode.BAD_REQUEST).json({
                 status: returnCode.BAD_REQUEST,
-                message: "User data 없음" 
+                message: "유저가 없습니다." 
               });
         }
         const name = user.name;
@@ -318,13 +521,10 @@ const getKeepinCount = async(req,res) => {
                 taken++;
             }
         }
-        // console.log(total);
-        // console.log(taken);
-        // console.log(given);
         const data = {name, total, taken, given};
         return res.status(200).json({
             status: returnCode.OK,
-            message: '선물 수 조회 성공',
+            message: 'keepin 수 조회 성공',
             data  
         });
 
