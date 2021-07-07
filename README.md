@@ -110,7 +110,7 @@
 ## 🦖 branch, commit 전략
 
 ### branch
-- local - yeoungwoo / minji / yunkyeong 에서 작업
+- local - yeoungwoo / minji / yunyeong 에서 작업
 - 각자 이름 브랜치에 push
 - PR전, 카톡방에 PR해도 되냐고 물어보기!
 - 각자 이름 브랜치에서 develop으로 PR
