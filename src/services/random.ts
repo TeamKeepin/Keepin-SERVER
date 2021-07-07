@@ -9,7 +9,7 @@ export interface keepinFindIdxInput {
 }
 
 const findRandoms = (data: keepinFindUserIdxInput) => {
-  const randoms =  Keepin.find().where('_id').equals(data.userIdx);
+  const randoms =  Keepin.find().where('userIdx').equals(data.userIdx);
   return randoms;
 }
 
