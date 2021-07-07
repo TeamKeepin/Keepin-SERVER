@@ -319,7 +319,7 @@ const getDetailKeepin = async (req, res) => {
     const friendIds = detail.friendIdx;
     var frienddata;
     for (var i=0; i<friendIds.length; i++) {
-      frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+      frienddata =  await friendService.findFriendOfKeepin({ friendIdx : friendIds[i].toString() });
       friendNames.push(frienddata.name);
       console.log(friendNames)
     }
@@ -341,7 +341,7 @@ const getDetailKeepin = async (req, res) => {
       message: '키핀 상세페이지 조회 성공',
       keepin
     })
-    } catch (err) {
+  } catch (err) {
       console.error(err.message);
       res.status(returnCode.INTERNAL_SERVER_ERROR).json({
           status: returnCode.INTERNAL_SERVER_ERROR,
