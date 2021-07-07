@@ -1,7 +1,9 @@
 import { validationResult } from "express-validator"
 import { friendService, keepinService } from "../services";
-const returnCode = require('../library/returnCode')
-const moment = require('moment');
+import returnCode from "../library/returnCode";
+import moment from "moment"; 
+// const returnCode = require('../library/returnCode')
+// const moment = require('moment');
 
 /**
  * @api {post} /keepin 키핀하기 생성

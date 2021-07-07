@@ -1,6 +1,6 @@
 import { friendService, keepinService } from "../services";
 import { validationResult } from "express-validator"
-const returnCode = require('../library/returnCode');
+import returnCode from "../library/returnCode";
 
 /**
  * @api {post} /friend 친구 생성

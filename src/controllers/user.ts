@@ -6,11 +6,7 @@ import config from "../config"
 import { check, validationResult } from "express-validator"
 import { userService } from "../services";
 import { keepinService } from "../services";
-const returnCode = require('../library/returnCode');
-
-
-
-
+import returnCode from "../library/returnCode";
 
 /**
  * @api {post} /user/signup 회원가입

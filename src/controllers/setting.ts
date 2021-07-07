@@ -1,5 +1,5 @@
 import { randomService } from "../services";
-const returnCode = require('../library/returnCode');
+import returnCode from "../library/returnCode";
 
 const deleteAllData = async(req,res) => {
     const userIdx = req._id;
