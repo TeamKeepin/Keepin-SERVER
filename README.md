@@ -93,6 +93,7 @@
 
 <br>
 
+
 ## ☑️ Coding Convention
 - 변수명: 카멜케이스 `inputBox`
 - 상수명: 대문자 `INPUT_BOX`
@@ -100,6 +101,7 @@
 - 클래스명: 첫글자 대문자 `InputBox`
 - `var` 사용 지양하고, `let` 이나 `const` 사용
 - 비동기는 promise의 `then` 보다 `async/await` 사용
+
 
 ## 🦖 commit, branch 전략
 
@@ -118,6 +120,7 @@
 - [fix] : 버그 해결 시
 - [refactor]: 코드 리팩토링
 - 설명은 한글로!
+
 
 ## :bulb: 배포
 * AWS EC2 - 클라우드 컴퓨팅 시스템
