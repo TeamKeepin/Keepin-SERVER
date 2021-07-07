@@ -83,7 +83,7 @@ const createFriend= async(req,res) => {
  * 
  * @apiVersion 1.0.0
  * @apiName getFriends
- * @apiGroup friend
+ * @apiGroup Friend
  * 
  * @apiHeaderExample {json} Header-Example:
  * {
@@ -157,7 +157,7 @@ const getFriends= async(req,res) => {
  * 
  * @apiVersion 1.0.0
  * @apiName getFriends
- * @apiGroup friend
+ * @apiGroup Friend
  * 
  * @apiHeaderExample {json} Header-Example:
  * {
