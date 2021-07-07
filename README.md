@@ -100,6 +100,8 @@
 - 클래스명: 첫글자 대문자 `InputBox`
 - `var` 사용 지양하고, `let` 이나 `const` 사용
 - 비동기는 promise의 `then` 보다 `async/await` 사용
+- 모듈 필요시, `import mongoose from "mongoose";` ← 해당 형식 사용하기
+- 코드 끝에는 ;(세미콜론) 사용
 
 <br>
 
