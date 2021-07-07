@@ -307,7 +307,17 @@ const getKeepinCount = async(req,res) => {
               });
         }
         const name = user.name;
-        const {total, taken, given} = await keepinService.findKeepinCount(userIdx);
+        const myKeepins = await keepinService.findkeepinByUserIdx({userIdx});
+        const total = myKeepins.length;
+        let taken = 0;
+        let given = 0; 
+        for(const keepin of myKeepins){
+            if(keepin.taken==false){
+                given++;
+            }else{
+                taken++;
+            }
+        }
         // console.log(total);
         // console.log(taken);
         // console.log(given);
