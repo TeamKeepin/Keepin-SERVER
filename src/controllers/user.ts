@@ -177,13 +177,11 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
     try {
         let user = await userService.findUser({email});
-        // console.log(user)
-        // console.log(user._id)
-        // console.log(user.email)
+
         if(!user) {
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
-                message: "유저가 없습니다."
+                message: "이메일/비밀번호를 다시 확인해주세요."
               });
         }
 
@@ -193,9 +191,11 @@ const signIn = async (req, res) => {
         if(!isMatch){
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
-                message: "비밀번호가 일치하지 않습니다."
+                message: "이메일/비밀번호를 다시 확인해주세요."
             });
         }
+
+        
 
         // Return jsonwebtoken
         const payload = {
