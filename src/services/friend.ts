@@ -70,7 +70,7 @@ const searchFriendByKeyword = (data: friendSearchInput) => {
 }
 
 // 윤경 키핀 모아보기 상세
-const findFriendOfKeepin = (data: friendKeepinInput) => {
+const findKeepinFriend = (data: friendKeepinInput) => {
     const result = Friend.findOne({_id:data.friendIdx});
     return result;
 }
@@ -93,7 +93,7 @@ export default {
   findFriendByName,
   searchFriendByKeyword,
   saveFriend,
-  findFriendOfKeepin,
+  findKeepinFriend,
   findFriendByFriendIdx,
   findFriendByNameAnduserIdx
 }
