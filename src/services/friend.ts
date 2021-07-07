@@ -75,6 +75,7 @@ const findFriendOfKeepin = (data: friendKeepinInput) => {
     return result;
 }
 
+// 영우 오빠 주석처리
 // const findKeepinFriend = (data: friendKeepinInput) => {
 //     const total= Friend.find().where('_id').equals(data.friendIdx).count();
 //     return; 
