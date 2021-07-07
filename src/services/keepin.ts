@@ -16,6 +16,10 @@ export interface keepinFindInput{
   taken: boolean;
 }
 
+export interface keepinFindByKeepinIdxInput{
+  keepinIdx: string;
+}
+
 export interface keepinSearchInput{
   userIdx: string;
   title: string;
@@ -63,11 +67,16 @@ const findKeepinCount = (data: randomFindUserIdxInput) => {
     return result;
 }
 
+const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
+  const keepin = Keepin.findOne({_id:data.keepinIdx});
+  return keepin;
+}
 
 export default {
   saveKeepin,
   findKeepin,
   findKeepinCount,
   searchKeepinByKeyword,
-  findDetailKeepin
+  findDetailKeepin,
+  findKeepinByKeepinIdx
 }

@@ -69,9 +69,11 @@ const searchFriendByKeyword = (data: friendSearchInput) => {
     return result;
 }
 
+
 const findKeepinFriend = (data: friendKeepinInput) => {
-    const result = Friend.findOne({_id:data.friendIdx});
-    return result;
+    const total= Friend.find().where('_id').equals(data.friendIdx).count();
+    
+    return; 
 }
 
 // const findFriendKeepinCountAndMemo = (data: friendFindFriendIdxInput) => {
