@@ -2,7 +2,7 @@ import Friend from "../models/Friend";
 
 
 export interface friendsFindUserIdxInput {
-    userIdx: string //user _id 
+    userIdx: string 
 }
 
 export interface friendFindNameInput {
@@ -14,12 +14,19 @@ export interface friendCreateInput{
     userIdx: string
 }
 
+export interface friendFinduserIdxAndNameInput{
+    name: string,
+    userIdx: string
+}
 
 export interface friendFindFriendIdxInput{
+    friendIdx:string
+}
+
+export interface friendFindIdxAndUserIdxInput{
     friendIdx:string,
     userIdx:string
 }
-
 
 export interface friendSearchInput{
     userIdx: string,
@@ -31,9 +38,8 @@ export interface friendKeepinInput{
 }
 
 
-
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
-    const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx');
+    const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name:-1});
     return friends;
 }
 
@@ -42,10 +48,13 @@ const findFriendByName = (data: friendFindNameInput) => {
     return friend;
 }
 
+const findFriendByNameAnduserIdx = (data: friendFinduserIdxAndNameInput) => {
+    const friend = Friend.find({userIdx: data.userIdx}).find({name: data.name});
+    return friend;
+}
+
 const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
     const friend= Friend.findOne({_id:data.friendIdx});
-
-    // friend의 keepin에서 userIdx가 일치하는 거만 골라서 카운트
     return friend;
 }
 
@@ -60,15 +69,24 @@ const searchFriendByKeyword = (data: friendSearchInput) => {
     return result;
 }
 
+
 const findKeepinFriend = (data: friendKeepinInput) => {
-    const result = Friend.findOne({_id:data.friendIdx});
-    return result;
+    const total= Friend.find().where('_id').equals(data.friendIdx).count();
+    
+    return; 
 }
+
+// const findFriendKeepinCountAndMemo = (data: friendFindFriendIdxInput) => {
+//     const friend = Friend.find({_id: data.friendIdx})
+//     return
+// }
+
 export default {
   findFriendsByUserIdx,
   findFriendByName,
   searchFriendByKeyword,
   saveFriend,
   findKeepinFriend,
-  findFriendByFriendIdx
+  findFriendByFriendIdx,
+  findFriendByNameAnduserIdx
 }
