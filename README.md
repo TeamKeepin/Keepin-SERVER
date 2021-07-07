@@ -59,8 +59,7 @@
 
 <br>
 
-## :blue_book: Package
-
+## :blue_book: Package (dependencies module)
 사용 패키지(모듈)은 다음과 같습니다.
 
 - **apidoc** - 간단한 주석을 통해 자동으로 api 문서를 생성해주는 모듈
