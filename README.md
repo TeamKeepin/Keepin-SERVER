@@ -104,7 +104,7 @@
 
 <br>
 
-## 🦖 commit, branch 전략
+## 🦖 branch, commit 전략
 
 ### branch
 - local - yeoungwoo / minji / yunkyeong 에서 작업
