@@ -184,7 +184,6 @@ const signIn = async (req, res) => {
                 message: "이메일/비밀번호를 다시 확인해주세요."
               });
         }
-
         // Encrpyt password
         const isMatch = await bcrypt.compare(password, user.password);
 
