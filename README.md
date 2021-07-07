@@ -93,6 +93,32 @@
 
 <br>
 
+## ☑️ Coding Convention
+- 변수명: 카멜케이스 `inputBox`
+- 상수명: 대문자 `INPUT_BOX`
+- 폴더명, 파일명: 소문자 `inputbox`
+- 클래스명: 첫글자 대문자 `InputBox`
+- `var` 사용 지양하고, `let` 이나 `const` 사용
+- 비동기는 promise의 `then` 보다 `async/await` 사용
+
+## 🦖 commit, branch 전략
+
+### branch
+- local - yeoungwoo / minji / yunkyeong 에서 작업
+- 각자 이름 브랜치에 push
+- PR전, 카톡방에 PR해도 되냐고 물어보기!
+- 각자 이름 브랜치에서 develop으로 PR
+- 코드 리뷰 후, confirm 받고 develop에 Merge
+- develop에 Merge 될 때마다 모든 팀원 pull 받아서, 최신 상태 유지하기!
+
+### commit 메세지 규약
+- [update] : 기능 수정 시
+- [release] : 첫 세팅 시
+- [feat] : 기능 추가 시
+- [fix] : 버그 해결 시
+- [refactor]: 코드 리팩토링
+- 설명은 한글로!
+
 ## :bulb: 배포
 * AWS EC2 - 클라우드 컴퓨팅 시스템
 * AWS S3 - 클라우드 데이터 저장소
@@ -100,7 +126,6 @@
 * Atlas - MongoDB 클라우드 호스팅 서비스
 
 <br>
-
 
 ## :computer: 개발자
 <img style="border: 1px solid black !important; border-radius:20px;" src="https://user-images.githubusercontent.com/37949197/124622445-1739a500-deb6-11eb-82ce-fa84c1359f04.png" width="300px" />
