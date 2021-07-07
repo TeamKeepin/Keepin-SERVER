@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { check, validationResult } from "express-validator"
 import { reminderService } from "../services";
-const moment = require('moment');
-const returnCode = require('../library/returnCode');
+import moment from "moment";
+import returnCode from "../library/returnCode";
 
 /**
  * @api {post} /reminder 리마인더 생성

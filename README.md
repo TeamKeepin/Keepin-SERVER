@@ -1,3 +1,5 @@
+
+
 # 🎁 Keepin - 감사한 순간을 더 잘 기억하는 방법 🎁
 
 <img style="border: 1px solid black !important; border-radius:20px;" src="https://user-images.githubusercontent.com/37949197/124622652-46e8ad00-deb6-11eb-8cca-f9367559c2b6.png" width="250px" />
@@ -11,7 +13,7 @@
     
 * 프로젝트 기간: 2021.06.26 ~ 07.17
 
-* [API 명세서](keepin-alb-1248062252.ap-northeast-2.elb.amazonaws.com/apidoc)</b>
+* [API 명세서](http://keepin-alb-1248062252.ap-northeast-2.elb.amazonaws.com/apidoc/)</b>
 
 <br>
 
@@ -59,8 +61,7 @@
 
 <br>
 
-## :blue_book: Package
-
+## :blue_book: Package (dependencies module)
 사용 패키지(모듈)은 다음과 같습니다.
 
 - **apidoc** - 간단한 주석을 통해 자동으로 api 문서를 생성해주는 모듈
@@ -89,7 +90,40 @@
 <br>
 
 ## :green_book: Cloud Architecture
-![keepin 아키텍처](https://user-images.githubusercontent.com/37949197/124375005-970b1800-dcda-11eb-9385-e4a12d1beabc.jpg)
+![keepin 아키텍처](https://user-images.githubusercontent.com/37949197/124752892-6093fe00-df63-11eb-9572-544fb01e8730.jpg)
+
+<br>
+
+
+## ☑️ Coding Convention
+- 변수명: 카멜케이스 `inputBox`
+- 상수명: 대문자 `INPUT_BOX`
+- 폴더명, 파일명: 소문자 `inputbox`
+- 클래스명: 첫글자 대문자 `InputBox`
+- `var` 사용 지양하고, `let` 이나 `const` 사용
+- 비동기는 promise의 `then` 보다 `async/await` 사용
+- 모듈 필요시, `import mongoose from "mongoose";` ← 해당 형식 사용하기
+- 코드 끝에는 ;(세미콜론) 사용
+
+<br>
+
+## 🦖 branch, commit 전략
+
+### branch
+- local - yeoungwoo / minji / yungyeong 에서 작업
+- 각자 이름 브랜치에 push
+- PR전, 카톡방에 PR해도 되냐고 물어보기!
+- 각자 이름 브랜치에서 develop으로 PR
+- 코드 리뷰 후, confirm 받고 develop에 Merge
+- develop에 Merge 될 때마다 모든 팀원 pull 받아서, 최신 상태 유지하기!
+
+### commit 메세지 규약
+- [update] : 기능 수정 시
+- [release] : 첫 세팅 시
+- [feat] : 기능 추가 시
+- [fix] : 버그 해결 시
+- [refactor]: 코드 리팩토링
+- 설명은 한글로!
 
 <br>
 
@@ -100,7 +134,6 @@
 * Atlas - MongoDB 클라우드 호스팅 서비스
 
 <br>
-
 
 ## :computer: 개발자
 <img style="border: 1px solid black !important; border-radius:20px;" src="https://user-images.githubusercontent.com/37949197/124622445-1739a500-deb6-11eb-82ce-fa84c1359f04.png" width="300px" />
