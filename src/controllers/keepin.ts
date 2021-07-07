@@ -321,7 +321,6 @@ const getDetailKeepin = async (req, res) => {
     for (var i=0; i<friendIds.length; i++) {
       frienddata =  await friendService.findFriendOfKeepin({ friendIdx : friendIds[i].toString() });
       friendNames.push(frienddata.name);
-      console.log(friendNames)
     }
 
     const keepin ={
