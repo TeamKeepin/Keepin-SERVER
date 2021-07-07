@@ -65,7 +65,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "\n- keyword에 검색할 단어를 넣음\n{\n    \"name\": \"보\" \n}",
+          "content": "\n- [QueryString]: keyword에 검색할 단어를 넣음\n{\n    \"name\": \"보\" \n}",
           "type": "json"
         }
       ]
