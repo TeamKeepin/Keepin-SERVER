@@ -433,10 +433,81 @@ const getDetailKeepin = async (req, res) => {
   }
 }
 
+/**
+ * @api {delete} /keepin 키핀 삭제
+ * 
+ * @apiVersion 1.0.0
+ * @apiName deleteKeepin
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+    "keepinArray": ["60e322167887874ecccad066","60e3221f7887874ecccad06a"]
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+     "status": 200,
+     "message": "키핀 삭제 완료"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "keepinID Array 값이 없습니다."
+ * }
+ *
+ */
+// 키핀 삭제
+const deleteKeepin = async (req, res) => {
+  const keepinIdArray = req.body.keepinArray; //배열로 keepinId 값들을 받음
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()){
+      res.status(returnCode.BAD_REQUEST).json({
+          status: returnCode.BAD_REQUEST,
+          message: '요청바디가 없습니다.',
+      });
+  }
+
+  if(!keepinIdArray || keepinIdArray.length == 0){
+      res.status(returnCode.BAD_REQUEST).json({
+          status: returnCode.BAD_REQUEST,
+          message: 'keepinID Array 값이 없습니다.',
+      });
+  }
+
+  try {
+      // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
+      for (var keepinId of keepinIdArray){ 
+          await keepinService.deleteKeepinByKeepinIdx({keepinIdx: keepinId}); // reminderId 하나씩 삭제 
+      }
+
+      return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 삭제 완료' });
+
+  } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+      });
+      return;
+  }
+}
+
 export default {
   createKeepin,
   getTakenKeepin,
   searchKeepin,
   getKeepinByCategory,
-  getDetailKeepin
+  getDetailKeepin,
+  deleteKeepin
 }

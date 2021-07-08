@@ -452,10 +452,13 @@ const deleteReminder = async (req, res) => {
         });
     }
 
+    // 해당 reminderId 값이 존재하는지 체크
+
     try {
+
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
         for (var reminderId of reminderIdArray){ 
-            await reminderService.deleteReminderbyReminderId({_id: reminderId}); // reminderId 하나씩 삭제 
+            await reminderService.deleteReminderbyReminderId({reminderIdx: reminderId}); // reminderId 하나씩 삭제 
         }
 
         return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 삭제 완료' });

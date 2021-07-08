@@ -1,4 +1,6 @@
-import { randomService } from "../services";
+import { Request, Response } from "express";
+import { check, validationResult } from "express-validator"
+import { reminderService } from "../services";
 import returnCode from "../library/returnCode";
 
 const deleteAllData = async(req,res) => {
