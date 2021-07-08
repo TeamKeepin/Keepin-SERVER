@@ -86,6 +86,11 @@ const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
   return keepin;
 }
 
+// 키핀 삭제
+const deleteKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
+  return Keepin.deleteOne({_id:data.keepinIdx});
+}
+
 export default {
   saveKeepin,
   findKeepin,
@@ -94,5 +99,6 @@ export default {
   findDetailKeepin,
   findKeepinByKeepinIdx,
   findKeepinForTaken,
-  findkeepinByUserIdxAndCategory
+  findkeepinByUserIdxAndCategory,
+  deleteKeepinByKeepinIdx
 }

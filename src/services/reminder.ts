@@ -27,7 +27,7 @@ export interface reminderMonthFindInput {
   month: string
 }
 export interface reminderFindInputByReminderId {
-  _id: string
+  reminderIdx: string
 }
 
 const saveReminder = (data: reminderCreateInput) => {
@@ -58,14 +58,19 @@ const findReminderOncoming = (data: reminderOncomingFindInput) => {
   return result;
 }
 
+const findReminderbyReminderId = (data: reminderFindInputByReminderId) => {
+  return Reminder.findOne({_id:data.reminderIdx});
+}
+
 const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
-return Reminder.deleteOne({_id:data._id});
+  return Reminder.deleteOne({_id:data.reminderIdx});
 }
 
 export default {
   saveReminder,
   findReminder,
   findMonthReminder,
+  findReminderbyReminderId,
   findReminderOncoming,
   deleteReminderbyReminderId
 }
