@@ -16,8 +16,7 @@ router.post('/',auth.checkToken,[
 router.get('/',auth.checkToken, friendController.getFriends);
 router.get('/search', auth.checkToken, friendController.searchFriends);
 router.get('/:friendId',auth.checkToken,friendController.getFriendDetail);
-// router.get('/taken/:friendId',auth.checkToken,friendController.getTakenList);
-// router.get('/given/:friendId',auth.checkToken,friendController.getGivenList);
-
+router.get('/keepin/:friendId',auth.checkToken,friendController.getTakenGivenList);
+router.put('/:friendId',auth.checkToken, friendController.editFriendMemo);
 
 export default router;

@@ -10,7 +10,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
           "type": "json"
         }
       ]
@@ -47,6 +47,43 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/friend/keepin/:friendId",
+    "title": "친구 메모 수정",
+    "version": "1.0.0",
+    "name": "editFriendMemo",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"메모 수정 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "get",
     "url": "/friend",
     "title": "친구 목록 조회",
     "version": "1.0.0",
@@ -56,7 +93,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
           "type": "json"
         }
       ]
@@ -93,7 +130,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
           "type": "json"
         }
       ]
@@ -121,6 +158,43 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/friend/keepin/:friendId",
+    "title": "친구에게 받은/준 keepin 목록 조회",
+    "version": "1.0.0",
+    "name": "getTakenGivenList",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구 상세 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"taken\": true,\n              \"category\": [\n                  \"생일\",\n                  \"축하\"\n              ],\n              \"friendIdx\": [\n                  {\n                      \"_id\": \"60e5dc375c157b183255b0ca\",\n                      \"name\": \"밀키\"\n                  }\n              ],\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"record\": \"우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\"\n          },\n          {\n              \"taken\": true,\n              \"category\": [\n                  \"생일\",\n                  \"축하\"\n              ],\n              \"friendIdx\": [\n                  {\n                      \"_id\": \"60e5dc375c157b183255b0ca\",\n                      \"name\": \"밀키\"\n                  }\n              ],\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"record\": \"우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\"\n          }\n      ],\n      \"givenList\": [\n          {\n              \"taken\": false,\n              \"category\": [\n                   \"생일\",\n                  \"축하\"\n              ],\n              \"friendIdx\": [\n                  {\n                      \"_id\": \"60e5dc375c157b183255b0ca\",\n                      \"name\": \"밀키\"\n                  }\n              ],\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"record\": \"우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\"\n          }\n      ]\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "get",
     "url": "/friend/search?name=keyword",
     "title": "친구 검색 조회",
     "version": "1.0.0",
@@ -130,7 +204,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
           "type": "json"
         }
       ]
@@ -139,7 +213,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "\n- [QueryString]: keyword에 검색할 단어를 넣음\n{\n    \"name\": \"보\" \n}",
+          "content": "\n- [QueryString]: keyword에 검색할 단어를 넣음\n{\n    \"name\": \"보리\" \n}",
           "type": "json"
         }
       ]
