@@ -135,11 +135,7 @@ const signUp = async (req: Request, res: Response) => {
  * @apiParamExample {json} Request-Example:
  * {
  *  "email": "keepin@gmail.com",
- *  "password": "1234abcd",
- *  "name": "유키핀",
- *  "birth": "19970627",
- *  "phone": "01012345678",
- *    
+ *  "password": "1234abcd", 
  * }
  *
  * @apiSuccess {String} jwt

@@ -19,8 +19,6 @@ router.post('/signin',
   check("email", "Please include a valid email").isEmail(),
   check("password", "Password is required").exists(),
 ], userController.signIn)
-//로그인 /auth로 되어 있는데 router하나 더 파야 하나 ??
-// router.post('/~',userController.login)
 
 export default router;
 

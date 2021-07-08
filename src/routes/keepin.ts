@@ -12,6 +12,7 @@ router.get('/', auth.checkToken, keepinController.getTakenKeepin)
 router.get('/all', auth.checkToken, keepinController.searchKeepin)
 // 모아보기 게시글 상세보기 
 router.get('/detail/:keepinIdx', auth.checkToken, keepinController.getDetailKeepin)
-
+// 모아보기 카테고리 조회 
+router.get('/category', auth.checkToken, keepinController.getKeepinByCategory)
 export default router;
 
