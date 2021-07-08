@@ -48,7 +48,7 @@ const createFriend= async(req,res) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
-        res.status(400).json({
+        res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: "필수 정보(name))를 입력하세요."
         });
@@ -57,8 +57,8 @@ const createFriend= async(req,res) => {
         //중복 check   //이거 name 하고 userIdx로 해야 함 !
         const alFriend = await friendService.findFriendByNameAnduserIdx({name,userIdx});
         if(alFriend.length>0){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"중복된 친구가 있습니다."
             });
         }
@@ -130,8 +130,8 @@ const getFriends= async(req,res) => {
         const friends = await friendService.findFriendsByUserIdx({userIdx});
         console.log(friends);
         if(friends.length==0){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"등록된 친구들이 없습니다."
             });
         }
@@ -251,7 +251,7 @@ const getFriendDetail= async(req,res) => {
  * -200 OK
  *{
  *  "status": 200,
- *  "message": "친구 상세 조회 성공",
+ *  "message": "친구에게 준/받은 keepin 목록 조회 성공",
  * "data": {
  *       "takenList": [
  *           {
@@ -331,8 +331,8 @@ const getTakenGivenList= async(req,res) => {
     try{
         const friend = await friendService.findFriendByFriendIdx({friendIdx});
         if(!friend){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"등록된 친구가 없습니다"
             });
         }
@@ -403,8 +403,8 @@ const editFriendMemo= async(req,res) => {
     try{
         const friend = await friendService.findFriendByFriendIdx({friendIdx});
         if(!friend){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"등록된 친구가 없습니다"
             });
         }
@@ -476,8 +476,8 @@ const searchFriends= async(req,res) => {
         const friends = await friendService.searchFriendByKeyword({name: name, userIdx: userIdx});
         console.log(friends);
         if(friends.length==0){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"등록된 친구들이 없습니다."
             });
         }

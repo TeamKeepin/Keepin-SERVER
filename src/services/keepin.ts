@@ -25,6 +25,11 @@ export interface keepinSearchInput{
   title: string;
 }
 
+export interface keepinFindByUserIdxAndCategory{
+  userIdx: string;
+  category: string;
+}
+
 export interface keepinDetailInput{
   userIdx: string;
   keepinIdx: string;
@@ -50,6 +55,12 @@ const findKeepin = (data: keepinFindInput) => {
 //모아보기 전체 키워드 검색
 const searchKeepinByKeyword = (data: keepinSearchInput) => {
   const result = Keepin.find({title:{$regex:data.title}}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+  return result;
+}
+
+// 모아보기 카테고리 조회 
+const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) => {
+  const result = Keepin.find({category : data.category}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).select('-__v -userIdx').sort({ date: 1 });
   return result;
 }
 
@@ -82,5 +93,6 @@ export default {
   searchKeepinByKeyword,
   findDetailKeepin,
   findKeepinByKeepinIdx,
-  findKeepinForTaken
+  findKeepinForTaken,
+  findkeepinByUserIdxAndCategory
 }

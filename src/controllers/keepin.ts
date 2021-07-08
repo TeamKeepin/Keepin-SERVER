@@ -254,6 +254,85 @@ const searchKeepin = async (req, res) => {
   }
 }
 
+
+/**
+ * @api {get} /keepin/category?category=keyword 모아보기 카테고리 별 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName searchKeepin
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * * [Querystring] category: category로 검색
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "키핀 카테고리 별 조회 성공",
+    "data": {
+        "keeppins":[
+          { "taken": true,
+            "_id": "60e420f9909d3063102be161",
+            "title": "PM이 탕수육 사줬지롱",
+            "photo": "탕수육 사진",
+            "date": "2021.06.21"
+          },
+          ... 
+        ]
+      }
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 빈 경우
+ * {
+    "status": 400,
+    "message": "요청바디가 없습니다"."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
+// 모아보기 카테고리 조회 
+const getKeepinByCategory = async (req, res) => {
+  const userIdx = req._id;
+  const category = req.query.category;
+  const errors = validationResult(req);
+  console.log(category);
+  if(!errors.isEmpty()){
+    res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: "요청바디가 없습니다." 
+    });
+  }
+
+  try {
+    const data = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
+    console.log(data);
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: '카테고리 조회 성공',
+      data
+    })
+    } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+      });
+      return;
+  }
+}
+
+
 /**
  * @api {get} /keepin/detail/:keepinIdx 모아보기 상세페이지 조회
  * 
@@ -358,5 +437,6 @@ export default {
   createKeepin,
   getTakenKeepin,
   searchKeepin,
+  getKeepinByCategory,
   getDetailKeepin
 }
