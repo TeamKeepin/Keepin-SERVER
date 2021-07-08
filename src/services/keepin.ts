@@ -25,6 +25,11 @@ export interface keepinSearchInput{
   title: string;
 }
 
+export interface keepinFindByUserIdxAndCategory{
+  userIdx: string;
+  category: string;
+}
+
 export interface keepinDetailInput{
   userIdx: string;
   keepinIdx: string;
@@ -53,26 +58,31 @@ const searchKeepinByKeyword = (data: keepinSearchInput) => {
   return result;
 }
 
+// 모아보기 카테고리 조회 
+const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) => {
+  const result = Keepin.find({category : data.category}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).select('-__v -userIdx').sort({ date: 1 });
+  return result;
+}
+
 const findDetailKeepin = (data: keepinDetailInput) => {
   const result = Keepin.findOne({_id: data.keepinIdx}).where('userIdx').equals(data.userIdx).sort({ date: 1 });
   return result;
 }
-
-// const findKeepinCount = (data: randomFindUserIdxInput) => {
-//     const total =  Keepin.find().where('userIdx').equals(data.userIdx).count();
-//     const taken =  Keepin.find({userIdx: data.userIdx}).find({taken: true}).count();
-//     const given =  Keepin.find({userIdx: data.userIdx}).find({taken: false}).count();
-//     const result = {total, taken, given}
-//     return result;
-// }
 
 const findkeepinByUserIdx = (data: keepinFindUserIdxInput) => {
   const keepins = Keepin.find().where('userIdx').equals(data.userIdx);
   return keepins;
 }
 
+
 const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
-  const keepin = Keepin.findOne({_id:data.keepinIdx});
+  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx');
+  return keepin;
+}
+
+//친구와 준/받은 keepin 목록 조회 
+const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
+  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]);
   return keepin;
 }
 
@@ -82,5 +92,7 @@ export default {
   findkeepinByUserIdx,
   searchKeepinByKeyword,
   findDetailKeepin,
-  findKeepinByKeepinIdx
+  findKeepinByKeepinIdx,
+  findKeepinForTaken,
+  findkeepinByUserIdxAndCategory
 }
