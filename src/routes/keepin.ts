@@ -14,6 +14,8 @@ router.get('/all', auth.checkToken, keepinController.searchKeepin);
 router.get('/detail/:keepinIdx', auth.checkToken, keepinController.getDetailKeepin);
 // 모아보기 카테고리 조회 
 router.get('/category', auth.checkToken, keepinController.getKeepinByCategory);
+// 키핀 수정
+// router.put('/', auth.checkToken, keepinController.modifyKeepin);
 // 키핀 삭제
 router.delete('/', auth.checkToken, keepinController.deleteKeepin);
 export default router;
