@@ -37,6 +37,11 @@ export interface friendKeepinInput{
     friendIdx: string
 }
 
+export interface KeepinArrayInput{
+    friendIdx: string,
+    keepinIdxArray: string[]
+}
+
 
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
     const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name:-1});
@@ -62,6 +67,34 @@ const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
 const saveFriend = (data: friendCreateInput) => {
     Friend.create(data);
 }
+
+// 친구에 키핀 등록
+//const saveKeepinInFriend = (data: KeepinArrayInput) => {
+  /*
+      const filter = {
+        _id: data.friendIdx,
+      };
+      const update = {
+        keepinIdx: data.keepinIdxArray,
+      };
+  */
+   //  Friend.findOneAndUpdate(filter, update, {
+   //   new: true,
+   // });
+//}
+
+//예시
+/*
+const filter = {
+      email: email,
+    };
+    const update = {
+      authToken: token,
+    };
+    await adminModel.findOneAndUpdate(filter, update, {
+      new: true,
+    });
+*/
 
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {
@@ -95,5 +128,6 @@ export default {
   saveFriend,
   findKeepinFriend,
   findFriendByFriendIdx,
-  findFriendByNameAnduserIdx
+  findFriendByNameAnduserIdx,
+//   saveKeepinInFriend
 }

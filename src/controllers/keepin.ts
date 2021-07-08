@@ -99,6 +99,9 @@ const createKeepin = async (req, res) => {
       await friend.save();
     }
 
+    // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
+    // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
+
     return res.status(200).json({
       status: returnCode.OK,
       message: "키핀하기 생성 성공",
