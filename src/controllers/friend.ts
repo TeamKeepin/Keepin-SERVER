@@ -198,8 +198,8 @@ const getFriendDetail= async(req,res) => {
     try{
         const friend = await friendService.findFriendByFriendIdx({friendIdx});
         if(!friend){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"등록된 친구가 없습니다"
             });
         }

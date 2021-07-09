@@ -70,7 +70,7 @@ const createKeepin = async (req, res) => {
 
   let {title, photo, taken, date, category, record, friendIdx} = req.body;
   if( !title || !photo || taken==undefined || !date || category==undefined || !record ||!friendIdx){
-    res.status(400).json({
+    res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.'
     });
@@ -102,7 +102,7 @@ const createKeepin = async (req, res) => {
     // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
     // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
 
-    return res.status(200).json({
+    return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: "키핀하기 생성 성공",
       keepin
