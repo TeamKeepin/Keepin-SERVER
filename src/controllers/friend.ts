@@ -64,8 +64,8 @@ const createFriend= async(req,res) => {
         }
 
         await friendService.saveFriend({name, userIdx});
-        return res.status(201).json({
-            status:201,
+        return res.status(returnCode.CREATED).json({
+            status:returnCode.CREATED,
             message:"친구 등록 성공",
             name: name
         })
@@ -198,8 +198,8 @@ const getFriendDetail= async(req,res) => {
     try{
         const friend = await friendService.findFriendByFriendIdx({friendIdx});
         if(!friend){
-            return res.status(400).json({
-                status:400,
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
                 message:"등록된 친구가 없습니다"
             });
         }
@@ -366,7 +366,7 @@ const getTakenGivenList= async(req,res) => {
 }
 
 /**
- * @api {get} /friend/keepin/:friendId 친구 메모 수정
+ * @api {get} /friend/memo/:friendId 친구 메모 수정
  * 
  * @apiVersion 1.0.0
  * @apiName editFriendMemo
@@ -424,6 +424,67 @@ const editFriendMemo= async(req,res) => {
         return;
     }
 }
+
+/**
+ * @api {put} /friend/:friendId 친구 이름 수정
+ * 
+ * @apiVersion 1.0.0
+ * @apiName editFriendName
+ * @apiGroup Friend
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ * }
+ * 
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *  "status": 200,
+ *  "message": "이름 수정 성공",
+ *}
+ * @apiErrorExample Error-Response:
+ * -400 친구 유무 확인
+ * {
+ *  "status": 400,
+ *  "message": "등록된 친구가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
+//친구 이름 수정 
+const editFriendName= async(req,res) => {
+    const friendIdx = req.params.friendId;
+    const {name} = req.body
+    try{
+        const friend = await friendService.findFriendByFriendIdx({friendIdx});
+        if(!friend){
+            return res.status(returnCode.BAD_REQUEST).json({
+                status:returnCode.BAD_REQUEST,
+                message:"등록된 친구가 없습니다"
+            });
+        }
+
+        friend.name = name;
+        await friend.save();
+        return res.status(returnCode.OK).json({
+            status:returnCode.OK,
+            message:"이름 수정 성공",
+        })
+    }catch(err){
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message,
+        });
+        return;
+    }
+}
+
 
 /**
  * @api {get} /friend/search?name=keyword 친구 검색 조회
@@ -511,5 +572,6 @@ export default {
    getFriendDetail,
    getTakenGivenList,
    editFriendMemo,
+   editFriendName,
    searchFriends
 }
