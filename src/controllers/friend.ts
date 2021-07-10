@@ -480,11 +480,6 @@ const editFriendName= async(req,res) => {
  *  "message": "친구 삭제 성공",
  *}
  * @apiErrorExample Error-Response:
- * -400 친구 유무 확인
- * {
- *  "status": 400,
- *  "message": "일치하는 친구가 없습니다."
- * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -496,8 +491,7 @@ const deleteFriend= async(req,res) => {
     const friendIdx = req.params.friendId;
     try{
 
-        //1. 친구 찾고  2. 찾은 친구의 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull 3. 친구 삭제 
-        //1. 키핀들에서 친구 들어가 있는 거 찾아서 뽑고 2. for 문 돌리면서 배열 길이가 1이면 삭제 2 이상이면 pull  3. 친구 삭제 
+        //1. 친구 찾고 2. 친구 삭제  3. 찾은 친구의 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull  
 
         await friendService.deleteFriendByFriendIdx({friendIdx});
         const keepins = await keepinService.findKeepinFriend({friendIdx});
@@ -563,7 +557,6 @@ const deleteFriend= async(req,res) => {
     }
  * }
  * 
- * @apiErrorExample Error-Response:
  * 
  */
 const searchFriends= async(req,res) => {

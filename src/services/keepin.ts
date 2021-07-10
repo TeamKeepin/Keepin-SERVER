@@ -4,13 +4,24 @@ import mongoose from "mongoose";
 
 export interface keepinCreateInput {
   title: string;
-  photo: string;
+  photo: string[];
   taken: boolean;
   date: string;
   category: [string];
   record: string;
   userIdx: string;
   friendIdx: [string];
+}
+
+export interface keepinModifyInput {
+  title: string;
+  photo: string[];
+  taken: boolean;
+  date: string;
+  category: [string];
+  record: string;
+  friendIdx: [mongoose.Types.ObjectId];
+  keepinIdx: string;
 }
 
 export interface keepinFindInput{
@@ -85,7 +96,6 @@ const findkeepinByUserIdx = (data: keepinFindUserIdxInput) => {
   return keepins;
 }
 
-
 const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
   const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx');
   return keepin;
@@ -97,6 +107,30 @@ const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
   // const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
   const keepin = Keepin.findOne({_id:data.keepinIdx}).select('title photo date taken').sort({date: 1});
   return keepin;
+}
+
+// 키핀 수정
+const modifyKeepinByKeepinIdx = (data: keepinModifyInput) => {
+  const updateData = {
+    title: data.title,
+    photo: data.photo,
+    taken: data.taken,
+    date: data.date,
+    category: data.category,
+    record: data.record,
+    friendIdx: data.friendIdx,
+  };
+
+  const keepins = Keepin.findOneAndUpdate({_id:data.keepinIdx},{
+    title: data.title,
+    photo: data.photo,
+    taken: data.taken,
+    date: data.date,
+    category: data.category,
+    record: data.record,
+    friendIdx: data.friendIdx,
+  },{new: true});
+  return keepins;
 }
 
 // 키핀 삭제
@@ -116,6 +150,7 @@ const deleteFriend = (data: keepinFindByKeepinIdxAndRevFriendIdx) => {
 
 export default {
   saveKeepin,
+  modifyKeepinByKeepinIdx,
   findKeepin,
   findkeepinByUserIdx,
   searchKeepinByKeyword,

@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator"
 import { friendService, keepinService } from "../services";
 import returnCode from "../library/returnCode";
+import mongoose from "mongoose";
 import moment from "moment"; 
 // const returnCode = require('../library/returnCode')
 // const moment = require('moment');
@@ -77,15 +78,27 @@ const createKeepin = async (req, res) => {
     return;
   }
 
-  // const year = date.substring(0,4);
-  // const month = date.substring(4,6);
-  // const day = date.substring(6);
+  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  // let photo = null;
+/*
+  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
-  // const realDate = year+"."+month+"."+day
-  // console.log(realDate);
+  if (req.files !== undefined) {
+    locationArray = req.files.map( img => img.location);
+    
+    //형식은 고려해보자
+    const type = req.files.mimetype.split('/')[1];
+    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+      return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+    }
+  } 
+  */
+
+  //photo: locationArray
+  var locationArray = ["abc","def"];
 
   try {
-    const keepin = await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
+    const keepin = await keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx});
 
     const friends = keepin.friendIdx;
     const keepinIdx = keepin._id;
@@ -476,6 +489,89 @@ const getDetailKeepin = async (req, res) => {
 }
 
 /**
+ * @api {put} /keepin 키핀 수정
+ * 
+ * @apiVersion 1.0.0
+ * @apiName modifyKeepin
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+    "keepinArray": ["60e322167887874ecccad066"]
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+     "status": 200,
+     "message": "키핀 수정 완료"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "keepinID Array 값이 없습니다."
+ * }
+ *
+ */
+// 키핀 수정
+const modifyKeepin = async (req, res) => {
+  const userIdx = req._id;
+  const keepinId = req.params.keepinIdx;
+  const errors = validationResult(req);
+
+  let {title, photo, taken, date, category, record, friendIdx} = req.body;
+  if( !title || !photo || taken==undefined || !date || category==undefined || !record ||!friendIdx){
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보를 입력하세요.'
+    });
+    return;
+  }
+
+  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  // let photo = null;
+/*
+  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+
+  if (req.files !== undefined) {
+    locationArray = req.files.map( img => img.location);
+    
+    //형식은 고려해보자
+    const type = req.files.mimetype.split('/')[1];
+    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+      return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+    }
+  } 
+  */
+  
+  //photo: locationArray
+  var locationArray = ["abc","def"];
+
+  try {
+
+    var data = await keepinService.modifyKeepinByKeepinIdx({ keepinIdx: keepinId, title, photo: locationArray, taken, date, category, record, friendIdx});
+  
+    return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 수정 완료', data});
+
+  } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+      });
+      return;
+  }
+}
+
+/**
  * @api {delete} /keepin 키핀 삭제
  * 
  * @apiVersion 1.0.0
@@ -528,10 +624,16 @@ const deleteKeepin = async (req, res) => {
   }
 
   try {
+      // 친구 삭제 로직
+      const ll = await friendService.findFriendsByKeepinIdx({keepinIdx: keepinIdArray[0].toString()}); // keepinId 하나씩 삭제 
+      console.log(ll)
+
       // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
       for (var keepinId of keepinIdArray){ 
           await keepinService.deleteKeepinByKeepinIdx({keepinIdx: keepinId}); // reminderId 하나씩 삭제 
       }
+
+    
 
       return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 삭제 완료' });
 
@@ -551,5 +653,6 @@ export default {
   searchKeepin,
   getKeepinByCategory,
   getDetailKeepin,
+  modifyKeepin,
   deleteKeepin
 }
