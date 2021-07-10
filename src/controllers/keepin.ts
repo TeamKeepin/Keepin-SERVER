@@ -26,7 +26,7 @@ import moment from "moment";
     "title": "보리 생일",
     "photo": "보리가 좋아하는 강아지 김밥",
     "taken": false,
-    "date": "20211202",
+    "date": "2021-12-02",
     "category": ["생일", "축하"],
     "record": "우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.",
     "friendIdx":["60e416d15d759051988d18d0", "60e416d95d759051988d18d3"]
@@ -143,7 +143,7 @@ const createKeepin = async (req, res) => {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": "탕수육 사진",
+            "photo": ["탕수육 사진"],
             "date": "2021.06.21"
           }
         ]
@@ -224,7 +224,7 @@ const getTakenKeepin = async (req, res) => {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": "탕수육 사진",
+            "photo": ["탕수육 사진"],
             "date": "2021.06.21"
          }
          ...
@@ -308,7 +308,7 @@ const searchKeepin = async (req, res) => {
           { 
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": "탕수육 사진",
+            "photo": ["탕수육 사진"],
             "date": "2021.06.21"
           },
           ... 
@@ -328,7 +328,6 @@ const searchKeepin = async (req, res) => {
  *  "message": "INTERNAL_SERVER_ERROR"
  * }
  */
-// 모아보기 카테고리 조회 
 const getKeepinByCategory = async (req, res) => {
   const userIdx = req._id;
   const category = req.query.category;
@@ -491,7 +490,7 @@ const getDetailKeepin = async (req, res) => {
  * 
  * @apiParamExample {json} Request-Example:
  * {
-    "keepinArray": ["60e322167887874ecccad066","60e3221f7887874ecccad06a"]
+    "keepinArray": ["60e322167887874ecccad066"]
  * }
  * 
  * @apiSuccessExample {json} Success-Response:

@@ -415,7 +415,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 상세페이지 조회 성공\",\n    \"keepin\": {\n        \"userIdx\": \"60e1d4070e50e39654b4bb5f\",\n        \"keepinIdx\": \"60e42158909d3063102be165\",\n        \"title\": \"보리 생일\",\n        \"photo\": \"보리가 좋아하는 강아지 김밥\",\n        \"friends\": [\n            \"보리\",\n            \"밀키\"\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"cateogry\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"date\": \"2021.12.02\",\n        \"taken\": false\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 상세페이지 조회 성공\",\n    \"data\": {\n        \"_id\": \"60e42158909d3063102be165\",\n        \"title\": \"보리 생일\",\n        \"photo\": \"보리가 좋아하는 강아지 김밥\",\n        \"friends\": [\n            \"보리\",\n            \"밀키\"\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"cateogry\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"date\": \"2021.12.02\",\n        \"taken\": false\n    }\n}",
           "type": "json"
         }
       ]
@@ -461,7 +461,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n     \"keepins\": [\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n        }\n      ]\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n        \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          }\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -507,7 +507,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 검색어 조회 성공\",\n    \"data\": [\n        {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n        }\n    ]\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 검색어 조회 성공\",\n    \"data\": {\n      \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n         }\n         ...\n      ]\n    }\n}",
           "type": "json"
         }
       ]

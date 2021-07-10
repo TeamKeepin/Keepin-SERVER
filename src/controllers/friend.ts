@@ -177,11 +177,6 @@ const getFriends= async(req,res) => {
  * }
  *  
  * @apiErrorExample Error-Response:
- * -400 친구 유무 확인
- * {
- *  "status": 400,
- *  "message": "일치하는 친구가 없습니다."
- * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -192,12 +187,16 @@ const getFriendDetail= async(req,res) => {
     const friendIdx = req.params.friendId;
     try{
         const friend = await friendService.findFriendByFriendIdx({friendIdx});
-        if(!friend){
-            return res.status(returnCode.BAD_REQUEST).json({
-                status:returnCode.BAD_REQUEST,
-                message:"일치하는 친구가 없습니다"
-            });
-        }
+     
+        // if(!friend){
+        //         const data= friend;
+        //         return res.status(returnCode.OK).json({
+        //         status:returnCode.OK,
+        //         message:"친구 상세 조회 성공",
+        //         data
+        //     });
+        // }
+
         const name = friend.name;
         const memo = friend.memo;
         const keepins = friend.keepinIdx; 
@@ -252,14 +251,14 @@ const getFriendDetail= async(req,res) => {
  *           {
  *               "_id": "60e5ddb55c157b183255b0d1",
  *               "title": "밀키가 좋아하는 장난감 먹었지",
- *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
+ *               "photo": ["밀키가 좋아하는 강아지 뼈다귀"],
  *               "date": "2021.12.02",
  *               "taken": true
  *           },
  *           {
  *               "_id": "60e650fe2821d6242df82904",
  *               "title": "메렁 메롱",
- *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
+ *               "photo": ["밀키가 좋아하는 강아지 뼈다귀"],
  *               "date": "2021.12.02",
  *               "taken": true
  *           }
@@ -268,7 +267,7 @@ const getFriendDetail= async(req,res) => {
  *           {
  *               "_id": "60e651142821d6242df82908",
  *               "title": "나에게만 선물같아",
- *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
+ *               "photo": ["밀키가 좋아하는 강아지 뼈다귀"],
  *               "date": "2021.12.02",
  *               "taken": false
  *           }
@@ -490,7 +489,6 @@ const editFriendName= async(req,res) => {
     "data": {
         "friends": [
             {
-                "keepinIdx": [],
                 "_id": "60e416d15d759051988d18d0",
                 "name": "보리"
             }
@@ -499,11 +497,6 @@ const editFriendName= async(req,res) => {
  * }
  * 
  * @apiErrorExample Error-Response:
- * - 400 등록된 친구가 없을 경우
- * {
-    "status": 400,
-    "message": "등록된 친구들이 없습니다."
- * }
  * 
  */
 const searchFriends= async(req,res) => {
@@ -512,12 +505,12 @@ const searchFriends= async(req,res) => {
     try{
         const friends = await friendService.searchFriendByKeyword({name: name, userIdx: userIdx});
         console.log(friends);
-        if(friends.length==0){
-            return res.status(returnCode.BAD_REQUEST).json({
-                status:returnCode.BAD_REQUEST,
-                message:"등록된 친구들이 없습니다."
-            });
-        }
+        // if(friends.length==0){
+        //     return res.status(returnCode.BAD_REQUEST).json({
+        //         status:returnCode.BAD_REQUEST,
+        //         message:"등록된 친구 없습니다."
+        //     });
+        // }
         // if(!name){
         //     return res.status(400).json({
         //         status:400,

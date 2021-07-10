@@ -98,7 +98,7 @@ const filter = {
 
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {
-    const result = Friend.find({name:{$regex:data.name}}).where('userIdx').equals(data.userIdx).select('-__v -userIdx');
+    const result = Friend.find({name:{$regex:data.name}}).where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx');
     return result;
 }
 

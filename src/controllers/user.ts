@@ -25,8 +25,8 @@ import randToken from "rand-token";
  *  "email": "keepin@gmail.com",
  *  "password": "1234abcd",
  *  "name": "유키핀",
- *  "birth": "19970627",
- *  "phone": "01012345678",
+ *  "birth": "1997-06-27",
+ *  "phone": "010-1234-5678",
  *    
  * }
  *
@@ -236,12 +236,11 @@ const signIn = async (req, res) => {
  *   "status": 200,
  *   "msg": "프로필 조회 성공",
  *   "data": {
- *       "_id": "60e349893460ec398ea1dc45",
  *       "email": "fbduddn97@naver.com",
  *       "password": "$2a$10$svbqi40QZQcWkRc2Jx8clOcoY5Q/urnAvdfcr0eVnIKk6M8.R9iRm",
  *       "name": "yboy",
- *       "birth": "19970322",
- *       "phone": "01012345678"
+ *       "birth": "1997.03.22",
+ *       "phone": "010-1234-5678"
  *   }
  *}
  *  
@@ -379,7 +378,7 @@ const editProfile = async(req,res) => {
  * -201 OK
  *{
  *   "status": 201,
- *   "msg": "비밀번호 수정 성공",
+ *   "message": "비밀번호 수정 성공",
  *}
  *  
  * @apiErrorExample Error-Response:
