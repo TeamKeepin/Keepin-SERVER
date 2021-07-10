@@ -274,6 +274,12 @@ const getProfile = async(req,res) => {
                 message: "유저가 없습니다." 
               });
         }
+
+        const year = data.birth.substring(0,4);
+        const month = data.birth.substring(4,6);
+        const day = data.birth.substring(6,8);
+        const tunedBirth = year+'.'+month+'.'+day;
+        data.birth=tunedBirth;
        
         return res.status(200).json({
             status: returnCode.OK,

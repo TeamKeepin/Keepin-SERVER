@@ -279,8 +279,8 @@ const searchKeepin = async (req, res) => {
     "status": 200,
     "message": "키핀 카테고리 별 조회 성공",
     "data": {
-        "keeppins":[
-          { "taken": true,
+        "keepins":[
+          { 
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
             "photo": "탕수육 사진",
@@ -317,8 +317,17 @@ const getKeepinByCategory = async (req, res) => {
   }
 
   try {
-    const data = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
-    console.log(data);
+    const keepins = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
+
+    for(var keepin of keepins){
+        const year = keepin.date.substring(0,4);
+        const month = keepin.date.substring(4,6);
+        const day = keepin.date.substring(6,8);
+        const tunedDate = year+'.'+month+'.'+day;
+        keepin.date=tunedDate;
+    }
+
+    const data = {keepins};
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '카테고리 조회 성공',
