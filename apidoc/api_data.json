@@ -231,7 +231,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n          }\n      ]\n  }\n}",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": false\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -461,7 +461,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"keepin\": [\n        {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n        }\n    ]\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n     \"keepins\": [\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n        }\n      ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -553,7 +553,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keeppins\":[\n          { \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keepins\":[\n          { \n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
           "type": "json"
         }
       ]

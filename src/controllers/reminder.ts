@@ -483,8 +483,9 @@ const getOncommingReminder = async (req, res) => {
 
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
         for (var result of resultArray){ 
-            const day = result.date.substring(6,8);
-            const date_day = result.date.substring(4,6)+"."+day;
+            const month = result.date.substring(5,7);
+            const day = result.date.substring(8,10);
+            const date_day = month+"."+day;
             result.date = date_day;
             dataArray.push(result);
         }
