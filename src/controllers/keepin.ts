@@ -85,7 +85,6 @@ const createKeepin = async (req, res) => {
   // console.log(realDate);
 
   try {
-    
     const keepin = await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
 
     const friends = keepin.friendIdx;
