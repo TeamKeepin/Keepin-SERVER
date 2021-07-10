@@ -2,6 +2,7 @@ import { friendService, keepinService } from "../services";
 import { validationResult } from "express-validator"
 import returnCode from "../library/returnCode";
 import keepin from "../services/keepin";
+import { Console } from "console";
 
 /**
  * @api {post} /friend 친구 생성
@@ -432,7 +433,6 @@ const editFriendMemo= async(req,res) => {
  *  "message": "INTERNAL_SERVER_ERROR"
  * }
  */
-//친구 이름 수정 
 const editFriendName= async(req,res) => {
     const friendIdx = req.params.friendId;
     const {name} = req.body
@@ -459,6 +459,67 @@ const editFriendName= async(req,res) => {
         return;
     }
 }
+
+/**
+ * @api {delete} /friend/:friendId 친구 삭제
+ * 
+ * @apiVersion 1.0.0
+ * @apiName editFriendName
+ * @apiGroup Friend
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ * }
+ *  
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *  "status": 200,
+ *  "message": "친구 삭제 성공",
+ *}
+ * @apiErrorExample Error-Response:
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
+//친구 삭제 
+const deleteFriend= async(req,res) => {
+    const friendIdx = req.params.friendId;
+    try{
+
+        //1. 친구 찾고 2. 친구 삭제  3. 찾은 친구의 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull  
+
+        await friendService.deleteFriendByFriendIdx({friendIdx});
+        const keepins = await keepinService.findKeepinFriend({friendIdx});
+        for(const keepin of keepins){
+            console.log(keepin.friendIdx.length);
+            if(keepin.friendIdx.length >1){ //배열의 길이가 1이상이면 keepin의 friendIdx에서 friend 삭제 
+                const keepinIdx = keepin._id;
+                await keepinService.deleteFriend({keepinIdx,friendIdx});
+            }else if(keepin.friendIdx.length==1){ //배열의 길이가 1이면 삭제 
+                const keepinIdx = keepin._id;
+                await keepinService.deleteKeepinByKeepinIdx({keepinIdx});
+            }
+        }
+
+        return res.status(returnCode.OK).json({
+            status:returnCode.OK,
+            message:"친구 삭제 성공",
+        })
+    }catch(err){
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+            status: returnCode.INTERNAL_SERVER_ERROR,
+            message: err.message,
+        });
+        return;
+    }
+}
+
+
 
 
 /**
@@ -541,5 +602,6 @@ export default {
    getTakenGivenList,
    editFriendMemo,
    editFriendName,
-   searchFriends
+   searchFriends,
+   deleteFriend
 }
