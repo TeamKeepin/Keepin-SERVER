@@ -7,7 +7,7 @@ import { check, validationResult } from "express-validator"
 import { userService } from "../services";
 import { keepinService } from "../services";
 import returnCode from "../library/returnCode";
-
+import randToken from "rand-token";
 /**
  * @api {post} /user/signup 회원가입
  * 
@@ -57,9 +57,10 @@ const signUp = async (req: Request, res: Response) => {
             errors: [{ msg: "요청바디가 없습니다." }],
         });
     }
-    const { name, birth, email, password, token, phone } = req.body;
+    const { name, birth, email, password, phoneToken, phone } = req.body;
+    console.log(req.body)
     // 파라미터 확인
-    if (!email || !password || !name || !birth || !token || !phone ) {
+    if (!email || !password || !name || !birth || !phoneToken || !phone ) {
         res.status(400).json({
             status: returnCode.BAD_REQUEST,
             message: '필수 정보를 입력하세요.'
@@ -82,34 +83,19 @@ const signUp = async (req: Request, res: Response) => {
             password,
             name,
             birth,
-            token,
+            phoneToken,
             phone
         });
 
         //Encrypt password
         const salt = await bcrypt.genSalt(10);
         const hashPwd = await bcrypt.hash(password, salt);
-        await userService.saveUser({ email, password: hashPwd, name, birth, token, phone });
+        await userService.saveUser({ email, password: hashPwd, name, birth, phoneToken, phone });
 
-        //Return jsonwebtoken
-        const payload = {
-            email: email
-        };
-        jwt.sign(
-            payload,
-            config.jwtSecret,
-            { expiresIn: 36000 },
-            (err, jwt) => {
-                if(err) throw err;
-                res.json({
-                    status: returnCode.OK,
-                    message: "회원가입 성공",
-                    data: {
-                        "jwt": jwt
-                    }
-                });
-            }
-        );
+        res.json({
+            status: returnCode.OK,
+            message: "회원가입 성공",
+      });
     } catch (err) {
         console.error(err.message);
         res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -197,21 +183,30 @@ const signIn = async (req, res) => {
             id: user._id,
             email: user.email
         };
-        jwt.sign(
+        
+        const result = {
+            accessToken: jwt.sign(
             payload,
             config.jwtSecret,
-            { expiresIn: 36000 },
-            (err, jwt) => {
-              if (err) throw err;
-              res.json({
-                status: returnCode.OK,
-                message: "로그인 성공",
-                data: {
-                    "jwt": jwt
-                }
-            });
-            }
-          );
+            { expiresIn: "2h" }),
+            refreshToken: jwt.sign(
+            payload,
+            config.jwtSecret,
+            { expiresIn: "7d" }),
+        };
+        
+        // refreshToken을 DB에 저장
+        const userInfo = await userService.saveRefreshToken({email: payload.email, refreshToken: result.refreshToken});
+
+        res.json({
+              status: returnCode.OK,
+              message: "로그인 성공",
+              data: {
+                  "jwt": result.accessToken,
+                  "refreshToken": result.refreshToken
+              }
+        });
+
         } catch (err) {
             console.error(err.message);
             res.status(returnCode.INTERNAL_SERVER_ERROR).json({
