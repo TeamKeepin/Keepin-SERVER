@@ -4,7 +4,8 @@ export interface IUser {
     password: string;
     birth: string;
     phone: string;
-    token: string;
+    phoneToken: string;
+    refreshToken: string;
   }
   
   export interface IUserInputDTO {
@@ -13,5 +14,6 @@ export interface IUser {
     password: string;
     birth: string;
     phone: string;
-    token: string;
+    phoneToken: string;
+    refreshToken: string;
   }

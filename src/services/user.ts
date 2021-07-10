@@ -6,7 +6,7 @@ export interface userCreateInput {
     password: string,
     name: string,
     birth: string,
-    token: string,
+    phoneToken: string,
     phone: string
 }
 export interface userFindInput {
@@ -17,24 +17,44 @@ export interface userIdxInput {
   userIdx: string
 }
 
+export interface refreshTokenInput {
+  email: string,
+  refreshToken: string
+}
+
 const saveUser = (data: userCreateInput) => {
     return User.create( data );
 }
 
 const findUser = (data: userFindInput) => {
   const user = User.findOne({email:data.email});
-  console.log("user: "+user)
   return user
 }
 
 const findUserbyIdx = (data: userIdxInput) => {
   const user = User.findOne({_id:data.userIdx});
-  return user
+;  return user
 }
 
 const findUserProfile = (data: userIdxInput) => {
   const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id');
   return user
+}
+
+const saveRefreshToken = (data: refreshTokenInput) => {
+  const filter = {
+    email: data.email,
+  };
+
+  const update = {
+    refreshToken: data.refreshToken,
+  };
+
+  const result = User.findOneAndUpdate(filter, update, {
+    new: true,
+  });
+  
+  return result;
 }
 
 
@@ -43,5 +63,6 @@ export default {
   saveUser,
   findUser,
   findUserbyIdx,
-  findUserProfile
+  findUserProfile,
+  saveRefreshToken
 }

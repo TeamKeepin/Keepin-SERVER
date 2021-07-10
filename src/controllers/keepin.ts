@@ -429,7 +429,9 @@ const getDetailKeepin = async (req, res) => {
   }
 
   try {
+
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
+    console.log(detail)
     console.log(detail.friendIdx)
     //friend의 이름 가져오기
     var friendNames = [];
