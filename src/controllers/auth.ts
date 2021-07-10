@@ -76,7 +76,7 @@ const reToken = async (req, res) => {
       }
       res.status(returnCode.OK).json({
         status: returnCode.OK,
-        accessToken: newToken,
+        jwt: newToken,
         message: '새로운 토큰이 발급 성공'
       });
     } catch (err) {
