@@ -7,7 +7,7 @@ import { check, validationResult } from "express-validator"
 import { userService } from "../services";
 import { keepinService } from "../services";
 import returnCode from "../library/returnCode";
-import randToken from "rand-token";
+
 /**
  * @api {post} /user/signup 회원가입
  * 
