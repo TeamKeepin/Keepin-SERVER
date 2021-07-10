@@ -23,9 +23,7 @@ const TOKEN_INVALID = -2;
  * -200 OK
  * {
     "status": 200,
-    "accessToken": {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTlhZTJmMjhjYjU1NTkyODQ4N2E3YiIsImVtYWlsIjoiaGVsbG9AbmF2ZXIuY29tIiwiaWF0IjoxNjI1OTI4OTU3fQ.7nJxrKbSrdvlthnaXg39XYWSUWApaaQd2a4RGqpdTYY"
-    },
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTlhZTJmMjhjYjU1NTkyODQ4N2E3YiIsImVtYWlsIjoiaGVsbG9AbmF2ZXIuY29tIiwiaWF0IjoxNjI1OTMxMjMyfQ.pxjJ4ouhO02fBSZ1U6Rw_00CgDRQWoOBFy43EHRoO1o",
     "message": "새로운 토큰이 발급 성공"
  * }
  *  
