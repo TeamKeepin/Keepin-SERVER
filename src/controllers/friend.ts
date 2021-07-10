@@ -496,7 +496,6 @@ const editFriendName= async(req,res) => {
     }
  * }
  * 
- * @apiErrorExample Error-Response:
  * 
  */
 const searchFriends= async(req,res) => {

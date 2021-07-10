@@ -203,7 +203,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -231,7 +231,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": false\n          }\n      ]\n  }\n}",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": [\"밀키가 좋아하는 강아지 뼈다귀\"],\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": [\"밀키가 좋아하는 강아지 뼈다귀\"],\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": [\"밀키가 좋아하는 강아지 뼈다귀\"],\n              \"date\": \"2021.12.02\",\n              \"taken\": false\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -277,16 +277,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"친구 검색 성공\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"keepinIdx\": [],\n                \"_id\": \"60e416d15d759051988d18d0\",\n                \"name\": \"보리\"\n            }\n        ]\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "- 400 등록된 친구가 없을 경우\n{\n    \"status\": 400,\n    \"message\": \"등록된 친구들이 없습니다.\"\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"친구 검색 성공\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"_id\": \"60e416d15d759051988d18d0\",\n                \"name\": \"보리\"\n            }\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -314,7 +305,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"보리 생일\",\n    \"photo\": \"보리가 좋아하는 강아지 김밥\",\n    \"taken\": false,\n    \"date\": \"20211202\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n    \"friendIdx\":[\"60e416d15d759051988d18d0\", \"60e416d95d759051988d18d3\"]\n}",
+          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"보리 생일\",\n    \"photo\": \"보리가 좋아하는 강아지 김밥\",\n    \"taken\": false,\n    \"date\": \"2021-12-02\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n    \"friendIdx\":[\"60e416d15d759051988d18d0\", \"60e416d95d759051988d18d3\"]\n}",
           "type": "json"
         }
       ]
@@ -360,7 +351,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"keepinArray\": [\"60e322167887874ecccad066\",\"60e3221f7887874ecccad06a\"]\n}",
+          "content": "{\n    \"keepinArray\": [\"60e322167887874ecccad066\"]\n}",
           "type": "json"
         }
       ]
@@ -461,7 +452,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n        \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          }\n        ]\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n        \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": [\"탕수육 사진\"],\n            \"date\": \"2021.06.21\"\n          }\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -507,7 +498,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 검색어 조회 성공\",\n    \"data\": {\n      \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n         }\n         ...\n      ]\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 검색어 조회 성공\",\n    \"data\": {\n      \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": [\"탕수육 사진\"],\n            \"date\": \"2021.06.21\"\n         }\n         ...\n      ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -553,7 +544,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keepins\":[\n          { \n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keepins\":[\n          { \n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": [\"탕수육 사진\"],\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
           "type": "json"
         }
       ]
@@ -645,7 +636,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-201 OK\n{\n  \"status\": 201,\n  \"msg\": \"비밀번호 수정 성공\",\n}",
+          "content": "-201 OK\n{\n  \"status\": 201,\n  \"message\": \"비밀번호 수정 성공\",\n}",
           "type": "json"
         }
       ]
@@ -719,7 +710,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n  \"status\": 200,\n  \"msg\": \"프로필 조회 성공\",\n  \"data\": {\n      \"_id\": \"60e349893460ec398ea1dc45\",\n      \"email\": \"fbduddn97@naver.com\",\n      \"password\": \"$2a$10$svbqi40QZQcWkRc2Jx8clOcoY5Q/urnAvdfcr0eVnIKk6M8.R9iRm\",\n      \"name\": \"yboy\",\n      \"birth\": \"19970322\",\n      \"phone\": \"01012345678\"\n  }\n}",
+          "content": "-200 OK\n{\n  \"status\": 200,\n  \"msg\": \"프로필 조회 성공\",\n  \"data\": {\n      \"email\": \"fbduddn97@naver.com\",\n      \"password\": \"$2a$10$svbqi40QZQcWkRc2Jx8clOcoY5Q/urnAvdfcr0eVnIKk6M8.R9iRm\",\n      \"name\": \"yboy\",\n      \"birth\": \"1997.03.22\",\n      \"phone\": \"010-1234-5678\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -1071,7 +1062,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n \"email\": \"keepin@gmail.com\",\n \"password\": \"1234abcd\",\n \"name\": \"유키핀\",\n \"birth\": \"19970627\",\n \"phone\": \"01012345678\",\n   \n}",
+          "content": "{\n \"email\": \"keepin@gmail.com\",\n \"password\": \"1234abcd\",\n \"name\": \"유키핀\",\n \"birth\": \"1997-06-27\",\n \"phone\": \"010-1234-5678\",\n   \n}",
           "type": "json"
         }
       ]
@@ -1107,5 +1098,42 @@ define({ "api": [
     },
     "filename": "src/controllers/user.ts",
     "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/retoken",
+    "title": "토큰 재발급",
+    "version": "1.0.0",
+    "name": "retoken",
+    "group": "token",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n    \"status\": 200,\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTlhZTJmMjhjYjU1NTkyODQ4N2E3YiIsImVtYWlsIjoiaGVsbG9AbmF2ZXIuY29tIiwiaWF0IjoxNjI1OTMxMjMyfQ.pxjJ4ouhO02fBSZ1U6Rw_00CgDRQWoOBFy43EHRoO1o\",\n    \"message\": \"새로운 토큰이 발급 성공\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-401 헤더 값 확인\n{\n \"status\": 401,\n \"message\": \"refreshToken header 값이 없습니다.\"\n}\n-401 토큰 만료\n{\n \"status\": 401,\n \"message\": \"만료된 토큰입니다. 새로운 토큰을 발급 요청해주세요.\"\n}\n-401 유효하지 않은 값\n{\n \"status\": 401,\n \"message\": \"유효하지 않은 토큰입니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/auth.ts",
+    "groupTitle": "token"
   }
 ] });
