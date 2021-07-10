@@ -330,6 +330,7 @@ const getTakenGivenList= async(req,res) => {
     const friendIdx = req.params.friendId;
     try{
         const friend = await friendService.findFriendByFriendIdx({friendIdx});
+        //내 친구 인지 아닌지 확인 
         if(!friend){
             return res.status(returnCode.BAD_REQUEST).json({
                 status:returnCode.BAD_REQUEST,
