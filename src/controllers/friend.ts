@@ -113,11 +113,6 @@ const createFriend= async(req,res) => {
  * }
  *  
  * @apiErrorExample Error-Response:
- * -400 친구 목록 확인
- * {
- *  "status": 400,
- *  "message": "등록된 친구들이 없습니다."
- * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -128,13 +123,13 @@ const getFriends= async(req,res) => {
     const userIdx = req._id;
     try{
         const friends = await friendService.findFriendsByUserIdx({userIdx});
-        console.log(friends);
-        if(friends.length==0){
-            return res.status(returnCode.BAD_REQUEST).json({
-                status:returnCode.BAD_REQUEST,
-                message:"등록된 친구들이 없습니다."
-            });
-        }
+        // console.log(friends);
+        // if(friends.length==0){
+        //     return res.status(returnCode.BAD_REQUEST).json({
+        //         status:returnCode.BAD_REQUEST,
+        //         message:"등록된 친구들이 없습니다."
+        //     });
+        // }
 
         const data = {friends};
 
@@ -185,7 +180,7 @@ const getFriends= async(req,res) => {
  * -400 친구 유무 확인
  * {
  *  "status": 400,
- *  "message": "등록된 친구가 없습니다."
+ *  "message": "일치하는 친구가 없습니다."
  * }
  * -500 서버error
  * {
@@ -200,7 +195,7 @@ const getFriendDetail= async(req,res) => {
         if(!friend){
             return res.status(returnCode.BAD_REQUEST).json({
                 status:returnCode.BAD_REQUEST,
-                message:"등록된 친구가 없습니다"
+                message:"일치하는 친구가 없습니다"
             });
         }
         const name = friend.name;
@@ -255,70 +250,34 @@ const getFriendDetail= async(req,res) => {
  * "data": {
  *       "takenList": [
  *           {
- *               "taken": true,
- *               "category": [
- *                   "생일",
- *                   "축하"
- *               ],
- *               "friendIdx": [
- *                   {
- *                       "_id": "60e5dc375c157b183255b0ca",
- *                       "name": "밀키"
- *                   }
- *               ],
  *               "_id": "60e5ddb55c157b183255b0d1",
  *               "title": "밀키가 좋아하는 장난감 먹었지",
  *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
  *               "date": "2021.12.02",
- *               "record": "우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워."
  *           },
  *           {
- *               "taken": true,
- *               "category": [
- *                   "생일",
- *                   "축하"
- *               ],
- *               "friendIdx": [
- *                   {
- *                       "_id": "60e5dc375c157b183255b0ca",
- *                       "name": "밀키"
- *                   }
- *               ],
  *               "_id": "60e650fe2821d6242df82904",
  *               "title": "메렁 메롱",
  *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
  *               "date": "2021.12.02",
- *               "record": "우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워."
  *           }
  *       ],
  *       "givenList": [
  *           {
- *               "taken": false,
- *               "category": [
- *                    "생일",
- *                   "축하"
- *               ],
- *               "friendIdx": [
- *                   {
- *                       "_id": "60e5dc375c157b183255b0ca",
- *                       "name": "밀키"
- *                   }
- *               ],
  *               "_id": "60e651142821d6242df82908",
  *               "title": "나에게만 선물같아",
  *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
  *               "date": "2021.12.02",
- *               "record": "우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워."
  *           }
  *       ]
  *   }
  * }
  *  
  * @apiErrorExample Error-Response:
- * -400 친구 유무 확인
+ * -400 친구 확인
  * {
  *  "status": 400,
- *  "message": "등록된 친구가 없습니다."
+ *  "message": "일치하는 친구가 없습니다"
  * }
  * -500 서버error
  * {
@@ -334,7 +293,7 @@ const getTakenGivenList= async(req,res) => {
         if(!friend){
             return res.status(returnCode.BAD_REQUEST).json({
                 status:returnCode.BAD_REQUEST,
-                message:"등록된 친구가 없습니다"
+                message:"일치하는 친구가 없습니다"
             });
         }
         let takenList = [];
@@ -367,7 +326,7 @@ const getTakenGivenList= async(req,res) => {
 }
 
 /**
- * @api {get} /friend/memo/:friendId 친구 메모 수정
+ * @api {put} /friend/memo/:friendId 친구 메모 수정
  * 
  * @apiVersion 1.0.0
  * @apiName editFriendMemo
@@ -378,7 +337,10 @@ const getTakenGivenList= async(req,res) => {
  *  "Content-Type": "application/json",
  *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
  * }
- * 
+ * @apiParamExample {json} Request-Example:
+ * {
+    "memo": "보리는 수박을 좋아해요"
+ * }
  *  
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
@@ -390,7 +352,7 @@ const getTakenGivenList= async(req,res) => {
  * -400 친구 유무 확인
  * {
  *  "status": 400,
- *  "message": "등록된 친구가 없습니다."
+ *  "message": "일치하는 친구가 없습니다."
  * }
  * -500 서버error
  * {
@@ -406,7 +368,7 @@ const editFriendMemo= async(req,res) => {
         if(!friend){
             return res.status(returnCode.BAD_REQUEST).json({
                 status:returnCode.BAD_REQUEST,
-                message:"등록된 친구가 없습니다"
+                message:"일치하는 친구가 없습니다"
             });
         }
 
@@ -438,7 +400,10 @@ const editFriendMemo= async(req,res) => {
  *  "Content-Type": "application/json",
  *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
  * }
- * 
+  * @apiParamExample {json} Request-Example:
+ * {
+    "name": "쌀보리"
+ * }
  *  
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
@@ -450,7 +415,7 @@ const editFriendMemo= async(req,res) => {
  * -400 친구 유무 확인
  * {
  *  "status": 400,
- *  "message": "등록된 친구가 없습니다."
+ *  "message": "일치하는 친구가 없습니다."
  * }
  * -500 서버error
  * {
@@ -467,7 +432,7 @@ const editFriendName= async(req,res) => {
         if(!friend){
             return res.status(returnCode.BAD_REQUEST).json({
                 status:returnCode.BAD_REQUEST,
-                message:"등록된 친구가 없습니다"
+                message:"일치하는 친구가 없습니다"
             });
         }
 

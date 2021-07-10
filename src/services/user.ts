@@ -33,7 +33,7 @@ const findUserbyIdx = (data: userIdxInput) => {
 }
 
 const findUserProfile = (data: userIdxInput) => {
-  const user = User.findOne({_id:data.userIdx}).select('-__v -token');
+  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id');
   return user
 }
 
