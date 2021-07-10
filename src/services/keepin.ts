@@ -1,4 +1,6 @@
+import keepin from "../controllers/keepin";
 import Keepin from "../models/Keepin";
+import mongoose from "mongoose";
 
 export interface keepinCreateInput {
   title: string;
@@ -37,6 +39,15 @@ export interface keepinDetailInput{
 
 export interface keepinFindUserIdxInput {
   userIdx: string //user _id 
+}
+
+export interface keepinFindByFriendIdx{
+  friendIdx: string 
+}
+
+export interface keepinFindByKeepinIdxAndRevFriendIdx{
+  keepinIdx: string,
+  friendIdx: string
 }
 
 
@@ -93,6 +104,16 @@ const deleteKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
   return Keepin.deleteOne({_id:data.keepinIdx});
 }
 
+const findKeepinFriend = (data: keepinFindByFriendIdx) => {
+  // const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1,  date:1}).sort({ date: 1 });
+  // [mongoose.Types.ObjectId(data.keepinIdx)]
+  return Keepin.find({friendIdx: {"$in" : [mongoose.Types.ObjectId(data.friendIdx)]}});
+}
+
+const deleteFriend = (data: keepinFindByKeepinIdxAndRevFriendIdx) => {
+  return Keepin.updateOne({_id:data.keepinIdx},{ $pull: { friendIdx: data.friendIdx} });
+}
+
 export default {
   saveKeepin,
   findKeepin,
@@ -102,5 +123,7 @@ export default {
   findKeepinByKeepinIdx,
   findKeepinForTaken,
   findkeepinByUserIdxAndCategory,
-  deleteKeepinByKeepinIdx
+  deleteKeepinByKeepinIdx,
+  findKeepinFriend,
+  deleteFriend
 }
