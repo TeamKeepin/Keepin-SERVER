@@ -25,7 +25,7 @@ import returnCode from "../library/returnCode";
  * - 알람 받는 경우, daysAgo 값 요청
  * {
     "title": "할아버지 생일",
-    "date": "20210705",
+    "date": "2021-07-05",
     "isAlarm": true,
     "daysAgo": 2,
     "isImportant": false
@@ -34,7 +34,7 @@ import returnCode from "../library/returnCode";
  * - 알람 받지 않는 경우
  * {
     "title": "여자친구 생일",
-    "date": "20210802",
+    "date": "2021-08-02",
     "isAlarm": false,
     "isImportant": false
  * }
@@ -48,7 +48,7 @@ import returnCode from "../library/returnCode";
     "data": {
         "_id": "60e1d4070e50e39654b4bb5f",
         "title": "여자친구 생일",
-        "date": "20210802",
+        "date": "2021-08-02",
         "isAlarm": false,
         "isImportant": true,
         "year": "2021",
@@ -388,8 +388,9 @@ const getMonthReminder = async (req, res) => {
 
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
         for (var result of resultArray){ 
-            const day = result.date.substring(6,8);
-            const date_day = result.date.substring(4,6)+"."+day;
+            const month = result[0].date.substring(5,7);
+            const day = result[0].date.substring(8,10);
+            const date_day = month+"."+day;
             result.date = date_day;
             dataArray.push(result);
         }
