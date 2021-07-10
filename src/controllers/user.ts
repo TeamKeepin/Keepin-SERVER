@@ -259,7 +259,7 @@ const signIn = async (req, res) => {
  */
 const getProfile = async(req,res) => {
     const userIdx = req._id;
-    // console.log(userIdx);
+    console.log(userIdx);
     try{
         const data = await userService.findUserProfile({userIdx});
         
@@ -269,6 +269,12 @@ const getProfile = async(req,res) => {
                 message: "유저가 없습니다." 
               });
         }
+
+        const year = data.birth.substring(0,4);
+        const month = data.birth.substring(5,7);
+        const day = data.birth.substring(8,10);
+        const tunedBirth = year+'.'+month+'.'+day;
+        data.birth=tunedBirth;
        
         return res.status(200).json({
             status: returnCode.OK,

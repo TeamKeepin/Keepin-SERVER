@@ -60,7 +60,7 @@ const searchKeepinByKeyword = (data: keepinSearchInput) => {
 
 // 모아보기 카테고리 조회 
 const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) => {
-  const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1, taken:1, category:1, date:1}).sort({ date: 1 });
+  const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1,  date:1}).sort({ date: 1 });
   return result;
 }
 
@@ -83,7 +83,8 @@ const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
 //친구와 준/받은 keepin 목록 조회 
 const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
   //최신 순 정렬 해야 함 
-  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
+  // const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
+  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('title photo date taken').sort({date: 1});
   return keepin;
 }
 

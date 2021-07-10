@@ -46,8 +46,8 @@ define({ "api": [
     "groupTitle": "Friend"
   },
   {
-    "type": "get",
-    "url": "/friend/keepin/:friendId",
+    "type": "put",
+    "url": "/friend/memo/:friendId",
     "title": "친구 메모 수정",
     "version": "1.0.0",
     "name": "editFriendMemo",
@@ -57,6 +57,15 @@ define({ "api": [
         {
           "title": "Header-Example:",
           "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"memo\": \"보리는 수박을 좋아해요\"\n}",
           "type": "json"
         }
       ]
@@ -74,7 +83,53 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "put",
+    "url": "/friend/:friendId",
+    "title": "친구 이름 수정",
+    "version": "1.0.0",
+    "name": "editFriendName",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"name\": \"쌀보리\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"이름 수정 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -111,7 +166,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-400 친구 목록 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구들이 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -148,7 +203,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -176,7 +231,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"taken\": true,\n              \"category\": [\n                  \"생일\",\n                  \"축하\"\n              ],\n              \"friendIdx\": [\n                  {\n                      \"_id\": \"60e5dc375c157b183255b0ca\",\n                      \"name\": \"밀키\"\n                  }\n              ],\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"record\": \"우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\"\n          },\n          {\n              \"taken\": true,\n              \"category\": [\n                  \"생일\",\n                  \"축하\"\n              ],\n              \"friendIdx\": [\n                  {\n                      \"_id\": \"60e5dc375c157b183255b0ca\",\n                      \"name\": \"밀키\"\n                  }\n              ],\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"record\": \"우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\"\n          }\n      ],\n      \"givenList\": [\n          {\n              \"taken\": false,\n              \"category\": [\n                   \"생일\",\n                  \"축하\"\n              ],\n              \"friendIdx\": [\n                  {\n                      \"_id\": \"60e5dc375c157b183255b0ca\",\n                      \"name\": \"밀키\"\n                  }\n              ],\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"record\": \"우리 밀키의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\"\n          }\n      ]\n  }\n}",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\",\n              \"taken\": false\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -185,7 +240,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-400 친구 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -406,7 +461,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"keepin\": [\n        {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n        }\n    ]\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n     \"keepins\": [\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n        }\n      ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -489,7 +544,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* [Querystring] category: category로 검색",
+          "content": "* [Querystring] category: category로 검색 (생일, 기념일, 축하, 칭찬, 응원, 감사, 깜작, 기타)",
           "type": "json"
         }
       ]
@@ -498,7 +553,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keeppins\":[\n          { \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keepins\":[\n          { \n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
           "type": "json"
         }
       ]
@@ -701,7 +756,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"랜덤 키핀 조회 성공\",\n  \"data\": {\n      \"taken\": true,\n      \"category\": [\n          \"칭찬\",\n          \"깜짝\"\n      ],\n      \"friendIdx\": [\n          \"60e34c82e2ada33a1e925704\",\n          \"60e34c98e2ada33a1e925707\"\n      ],\n      \"_id\": \"60e46b35c167c37c296bbf4f\",\n      \"title\": \"햄버거 고마워\",\n      \"photo\": \"ㄹㅇ나룬어룬ㅇㄹㅇㄴ\",\n      \"date\": \"20210704\",\n      \"record\": \"투데이즈 해피데이~~\",\n      \"userIdx\": \"60e349893460ec398ea1dc45\",\n      \"__v\": 0\n  }\n}",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"랜덤 키핀 조회 성공\",\n  \"data\": {\n      \"_id\": \"60e46b35c167c37c296bbf4f\",\n      \"title\": \"햄버거 고마워\",\n      \"photo\": \"ㄹㅇ나룬어룬ㅇㄹㅇㄴ\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -710,7 +765,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-400 등록된 키핀 확인 \n{\n \"status\": 400,\n \"message\": \"등록된 키핀이 없습니다\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -738,7 +793,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청\n* isImportant : 중요 여부(true/false)\n* daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전)\n\n- 알람 받는 경우, daysAgo 값 요청\n{\n    \"title\": \"할아버지 생일\",\n    \"date\": \"20210705\",\n    \"isAlarm\": true,\n    \"daysAgo\": 2,\n    \"isImportant\": false\n}\n\n- 알람 받지 않는 경우\n{\n    \"title\": \"여자친구 생일\",\n    \"date\": \"20210802\",\n    \"isAlarm\": false,\n    \"isImportant\": false\n}",
+          "content": "* isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청\n* isImportant : 중요 여부(true/false)\n* daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전)\n\n- 알람 받는 경우, daysAgo 값 요청\n{\n    \"title\": \"할아버지 생일\",\n    \"date\": \"2021-07-05\",\n    \"isAlarm\": true,\n    \"daysAgo\": 2,\n    \"isImportant\": false\n}\n\n- 알람 받지 않는 경우\n{\n    \"title\": \"여자친구 생일\",\n    \"date\": \"2021-08-02\",\n    \"isAlarm\": false,\n    \"isImportant\": false\n}",
           "type": "json"
         }
       ]
@@ -747,7 +802,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 생성 성공\",\n    \"data\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"여자친구 생일\",\n        \"date\": \"20210802\",\n        \"isAlarm\": false,\n        \"isImportant\": true,\n        \"year\": \"2021\",\n        \"month\": \"08\"\n     }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 생성 성공\",\n    \"data\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"여자친구 생일\",\n        \"date\": \"2021-08-02\",\n        \"isAlarm\": false,\n        \"isImportant\": true,\n        \"year\": \"2021\",\n        \"month\": \"08\"\n     }\n}",
           "type": "json"
         }
       ]
@@ -803,6 +858,52 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"reminderID Array 값이 없습니다.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/reminder.ts",
+    "groupTitle": "Reminder"
+  },
+  {
+    "type": "get",
+    "url": "/reminder/:reminderId",
+    "title": "리마인더 상세 조회",
+    "version": "1.0.0",
+    "name": "getDetailReminder",
+    "group": "Reminder",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "* url: /reminder/60e5bdc46c3cdb135f1da1dc\n* reminderId : 리마인더 Id",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 상세 조회 성공\",\n    \"data\": {\n        \"isAlarm\": true,\n        \"isImportant\": true,\n        \"_id\": \"60e651b32821d6242df8291a\",\n        \"title\": \"더미데이터4\",\n        \"date\": \"2021.05.01\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"파라미터(reminderId)를 입력하세요.\"\n}\n\n- 400 등록된 리마인더가 없음\n\n{\n    \"status\": 400,\n    \"message\": \"등록된 리마인더가 없습니다.\"\n}",
           "type": "json"
         }
       ]
