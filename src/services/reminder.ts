@@ -27,7 +27,7 @@ export interface reminderMonthFindInput {
   month: string
 }
 export interface reminderFindInputByReminderId {
-  _id: string
+  reminderIdx: string
 }
 
 const saveReminder = (data: reminderCreateInput) => {
@@ -38,6 +38,13 @@ const findReminder = (data: reminderFindInput) => {
   const result = Reminder.find({
     userIdx: data.userIdx,
   }).sort({ date: 1 }); //가까운 순으로 정렬
+  return result;
+}
+
+const findDetailReminder = (data: reminderFindInputByReminderId) => {
+  const result = Reminder.find({
+    _id: data.reminderIdx,
+  },{_id:1, title:1, date:1, daysAgo:1, isAlarm:1, isImportant:1}).sort({ date: 1 }); //가까운 순으로 정렬
   return result;
 }
 
@@ -58,14 +65,20 @@ const findReminderOncoming = (data: reminderOncomingFindInput) => {
   return result;
 }
 
+const findReminderbyReminderId = (data: reminderFindInputByReminderId) => {
+  return Reminder.findOne({_id:data.reminderIdx});
+}
+
 const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
-return Reminder.deleteOne({_id:data._id});
+  return Reminder.deleteOne({_id:data.reminderIdx});
 }
 
 export default {
   saveReminder,
   findReminder,
+  findDetailReminder,
   findMonthReminder,
+  findReminderbyReminderId,
   findReminderOncoming,
   deleteReminderbyReminderId
 }

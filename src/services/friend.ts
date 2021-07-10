@@ -37,6 +37,11 @@ export interface friendKeepinInput{
     friendIdx: string
 }
 
+export interface KeepinArrayInput{
+    friendIdx: string,
+    keepinIdxArray: string[]
+}
+
 
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
     const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name:-1});
@@ -63,6 +68,34 @@ const saveFriend = (data: friendCreateInput) => {
     Friend.create(data);
 }
 
+// 친구에 키핀 등록
+//const saveKeepinInFriend = (data: KeepinArrayInput) => {
+  /*
+      const filter = {
+        _id: data.friendIdx,
+      };
+      const update = {
+        keepinIdx: data.keepinIdxArray,
+      };
+  */
+   //  Friend.findOneAndUpdate(filter, update, {
+   //   new: true,
+   // });
+//}
+
+//예시
+/*
+const filter = {
+      email: email,
+    };
+    const update = {
+      authToken: token,
+    };
+    await adminModel.findOneAndUpdate(filter, update, {
+      new: true,
+    });
+*/
+
 // 친구 검색
 const searchFriendByKeyword = (data: friendSearchInput) => {
     const result = Friend.find({name:{$regex:data.name}}).where('userIdx').equals(data.userIdx).select('-__v -userIdx');
@@ -75,7 +108,9 @@ const findKeepinFriend = (data: friendKeepinInput) => {
     return result;
 }
 
-// 영우 오빠
+
+// 영우 오빠 주석처리
+
 // const findKeepinFriend = (data: friendKeepinInput) => {
 //     const total= Friend.find().where('_id').equals(data.friendIdx).count();
 //     return; 
@@ -93,5 +128,6 @@ export default {
   saveFriend,
   findKeepinFriend,
   findFriendByFriendIdx,
-  findFriendByNameAnduserIdx
+  findFriendByNameAnduserIdx,
+//   saveKeepinInFriend
 }

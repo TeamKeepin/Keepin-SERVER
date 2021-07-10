@@ -1,5 +1,7 @@
-import { randomService } from "../services";
-const returnCode = require('../library/returnCode');
+import { Request, Response } from "express";
+import { check, validationResult } from "express-validator"
+import { reminderService } from "../services";
+import returnCode from "../library/returnCode";
 
 const deleteAllData = async(req,res) => {
     const userIdx = req._id;

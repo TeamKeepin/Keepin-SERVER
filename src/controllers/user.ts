@@ -6,11 +6,7 @@ import config from "../config"
 import { check, validationResult } from "express-validator"
 import { userService } from "../services";
 import { keepinService } from "../services";
-const returnCode = require('../library/returnCode');
-
-
-
-
+import returnCode from "../library/returnCode";
 
 /**
  * @api {post} /user/signup 회원가입
@@ -139,11 +135,7 @@ const signUp = async (req: Request, res: Response) => {
  * @apiParamExample {json} Request-Example:
  * {
  *  "email": "keepin@gmail.com",
- *  "password": "1234abcd",
- *  "name": "유키핀",
- *  "birth": "19970627",
- *  "phone": "01012345678",
- *    
+ *  "password": "1234abcd", 
  * }
  *
  * @apiSuccess {String} jwt
