@@ -264,7 +264,7 @@ const signIn = async (req, res) => {
  */
 const getProfile = async(req,res) => {
     const userIdx = req._id;
-    // console.log(userIdx);
+    console.log(userIdx);
     try{
         const data = await userService.findUserProfile({userIdx});
         

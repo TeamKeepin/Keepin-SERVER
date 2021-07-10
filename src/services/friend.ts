@@ -58,7 +58,7 @@ const findFriendByNameAnduserIdx = (data: friendFinduserIdxAndNameInput) => {
     return friend;
 }
 
-const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
+const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => { 
     const friend= Friend.findOne({_id:data.friendIdx});
     return friend;
 }
