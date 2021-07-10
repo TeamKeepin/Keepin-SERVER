@@ -42,7 +42,7 @@ export default {
   refresh: async (refreshToken) => {
     try {
         const result = await jwt.verify(refreshToken, config.jwtSecret);
-        
+
         if (result.id === undefined) {
             return TOKEN_INVALID;
         }
@@ -56,10 +56,8 @@ export default {
             id: user.id,
             email: user.email
         };
-        const dto = {
-            token: jwt.sign(payload, config.jwtSecret)
-        };
-        return dto;
+        return jwt.sign(payload, config.jwtSecret);
+        
     } catch (err) {
         if (err.message === 'jwt expired') {
             console.log('expired token');
