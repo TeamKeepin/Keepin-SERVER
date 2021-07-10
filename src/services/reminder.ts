@@ -41,6 +41,13 @@ const findReminder = (data: reminderFindInput) => {
   return result;
 }
 
+const findDetailReminder = (data: reminderFindInputByReminderId) => {
+  const result = Reminder.find({
+    _id: data.reminderIdx,
+  },{_id:1, title:1, date:1, daysAgo:1, isAlarm:1, isImportant:1}).sort({ date: 1 }); //가까운 순으로 정렬
+  return result;
+}
+
 const findMonthReminder = (data: reminderMonthFindInput) => {
   const result = Reminder.find({
     userIdx: data.userIdx, 
@@ -69,6 +76,7 @@ const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
 export default {
   saveReminder,
   findReminder,
+  findDetailReminder,
   findMonthReminder,
   findReminderbyReminderId,
   findReminderOncoming,
