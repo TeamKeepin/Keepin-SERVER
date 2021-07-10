@@ -47,7 +47,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/friend/keepin/:friendId",
+    "url": "/friend/memo/:friendId",
     "title": "친구 메모 수정",
     "version": "1.0.0",
     "name": "editFriendMemo",
@@ -66,6 +66,43 @@ define({ "api": [
         {
           "title": "Success-Response:",
           "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"메모 수정 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"등록된 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "put",
+    "url": "/friend/:friendId",
+    "title": "친구 이름 수정",
+    "version": "1.0.0",
+    "name": "editFriendName",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"이름 수정 성공\",\n}",
           "type": "json"
         }
       ]
@@ -803,6 +840,52 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"reminderID Array 값이 없습니다.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/reminder.ts",
+    "groupTitle": "Reminder"
+  },
+  {
+    "type": "get",
+    "url": "/reminder/:reminderId",
+    "title": "리마인더 상세 조회",
+    "version": "1.0.0",
+    "name": "getDetailReminder",
+    "group": "Reminder",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "* url: /reminder/60e5bdc46c3cdb135f1da1dc\n* reminderId : 리마인더 Id",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 상세 조회 성공\",\n    \"data\": {\n        \"isAlarm\": true,\n        \"isImportant\": true,\n        \"_id\": \"60e651b32821d6242df8291a\",\n        \"title\": \"더미데이터4\",\n        \"date\": \"2021.05.01\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"파라미터(reminderId)를 입력하세요.\"\n}\n\n- 400 등록된 리마인더가 없음\n\n{\n    \"status\": 400,\n    \"message\": \"등록된 리마인더가 없습니다.\"\n}",
           "type": "json"
         }
       ]
