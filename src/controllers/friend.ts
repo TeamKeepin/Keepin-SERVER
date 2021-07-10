@@ -307,8 +307,8 @@ const getTakenGivenList= async(req,res) => {
             const keepin = await keepinService.findKeepinForTaken({keepinIdx});
             
             const year = keepin.date.substring(0,4);
-            const month = keepin.date.substring(4,6);
-            const day = keepin.date.substring(6,8);
+            const month = keepin.date.substring(5,7);
+            const day = keepin.date.substring(8,10);
             const tunedDate = year+'.'+month+'.'+day;
             keepin.date=tunedDate;
 

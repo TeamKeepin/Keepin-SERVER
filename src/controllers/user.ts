@@ -276,8 +276,8 @@ const getProfile = async(req,res) => {
         }
 
         const year = data.birth.substring(0,4);
-        const month = data.birth.substring(4,6);
-        const day = data.birth.substring(6,8);
+        const month = data.birth.substring(5,7);
+        const day = data.birth.substring(8,10);
         const tunedBirth = year+'.'+month+'.'+day;
         data.birth=tunedBirth;
        

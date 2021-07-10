@@ -137,15 +137,17 @@ const createKeepin = async (req, res) => {
  * {
     "status": 200,
     "message": "모아보기 준/받은 조회 성공",
-    "keepin": [
-        {
+    "data":{
+        "keepins":[
+          {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
             "photo": "탕수육 사진",
             "date": "2021.06.21"
-        }
-    ]
+          }
+        ]
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -169,11 +171,21 @@ const getTakenKeepin = async (req, res) => {
   }
 
   try {
-    const keepin = await keepinService.findKeepin({taken, userIdx});
+    const keepins = await keepinService.findKeepin({taken, userIdx});
+
+    for(var keepin of keepins){
+      const year = keepin.date.substring(0,4);
+      const month = keepin.date.substring(5,7);
+      const day = keepin.date.substring(8,10);
+      const tunedDate = year+'.'+month+'.'+day;
+      keepin.date=tunedDate;
+    }
+
+    const data = {keepins};
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '모아보기 준/받은 조회 성공',
-      keepin
+      data
     })
     } catch (err) {
       console.error(err.message);
@@ -206,15 +218,18 @@ const getTakenKeepin = async (req, res) => {
  * {
     "status": 200,
     "message": "키핀 검색어 조회 성공",
-    "data": [
-        {
+    "data": {
+      "keepins":[
+          {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
             "photo": "탕수육 사진",
             "date": "2021.06.21"
-        }
-    ]
+         }
+         ...
+      ]
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -239,8 +254,18 @@ const searchKeepin = async (req, res) => {
   }
 
   try {
-    const data = await keepinService.searchKeepinByKeyword({title, userIdx});
+    const keepins = await keepinService.searchKeepinByKeyword({title, userIdx});
     
+   
+    for(var keepin of keepins){
+      const year = keepin.date.substring(0,4);
+      const month = keepin.date.substring(5,7);
+      const day = keepin.date.substring(8,10);
+      const tunedDate = year+'.'+month+'.'+day;
+      keepin.date=tunedDate;
+    }
+    const data = {keepins};
+
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀 검색어 조회 성공',
@@ -321,8 +346,8 @@ const getKeepinByCategory = async (req, res) => {
 
     for(var keepin of keepins){
         const year = keepin.date.substring(0,4);
-        const month = keepin.date.substring(4,6);
-        const day = keepin.date.substring(6,8);
+        const month = keepin.date.substring(5,7);
+        const day = keepin.date.substring(8,10);
         const tunedDate = year+'.'+month+'.'+day;
         keepin.date=tunedDate;
     }
@@ -365,9 +390,8 @@ const getKeepinByCategory = async (req, res) => {
  * {
     "status": 200,
     "message": "키핀 상세페이지 조회 성공",
-    "keepin": {
-        "userIdx": "60e1d4070e50e39654b4bb5f",
-        "keepinIdx": "60e42158909d3063102be165",
+    "data": {
+        "_id": "60e42158909d3063102be165",
         "title": "보리 생일",
         "photo": "보리가 좋아하는 강아지 김밥",
         "friends": [
@@ -417,22 +441,28 @@ const getDetailKeepin = async (req, res) => {
       friendNames.push(frienddata.name);
     }
 
-    const keepin ={
-      userIdx: userIdx,
-      keepinIdx: detail._id,
+
+ 
+    const year = detail.date.substring(0,4);
+    const month = detail.date.substring(5,7);
+    const day = detail.date.substring(8,10);
+    const tunedDate = year+'.'+month+'.'+day;
+
+    const data ={
+      _id: detail._id,
       title: detail.title,
       photo: detail.photo,
       friends: friendNames,
       record: detail.record,
       cateogry: detail.category,
-      date: detail.date,
+      date: tunedDate,
       taken: detail.taken
     }
 
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀 상세페이지 조회 성공',
-      keepin
+      data
     })
   } catch (err) {
       console.error(err.message);
