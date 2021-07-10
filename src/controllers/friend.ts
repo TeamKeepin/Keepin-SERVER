@@ -254,12 +254,14 @@ const getFriendDetail= async(req,res) => {
  *               "title": "밀키가 좋아하는 장난감 먹었지",
  *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
  *               "date": "2021.12.02",
+ *               "taken": true
  *           },
  *           {
  *               "_id": "60e650fe2821d6242df82904",
  *               "title": "메렁 메롱",
  *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
  *               "date": "2021.12.02",
+ *               "taken": true
  *           }
  *       ],
  *       "givenList": [
@@ -268,6 +270,7 @@ const getFriendDetail= async(req,res) => {
  *               "title": "나에게만 선물같아",
  *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
  *               "date": "2021.12.02",
+ *               "taken": false
  *           }
  *       ]
  *   }
@@ -302,6 +305,13 @@ const getTakenGivenList= async(req,res) => {
         for(const keepinId of keepins){
             const keepinIdx = keepinId.toString();
             const keepin = await keepinService.findKeepinForTaken({keepinIdx});
+            
+            const year = keepin.date.substring(0,4);
+            const month = keepin.date.substring(4,6);
+            const day = keepin.date.substring(6,8);
+            const tunedDate = year+'.'+month+'.'+day;
+            keepin.date=tunedDate;
+
             if(keepin.taken===false){
                 givenList.push(keepin);
             }else{

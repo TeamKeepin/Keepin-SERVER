@@ -544,7 +544,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* [Querystring] category: category로 검색",
+          "content": "* [Querystring] category: category로 검색 (생일, 기념일, 축하, 칭찬, 응원, 감사, 깜작, 기타)",
           "type": "json"
         }
       ]
