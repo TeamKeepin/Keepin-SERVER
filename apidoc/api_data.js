@@ -775,7 +775,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청\n* isImportant : 중요 여부(true/false)\n* daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전)\n\n- 알람 받는 경우, daysAgo 값 요청\n{\n    \"title\": \"할아버지 생일\",\n    \"date\": \"20210705\",\n    \"isAlarm\": true,\n    \"daysAgo\": 2,\n    \"isImportant\": false\n}\n\n- 알람 받지 않는 경우\n{\n    \"title\": \"여자친구 생일\",\n    \"date\": \"20210802\",\n    \"isAlarm\": false,\n    \"isImportant\": false\n}",
+          "content": "* isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청\n* isImportant : 중요 여부(true/false)\n* daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전)\n\n- 알람 받는 경우, daysAgo 값 요청\n{\n    \"title\": \"할아버지 생일\",\n    \"date\": \"2021-07-05\",\n    \"isAlarm\": true,\n    \"daysAgo\": 2,\n    \"isImportant\": false\n}\n\n- 알람 받지 않는 경우\n{\n    \"title\": \"여자친구 생일\",\n    \"date\": \"2021-08-02\",\n    \"isAlarm\": false,\n    \"isImportant\": false\n}",
           "type": "json"
         }
       ]
@@ -784,7 +784,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 생성 성공\",\n    \"data\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"여자친구 생일\",\n        \"date\": \"20210802\",\n        \"isAlarm\": false,\n        \"isImportant\": true,\n        \"year\": \"2021\",\n        \"month\": \"08\"\n     }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 생성 성공\",\n    \"data\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"여자친구 생일\",\n        \"date\": \"2021-08-02\",\n        \"isAlarm\": false,\n        \"isImportant\": true,\n        \"year\": \"2021\",\n        \"month\": \"08\"\n     }\n}",
           "type": "json"
         }
       ]
