@@ -22,12 +22,12 @@ import returnCode from "../library/returnCode";
  * 
  * @apiParamExample {json} Request-Example:
  * {
- *  "email": "keepin@gmail.com",
- *  "password": "1234abcd",
- *  "name": "유키핀",
- *  "birth": "1997-06-27",
- *  "phone": "010-1234-5678",
- *    
+    "email": "whatisthis@naver.com",
+    "password": "1234567",
+    "name": "mk",
+    "birth": "19980322",
+    "phoneToken": "1" ,
+    "phone": "01012345678"
  * }
  *
  * @apiSuccess {String} jwt
