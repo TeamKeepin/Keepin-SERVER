@@ -26,8 +26,8 @@ import returnCode from "../library/returnCode";
  *  "password": "1234abcd",
  *  "name": "유키핀",
  *  "birth": "1997-06-27",
- *  "phone": "010-1234-5678",
- *    
+ *  "phoneToken": 1,
+ *  "phone": "010-1234-5678"
  * }
  *
  * @apiSuccess {String} jwt
