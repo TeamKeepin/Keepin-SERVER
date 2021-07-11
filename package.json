@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node src",
-    "build": "tsc && node —max-old-space-size=12000 dist",
+    "build": "tsc && node -—max-old-space-size=12000 dist",
     "test": "nodemon",
     "docs": "apidoc -i src/controllers -o apidoc"
   },
