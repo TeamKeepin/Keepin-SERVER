@@ -25,7 +25,7 @@ import moment from "moment";
  * 
  * {
     "title": "보리 생일",
-    "photo": "보리가 좋아하는 강아지 김밥",
+    "photo": ["보리가 좋아하는 강아지 김밥"],
     "taken": false,
     "date": "2021-12-02",
     "category": ["생일", "축하"],
@@ -41,7 +41,7 @@ import moment from "moment";
     "keepin": {
         "_id": "60e1d4070e50e39654b4bb5f",
         "title": "보리 생일",
-        "photo": "보리가 좋아하는 강아지 김밥",
+        "photo": ["보리가 좋아하는 강아지 김밥"],
         "taken": false,
         "date": "2021.12.02",
         "category": [
@@ -98,7 +98,7 @@ const createKeepin = async (req, res) => {
   var locationArray = ["abc","def"];
 
   try {
-    const keepin = await keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx});
+    const keepin = await keepinService.saveKeepin({title, photo: locationArray, taken, date, category, record, userIdx, friendIdx});
 
     const friends = keepin.friendIdx;
     const keepinIdx = keepin._id;
@@ -156,7 +156,7 @@ const createKeepin = async (req, res) => {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": ["탕수육 사진"],
+            "photo": "탕수육 사진",
             "date": "2021.06.21"
           }
         ]
@@ -184,14 +184,18 @@ const getTakenKeepin = async (req, res) => {
   }
 
   try {
-    const keepins = await keepinService.findKeepin({taken, userIdx});
+    const keepinss = await keepinService.findKeepin({taken, userIdx});
 
-    for(var keepin of keepins){
-      const year = keepin.date.substring(0,4);
-      const month = keepin.date.substring(5,7);
-      const day = keepin.date.substring(8,10);
+    const keepins = [];
+
+    for(var i=0; i<keepinss.length; i++){
+      const year = keepinss[i].date.substring(0,4);
+      const month = keepinss[i].date.substring(4,6);
+      const day = keepinss[i].date.substring(6,8);
       const tunedDate = year+'.'+month+'.'+day;
-      keepin.date=tunedDate;
+      const{_id, taken, title, photo } = keepinss[i];
+      const pKeepin = {_id:_id, taken:taken,title:title, photo:photo[0], date:tunedDate};
+      keepins.push(pKeepin);
     }
 
     const data = {keepins};
@@ -237,7 +241,7 @@ const getTakenKeepin = async (req, res) => {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": ["탕수육 사진"],
+            "photo": "탕수육 사진",
             "date": "2021.06.21"
          }
          ...
@@ -267,16 +271,20 @@ const searchKeepin = async (req, res) => {
   }
 
   try {
-    const keepins = await keepinService.searchKeepinByKeyword({title, userIdx});
+    const keepinss = await keepinService.searchKeepinByKeyword({title, userIdx});
     
+    const keepins = [];
    
-    for(var keepin of keepins){
+    for(var keepin of keepinss){
       const year = keepin.date.substring(0,4);
-      const month = keepin.date.substring(5,7);
-      const day = keepin.date.substring(8,10);
+      const month = keepin.date.substring(4,6);
+      const day = keepin.date.substring(6,8);
       const tunedDate = year+'.'+month+'.'+day;
-      keepin.date=tunedDate;
+      const{_id, taken, title, photo } = keepin;
+      const pKeepin = {_id:_id, taken:taken,title:title, photo:photo[0], date:tunedDate};
+      keepins.push(pKeepin);
     }
+
     const data = {keepins};
 
     return res.status(returnCode.OK).json({
@@ -321,7 +329,7 @@ const searchKeepin = async (req, res) => {
           { 
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": ["탕수육 사진"],
+            "photo": "탕수육 사진",
             "date": "2021.06.21"
           },
           ... 
@@ -354,17 +362,21 @@ const getKeepinByCategory = async (req, res) => {
   }
 
   try {
-    const keepins = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
+    const keepinss = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
 
-    for(var keepin of keepins){
+    const keepins = [];
+    
+    for(var keepin of keepinss){
         const year = keepin.date.substring(0,4);
-        const month = keepin.date.substring(5,7);
-        const day = keepin.date.substring(8,10);
+        const month = keepin.date.substring(4,6);
+        const day = keepin.date.substring(6,8);
         const tunedDate = year+'.'+month+'.'+day;
-        keepin.date=tunedDate;
+        const{_id, taken, title, photo } = keepin;
+        const pKeepin = {_id:_id, title:title, photo:photo[0], date:tunedDate};
     }
 
     const data = {keepins};
+
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '카테고리 조회 성공',
@@ -405,7 +417,7 @@ const getKeepinByCategory = async (req, res) => {
     "data": {
         "_id": "60e42158909d3063102be165",
         "title": "보리 생일",
-        "photo": "보리가 좋아하는 강아지 김밥",
+        "photo": ["보리가 좋아하는 강아지 김밥"],
         "friends": [
             "보리",
             "밀키"
@@ -458,8 +470,8 @@ const getDetailKeepin = async (req, res) => {
 
  
     const year = detail.date.substring(0,4);
-    const month = detail.date.substring(5,7);
-    const day = detail.date.substring(8,10);
+    const month = detail.date.substring(4,6);
+    const day = detail.date.substring(6,8);
     const tunedDate = year+'.'+month+'.'+day;
 
     const data ={
