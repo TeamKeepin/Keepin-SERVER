@@ -133,6 +133,8 @@ const signUp = async (req: Request, res: Response) => {
  *  "message": "로그인 성공"   ,
  *  "data": {
  *    "jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *    "name": "김키핀"
  *  }
  * }
  * 
@@ -158,7 +160,7 @@ const signIn = async (req, res) => {
     }
     const { email, password } = req.body;
     try {
-        let user = await userService.findUser({email});
+        const user = await userService.findUser({email});
 
         if(!user) {
             res.status(400).json({
@@ -176,14 +178,12 @@ const signIn = async (req, res) => {
             });
         }
 
-        
-
         // Return jsonwebtoken
         const payload = {
             id: user._id,
             email: user.email
         };
-        
+
         const result = {
             accessToken: jwt.sign(
             payload,
@@ -203,11 +203,12 @@ const signIn = async (req, res) => {
               message: "로그인 성공",
               data: {
                   "jwt": result.accessToken,
-                  "refreshToken": result.refreshToken
+                  "refreshToken": result.refreshToken,
+                  "name":user.name
               }
         });
 
-        } catch (err) {
+        }catch (err) {
             console.error(err.message);
             res.status(returnCode.INTERNAL_SERVER_ERROR).json({
                 status: returnCode.INTERNAL_SERVER_ERROR,
@@ -270,8 +271,8 @@ const getProfile = async(req,res) => {
         }
 
         const year = data.birth.substring(0,4);
-        const month = data.birth.substring(5,7);
-        const day = data.birth.substring(8,10);
+        const month = data.birth.substring(4,6);
+        const day = data.birth.substring(6,8);
         const tunedBirth = year+'.'+month+'.'+day;
         data.birth=tunedBirth;
        

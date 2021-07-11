@@ -247,30 +247,27 @@ const getFriendDetail= async(req,res) => {
  *{
  *  "status": 200,
  *  "message": "친구에게 준/받은 keepin 목록 조회 성공",
- * "data": {
+ *  "data": {
  *       "takenList": [
  *           {
  *               "_id": "60e5ddb55c157b183255b0d1",
  *               "title": "밀키가 좋아하는 장난감 먹었지",
- *               "photo": ["밀키가 좋아하는 강아지 뼈다귀"],
- *               "date": "2021.12.02",
- *               "taken": true
+ *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
+ *               "date": "2021.12.02"
  *           },
  *           {
  *               "_id": "60e650fe2821d6242df82904",
  *               "title": "메렁 메롱",
- *               "photo": ["밀키가 좋아하는 강아지 뼈다귀"],
- *               "date": "2021.12.02",
- *               "taken": true
+ *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
+ *               "date": "2021.12.02"
  *           }
  *       ],
  *       "givenList": [
  *           {
  *               "_id": "60e651142821d6242df82908",
  *               "title": "나에게만 선물같아",
- *               "photo": ["밀키가 좋아하는 강아지 뼈다귀"],
- *               "date": "2021.12.02",
- *               "taken": false
+ *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
+ *               "date": "2021.12.02"
  *           }
  *       ]
  *   }
@@ -306,16 +303,19 @@ const getTakenGivenList= async(req,res) => {
             const keepinIdx = keepinId.toString();
             const keepin = await keepinService.findKeepinForTaken({keepinIdx});
             
+            const{ _id, title, photo } = keepin;
+
             const year = keepin.date.substring(0,4);
-            const month = keepin.date.substring(5,7);
-            const day = keepin.date.substring(8,10);
+            const month = keepin.date.substring(4,6);
+            const day = keepin.date.substring(6,8);
             const tunedDate = year+'.'+month+'.'+day;
             keepin.date=tunedDate;
+            const pKeepin = {_id:_id,title:title, photo:photo[0], date:tunedDate};
 
             if(keepin.taken===false){
-                givenList.push(keepin);
+                givenList.push(pKeepin);
             }else{
-                takenList.push(keepin);
+                takenList.push(pKeepin);
             }
         }
 
