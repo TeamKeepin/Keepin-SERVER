@@ -106,13 +106,7 @@ const createReminder = async (req, res) => {
     if (isAlarm==true) {
         if(daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 ||daysAgo == 7 ) {
             // realDate = date - daysAgo
-            var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYYMMDD');
-            //20210303
-            const sendYear = realDate.substring(0,4);
-            const sendMonth = realDate.substring(4,6);
-            const sendDay = realDate.substring(6,8);
-
-            realDate = sendYear+'-'+sendMonth+'-'+sendDay;
+            var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYY-MM-DD');
 
         } else {
             res.status(returnCode.BAD_REQUEST).json({
@@ -189,7 +183,7 @@ const getAllReminder = async (req, res) => {
 
 
 /**
- * @api {get} /reminder/:reminderId 리마인더 상세 조회
+ * @api {get} /reminder/detail/:reminderId 리마인더 상세 조회
  * 
  * @apiVersion 1.0.0
  * @apiName getDetailReminder
@@ -249,7 +243,7 @@ const getDetailReminder = async (req, res) => {
     if(!reminderId || reminderId == undefined){
         res.status(returnCode.BAD_REQUEST).json({
             status: returnCode.BAD_REQUEST,
-            message: '파라미터(year, month)를 입력하세요.',
+            message: '파라미터(reminderId)를 입력하세요.',
         });
     }
 
@@ -474,6 +468,8 @@ const getOncommingReminder = async (req, res) => {
     const userId = req._id;
     const errors = validationResult(req);
 
+    console.log("today: "+userId);  //
+
     if(!errors.isEmpty()){
         res.status(returnCode.BAD_REQUEST).json({
             status: returnCode.BAD_REQUEST,
@@ -482,7 +478,8 @@ const getOncommingReminder = async (req, res) => {
     }
 
     try {
-        const today = moment().format('YYYYMMDD');
+        const today = moment().format('YYYY-MM-DD');
+
         const resultArray = await reminderService.findReminderOncoming({userIdx:userId, start:today});
 
         if(resultArray.length==0) {
