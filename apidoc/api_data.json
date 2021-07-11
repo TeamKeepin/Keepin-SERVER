@@ -526,7 +526,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n    \"keepinArray\": [\"60e322167887874ecccad066\"]\n}",
+          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"보리 생일\",\n    \"photo\": [\"보리가 좋아하는 강아지 김밥\"],\n    \"taken\": false,\n    \"date\": \"2021-12-02\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n    \"friendIdx\":[\"60e416d15d759051988d18d0\", \"60e416d95d759051988d18d3\"]\n}",
           "type": "json"
         }
       ]
@@ -941,7 +941,7 @@
   },
   {
     "type": "get",
-    "url": "/reminder/:reminderId",
+    "url": "/reminder/detail/:reminderId",
     "title": "리마인더 상세 조회",
     "version": "1.0.0",
     "name": "getDetailReminder",

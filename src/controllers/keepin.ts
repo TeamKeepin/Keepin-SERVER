@@ -514,8 +514,17 @@ const getDetailKeepin = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
+ * * taken: 준/받은 여부 -> taken: true이면 받은
+ * * friendIdx: friend name을 표시하기 위함
+ * 
  * {
-    "keepinArray": ["60e322167887874ecccad066"]
+    "title": "보리 생일",
+    "photo": ["보리가 좋아하는 강아지 김밥"],
+    "taken": false,
+    "date": "2021-12-02",
+    "category": ["생일", "축하"],
+    "record": "우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.",
+    "friendIdx":["60e416d15d759051988d18d0", "60e416d95d759051988d18d3"]
  * }
  * 
  * @apiSuccessExample {json} Success-Response:
@@ -638,7 +647,6 @@ const deleteKeepin = async (req, res) => {
   try {
       // 친구 삭제 로직
       const ll = await friendService.findFriendsByKeepinIdx({keepinIdx: keepinIdArray[0].toString()}); // keepinId 하나씩 삭제 
-      console.log(ll)
 
       // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
       for (var keepinId of keepinIdArray){ 
