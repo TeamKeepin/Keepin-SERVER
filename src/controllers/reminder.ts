@@ -381,9 +381,8 @@ const getMonthReminder = async (req, res) => {
     }
 
     try {
-    
         const resultArray = await reminderService.findMonthReminder({userIdx:userId, year:year, month:month});
-
+        
         if(resultArray.length==0) {
             res.status(returnCode.BAD_REQUEST).json({
                 status: returnCode.BAD_REQUEST,
@@ -395,9 +394,9 @@ const getMonthReminder = async (req, res) => {
         var dataArray = [];
 
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
-        for (var result of resultArray){ 
-            const month = result[0].date.substring(5,7);
-            const day = result[0].date.substring(8,10);
+        for (var result of resultArray){
+            const month = result.date.substring(5,7);
+            const day = result.date.substring(8,10);
             const date_day = month+"."+day;
             result.date = date_day;
             dataArray.push(result);

@@ -12,11 +12,11 @@ router.post('/', auth.checkToken, reminderController.createReminder);
 //리마인더 전체 목록 조회
 router.get('/', auth.checkToken, reminderController.getAllReminder);
 
-// 가장 가까운 2개 리마인더 조회
-router.get('/oncomming', auth.checkToken, reminderController.getOncommingReminder);
-
 // 월별 목록 조회
 router.get('/date/:year/:month', auth.checkToken, reminderController.getMonthReminder);
+
+// 가장 가까운 2개 리마인더 조회
+router.get('/oncomming', auth.checkToken, reminderController.getOncommingReminder);
 
 //리마인더 상세 조회
 router.get('/detail/:reminderId', auth.checkToken, reminderController.getDetailReminder);
