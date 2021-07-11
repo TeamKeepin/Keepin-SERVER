@@ -268,7 +268,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n\"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": [\"밀키가 좋아하는 강아지 뼈다귀\"],\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": [\"밀키가 좋아하는 강아지 뼈다귀\"],\n              \"date\": \"2021.12.02\",\n              \"taken\": true\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": [\"밀키가 좋아하는 강아지 뼈다귀\"],\n              \"date\": \"2021.12.02\",\n              \"taken\": false\n          }\n      ]\n  }\n}",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n \"data\": {\n      \"takenList\": [\n          {\n              \"_id\": \"60e5ddb55c157b183255b0d1\",\n              \"title\": \"밀키가 좋아하는 장난감 먹었지\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\"\n          },\n          {\n              \"_id\": \"60e650fe2821d6242df82904\",\n              \"title\": \"메렁 메롱\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\"\n          }\n      ],\n      \"givenList\": [\n          {\n              \"_id\": \"60e651142821d6242df82908\",\n              \"title\": \"나에게만 선물같아\",\n              \"photo\": \"밀키가 좋아하는 강아지 뼈다귀\",\n              \"date\": \"2021.12.02\"\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -342,7 +342,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"보리 생일\",\n    \"photo\": \"보리가 좋아하는 강아지 김밥\",\n    \"taken\": false,\n    \"date\": \"2021-12-02\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n    \"friendIdx\":[\"60e416d15d759051988d18d0\", \"60e416d95d759051988d18d3\"]\n}",
+          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"보리 생일\",\n    \"photo\": [\"보리가 좋아하는 강아지 김밥\"],\n    \"taken\": false,\n    \"date\": \"2021-12-02\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n    \"friendIdx\":[\"60e416d15d759051988d18d0\", \"60e416d95d759051988d18d3\"]\n}",
           "type": "json"
         }
       ]
@@ -351,7 +351,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀하기 생성 성공\",\n    \"keepin\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"보리 생일\",\n        \"photo\": \"보리가 좋아하는 강아지 김밥\",\n        \"taken\": false,\n        \"date\": \"2021.12.02\",\n        \"category\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"friendIdx\": [\n            \"60e416d15d759051988d18d0\",\n            \"60e416d95d759051988d18d3\"\n        ]\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀하기 생성 성공\",\n    \"keepin\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"보리 생일\",\n        \"photo\": [\"보리가 좋아하는 강아지 김밥\"],\n        \"taken\": false,\n        \"date\": \"2021.12.02\",\n        \"category\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"friendIdx\": [\n            \"60e416d15d759051988d18d0\",\n            \"60e416d95d759051988d18d3\"\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -443,7 +443,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 상세페이지 조회 성공\",\n    \"data\": {\n        \"_id\": \"60e42158909d3063102be165\",\n        \"title\": \"보리 생일\",\n        \"photo\": \"보리가 좋아하는 강아지 김밥\",\n        \"friends\": [\n            \"보리\",\n            \"밀키\"\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"cateogry\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"date\": \"2021.12.02\",\n        \"taken\": false\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 상세페이지 조회 성공\",\n    \"data\": {\n        \"_id\": \"60e42158909d3063102be165\",\n        \"title\": \"보리 생일\",\n        \"photo\": [\"보리가 좋아하는 강아지 김밥\"],\n        \"friends\": [\n            \"보리\",\n            \"밀키\"\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"cateogry\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"date\": \"2021.12.02\",\n        \"taken\": false\n    }\n}",
           "type": "json"
         }
       ]
@@ -489,7 +489,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n        \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": [\"탕수육 사진\"],\n            \"date\": \"2021.06.21\"\n          }\n        ]\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"모아보기 준/받은 조회 성공\",\n    \"data\":{\n        \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          }\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -581,7 +581,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 검색어 조회 성공\",\n    \"data\": {\n      \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": [\"탕수육 사진\"],\n            \"date\": \"2021.06.21\"\n         }\n         ...\n      ]\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 검색어 조회 성공\",\n    \"data\": {\n      \"keepins\":[\n          {\n            \"taken\": true,\n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n         }\n         ...\n      ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -627,7 +627,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keepins\":[\n          { \n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": [\"탕수육 사진\"],\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 카테고리 별 조회 성공\",\n    \"data\": {\n        \"keepins\":[\n          { \n            \"_id\": \"60e420f9909d3063102be161\",\n            \"title\": \"PM이 탕수육 사줬지롱\",\n            \"photo\": \"탕수육 사진\",\n            \"date\": \"2021.06.21\"\n          },\n          ... \n        ]\n      }\n}",
           "type": "json"
         }
       ]
@@ -876,7 +876,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 생성 성공\",\n    \"data\": {\n        \"_id\": \"60e1d4070e50e39654b4bb5f\",\n        \"title\": \"여자친구 생일\",\n        \"date\": \"2021-08-02\",\n        \"isAlarm\": false,\n        \"isImportant\": true,\n        \"year\": \"2021\",\n        \"month\": \"08\"\n     }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 생성 성공\",\n    \"data\": {\n        \"_id\": \"60e4163d5d759051988d18cb\",\n        \"title\": \"더미데이터11\",\n        \"date\": \"2021-08-03\",\n        \"sendDate\": \"2021-07-27\",\n        \"isAlarm\": true,\n        \"isImportant\": true,\n        \"year\": \"2021\",\n        \"month\": \"08\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -1108,7 +1108,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "200 OK\n{\n \"status\": 200,\n \"message\": \"로그인 성공\"   ,\n \"data\": {\n   \"jwt\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA\"\n }\n}",
+          "content": "200 OK\n{\n \"status\": 200,\n \"message\": \"로그인 성공\"   ,\n \"data\": {\n   \"jwt\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA\"\n   \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA\"\n   \"name\": \"김키핀\"\n }\n}",
           "type": "json"
         }
       ]
