@@ -7,14 +7,17 @@ const app = express();
 // __dirname 은 현재 폴더의 경로
 const apidocPath = path.join(__dirname, "../apidoc");
 
+app.use(express.urlencoded({
+  extended: false,
+}));
+app.use(express.json());
+
 // 문서를 보여줄 경로를 적고, static 파일을 연다.
 app.use("/apidoc", express.static(apidocPath))
 
 
 // Connect Database
 connectDB();
-
-app.use(express.json());
 
 // Define Routes
 app.use("/", indexRouter);
