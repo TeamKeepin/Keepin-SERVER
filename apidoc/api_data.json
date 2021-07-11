@@ -138,6 +138,43 @@
     "groupTitle": "Friend"
   },
   {
+    "type": "delete",
+    "url": "/friend/:friendId",
+    "title": "친구 삭제",
+    "version": "1.0.0",
+    "name": "editFriendName",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"친구 삭제 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
     "type": "get",
     "url": "/friend",
     "title": "친구 목록 조회",
@@ -462,6 +499,52 @@
         {
           "title": "Error-Response:",
           "content": "- 400 taken이 빈 값인 경우\n{\n    \"status\": 400,\n    \"message\": \"준/받은 여부를 선택하세요.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/keepin.ts",
+    "groupTitle": "Keepin"
+  },
+  {
+    "type": "put",
+    "url": "/keepin",
+    "title": "키핀 수정",
+    "version": "1.0.0",
+    "name": "modifyKeepin",
+    "group": "Keepin",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"keepinArray\": [\"60e322167887874ecccad066\"]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n     \"status\": 200,\n     \"message\": \"키핀 수정 완료\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"keepinID Array 값이 없습니다.\"\n}",
           "type": "json"
         }
       ]
@@ -1062,7 +1145,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n \"email\": \"keepin@gmail.com\",\n \"password\": \"1234abcd\",\n \"name\": \"유키핀\",\n \"birth\": \"1997-06-27\",\n \"phone\": \"010-1234-5678\",\n   \n}",
+          "content": "{\n    \"email\": \"whatisthis@naver.com\",\n    \"password\": \"1234567\",\n    \"name\": \"mk\",\n    \"birth\": \"19980322\",\n    \"phoneToken\": \"1\" ,\n    \"phone\": \"01012345678\"\n}",
           "type": "json"
         }
       ]

@@ -46,14 +46,15 @@ import returnCode from "../library/returnCode";
     "status": 200,
     "message": "리마인더 생성 성공",
     "data": {
-        "_id": "60e1d4070e50e39654b4bb5f",
-        "title": "여자친구 생일",
-        "date": "2021-08-02",
-        "isAlarm": false,
+        "_id": "60e4163d5d759051988d18cb",
+        "title": "더미데이터11",
+        "date": "2021-08-03",
+        "sendDate": "2021-07-27",
+        "isAlarm": true,
         "isImportant": true,
         "year": "2021",
         "month": "08"
-     }
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -92,13 +93,26 @@ const createReminder = async (req, res) => {
 
     // date를 년과 월 분할
     const year = date.substring(0,4);
-    const month = date.substring(4,6);
+    const month = date.substring(5,7);
+    const day = date.substring(8,10);
+
+    console.log(date)
+    console.log(month)
+
+    const customDate = year+month+day;
+    console.log(customDate)
 
     // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
     if (isAlarm==true) {
         if(daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 ||daysAgo == 7 ) {
             // realDate = date - daysAgo
-            var realDate = moment(date).subtract(daysAgo, 'd').format('YYYYMMDD');
+            var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYYMMDD');
+            //20210303
+            const sendYear = realDate.substring(0,4);
+            const sendMonth = realDate.substring(4,6);
+            const sendDay = realDate.substring(6,8);
+
+            realDate = sendYear+'-'+sendMonth+'-'+sendDay;
 
         } else {
             res.status(returnCode.BAD_REQUEST).json({
