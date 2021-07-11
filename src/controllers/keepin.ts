@@ -69,14 +69,14 @@ const createKeepin = async (req, res) => {
   const userIdx = req._id;
   const errors = validationResult(req);
 
-  let {title, photo, taken, date, category, record, friendIdx} = req.body;
+  let {title, taken, date, category, record, friendIdx} = req.body;
 
-  var tt = {title, photo, taken, date, category, record, friendIdx};
-  //console.log(tt)
+  var tt = {title, taken, date, category, record, friendIdx};
+  console.log(tt)
 
   //console.log(title)
 
-  if( !title || !photo || taken==undefined || !date || category==undefined || !record ||!friendIdx){
+  if( !title || taken==undefined || !date || category==undefined || !record ||!friendIdx){
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.'
