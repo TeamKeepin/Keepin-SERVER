@@ -22,12 +22,12 @@ import returnCode from "../library/returnCode";
  * 
  * @apiParamExample {json} Request-Example:
  * {
- *  "email": "keepin@gmail.com",
- *  "password": "1234abcd",
- *  "name": "유키핀",
- *  "birth": "19970627",
- *  "phone": "01012345678",
- *    
+    "email": "whatisthis@naver.com",
+    "password": "1234567",
+    "name": "mk",
+    "birth": "19980322",
+    "phoneToken": "1" ,
+    "phone": "01012345678"
  * }
  *
  * @apiSuccess {String} jwt
@@ -57,9 +57,10 @@ const signUp = async (req: Request, res: Response) => {
             errors: [{ msg: "요청바디가 없습니다." }],
         });
     }
-    const { name, birth, email, password, token, phone } = req.body;
+    const { name, birth, email, password, phoneToken, phone } = req.body;
+    console.log(req.body)
     // 파라미터 확인
-    if (!email || !password || !name || !birth || !token || !phone ) {
+    if (!email || !password || !name || !birth || !phoneToken || !phone ) {
         res.status(400).json({
             status: returnCode.BAD_REQUEST,
             message: '필수 정보를 입력하세요.'
@@ -82,34 +83,19 @@ const signUp = async (req: Request, res: Response) => {
             password,
             name,
             birth,
-            token,
+            phoneToken,
             phone
         });
 
         //Encrypt password
         const salt = await bcrypt.genSalt(10);
         const hashPwd = await bcrypt.hash(password, salt);
-        await userService.saveUser({ email, password: hashPwd, name, birth, token, phone });
+        await userService.saveUser({ email, password: hashPwd, name, birth, phoneToken, phone });
 
-        //Return jsonwebtoken
-        const payload = {
-            email: email
-        };
-        jwt.sign(
-            payload,
-            config.jwtSecret,
-            { expiresIn: 36000 },
-            (err, jwt) => {
-                if(err) throw err;
-                res.json({
-                    status: returnCode.OK,
-                    message: "회원가입 성공",
-                    data: {
-                        "jwt": jwt
-                    }
-                });
-            }
-        );
+        res.json({
+            status: returnCode.OK,
+            message: "회원가입 성공",
+      });
     } catch (err) {
         console.error(err.message);
         res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -197,21 +183,30 @@ const signIn = async (req, res) => {
             id: user._id,
             email: user.email
         };
-        jwt.sign(
+        
+        const result = {
+            accessToken: jwt.sign(
             payload,
             config.jwtSecret,
-            { expiresIn: 36000 },
-            (err, jwt) => {
-              if (err) throw err;
-              res.json({
-                status: returnCode.OK,
-                message: "로그인 성공",
-                data: {
-                    "jwt": jwt
-                }
-            });
-            }
-          );
+            { expiresIn: "2h" }),
+            refreshToken: jwt.sign(
+            payload,
+            config.jwtSecret,
+            { expiresIn: "7d" }),
+        };
+        
+        // refreshToken을 DB에 저장
+        const userInfo = await userService.saveRefreshToken({email: payload.email, refreshToken: result.refreshToken});
+
+        res.json({
+              status: returnCode.OK,
+              message: "로그인 성공",
+              data: {
+                  "jwt": result.accessToken,
+                  "refreshToken": result.refreshToken
+              }
+        });
+
         } catch (err) {
             console.error(err.message);
             res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -241,12 +236,11 @@ const signIn = async (req, res) => {
  *   "status": 200,
  *   "msg": "프로필 조회 성공",
  *   "data": {
- *       "_id": "60e349893460ec398ea1dc45",
  *       "email": "fbduddn97@naver.com",
  *       "password": "$2a$10$svbqi40QZQcWkRc2Jx8clOcoY5Q/urnAvdfcr0eVnIKk6M8.R9iRm",
  *       "name": "yboy",
- *       "birth": "19970322",
- *       "phone": "01012345678"
+ *       "birth": "1997.03.22",
+ *       "phone": "010-1234-5678"
  *   }
  *}
  *  
@@ -264,7 +258,7 @@ const signIn = async (req, res) => {
  */
 const getProfile = async(req,res) => {
     const userIdx = req._id;
-    // console.log(userIdx);
+    console.log(userIdx);
     try{
         const data = await userService.findUserProfile({userIdx});
         
@@ -274,6 +268,12 @@ const getProfile = async(req,res) => {
                 message: "유저가 없습니다." 
               });
         }
+
+        const year = data.birth.substring(0,4);
+        const month = data.birth.substring(5,7);
+        const day = data.birth.substring(8,10);
+        const tunedBirth = year+'.'+month+'.'+day;
+        data.birth=tunedBirth;
        
         return res.status(200).json({
             status: returnCode.OK,
@@ -378,7 +378,7 @@ const editProfile = async(req,res) => {
  * -201 OK
  *{
  *   "status": 201,
- *   "msg": "비밀번호 수정 성공",
+ *   "message": "비밀번호 수정 성공",
  *}
  *  
  * @apiErrorExample Error-Response:

@@ -27,5 +27,6 @@ router.put('/memo:friendId',auth.checkToken,check("memo", "Memo is required").no
 //친구 이름 수정 
 router.put('/:friendId',auth.checkToken,check("name", "Name is required").not().isEmpty(), friendController.editFriendName);
 //친구 삭제 
+router.delete('/:friendId',auth.checkToken,friendController.deleteFriend);
 
 export default router;

@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator"
 import { friendService, keepinService } from "../services";
 import returnCode from "../library/returnCode";
+import mongoose from "mongoose";
 import moment from "moment"; 
 // const returnCode = require('../library/returnCode')
 // const moment = require('moment');
@@ -26,7 +27,7 @@ import moment from "moment";
     "title": "보리 생일",
     "photo": "보리가 좋아하는 강아지 김밥",
     "taken": false,
-    "date": "20211202",
+    "date": "2021-12-02",
     "category": ["생일", "축하"],
     "record": "우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.",
     "friendIdx":["60e416d15d759051988d18d0", "60e416d95d759051988d18d3"]
@@ -77,15 +78,27 @@ const createKeepin = async (req, res) => {
     return;
   }
 
-  // const year = date.substring(0,4);
-  // const month = date.substring(4,6);
-  // const day = date.substring(6);
+  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  // let photo = null;
+/*
+  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
-  // const realDate = year+"."+month+"."+day
-  // console.log(realDate);
+  if (req.files !== undefined) {
+    locationArray = req.files.map( img => img.location);
+    
+    //형식은 고려해보자
+    const type = req.files.mimetype.split('/')[1];
+    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+      return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+    }
+  } 
+  */
+
+  //photo: locationArray
+  var locationArray = ["abc","def"];
 
   try {
-    const keepin = await keepinService.saveKeepin({ title, photo, taken, date, category, record, userIdx, friendIdx});
+    const keepin = await keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx});
 
     const friends = keepin.friendIdx;
     const keepinIdx = keepin._id;
@@ -137,15 +150,17 @@ const createKeepin = async (req, res) => {
  * {
     "status": 200,
     "message": "모아보기 준/받은 조회 성공",
-    "keepin": [
-        {
+    "data":{
+        "keepins":[
+          {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": "탕수육 사진",
+            "photo": ["탕수육 사진"],
             "date": "2021.06.21"
-        }
-    ]
+          }
+        ]
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -169,11 +184,21 @@ const getTakenKeepin = async (req, res) => {
   }
 
   try {
-    const keepin = await keepinService.findKeepin({taken, userIdx});
+    const keepins = await keepinService.findKeepin({taken, userIdx});
+
+    for(var keepin of keepins){
+      const year = keepin.date.substring(0,4);
+      const month = keepin.date.substring(5,7);
+      const day = keepin.date.substring(8,10);
+      const tunedDate = year+'.'+month+'.'+day;
+      keepin.date=tunedDate;
+    }
+
+    const data = {keepins};
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '모아보기 준/받은 조회 성공',
-      keepin
+      data
     })
     } catch (err) {
       console.error(err.message);
@@ -206,15 +231,18 @@ const getTakenKeepin = async (req, res) => {
  * {
     "status": 200,
     "message": "키핀 검색어 조회 성공",
-    "data": [
-        {
+    "data": {
+      "keepins":[
+          {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": "탕수육 사진",
+            "photo": ["탕수육 사진"],
             "date": "2021.06.21"
-        }
-    ]
+         }
+         ...
+      ]
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -239,8 +267,18 @@ const searchKeepin = async (req, res) => {
   }
 
   try {
-    const data = await keepinService.searchKeepinByKeyword({title, userIdx});
+    const keepins = await keepinService.searchKeepinByKeyword({title, userIdx});
     
+   
+    for(var keepin of keepins){
+      const year = keepin.date.substring(0,4);
+      const month = keepin.date.substring(5,7);
+      const day = keepin.date.substring(8,10);
+      const tunedDate = year+'.'+month+'.'+day;
+      keepin.date=tunedDate;
+    }
+    const data = {keepins};
+
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀 검색어 조회 성공',
@@ -271,7 +309,7 @@ const searchKeepin = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
- * * [Querystring] category: category로 검색
+ * * [Querystring] category: category로 검색 (생일, 기념일, 축하, 칭찬, 응원, 감사, 깜작, 기타)
  * 
  * @apiSuccessExample {json} Success-Response:
  * - 200 OK
@@ -279,11 +317,11 @@ const searchKeepin = async (req, res) => {
     "status": 200,
     "message": "키핀 카테고리 별 조회 성공",
     "data": {
-        "keeppins":[
-          { "taken": true,
+        "keepins":[
+          { 
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": "탕수육 사진",
+            "photo": ["탕수육 사진"],
             "date": "2021.06.21"
           },
           ... 
@@ -303,7 +341,6 @@ const searchKeepin = async (req, res) => {
  *  "message": "INTERNAL_SERVER_ERROR"
  * }
  */
-// 모아보기 카테고리 조회 
 const getKeepinByCategory = async (req, res) => {
   const userIdx = req._id;
   const category = req.query.category;
@@ -317,8 +354,17 @@ const getKeepinByCategory = async (req, res) => {
   }
 
   try {
-    const data = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
-    console.log(data);
+    const keepins = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
+
+    for(var keepin of keepins){
+        const year = keepin.date.substring(0,4);
+        const month = keepin.date.substring(5,7);
+        const day = keepin.date.substring(8,10);
+        const tunedDate = year+'.'+month+'.'+day;
+        keepin.date=tunedDate;
+    }
+
+    const data = {keepins};
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '카테고리 조회 성공',
@@ -356,9 +402,8 @@ const getKeepinByCategory = async (req, res) => {
  * {
     "status": 200,
     "message": "키핀 상세페이지 조회 성공",
-    "keepin": {
-        "userIdx": "60e1d4070e50e39654b4bb5f",
-        "keepinIdx": "60e42158909d3063102be165",
+    "data": {
+        "_id": "60e42158909d3063102be165",
         "title": "보리 생일",
         "photo": "보리가 좋아하는 강아지 김밥",
         "friends": [
@@ -396,7 +441,9 @@ const getDetailKeepin = async (req, res) => {
   }
 
   try {
+
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
+    console.log(detail)
     console.log(detail.friendIdx)
     //friend의 이름 가져오기
     var friendNames = [];
@@ -408,23 +455,112 @@ const getDetailKeepin = async (req, res) => {
       friendNames.push(frienddata.name);
     }
 
-    const keepin ={
-      userIdx: userIdx,
-      keepinIdx: detail._id,
+
+ 
+    const year = detail.date.substring(0,4);
+    const month = detail.date.substring(5,7);
+    const day = detail.date.substring(8,10);
+    const tunedDate = year+'.'+month+'.'+day;
+
+    const data ={
+      _id: detail._id,
       title: detail.title,
       photo: detail.photo,
       friends: friendNames,
       record: detail.record,
       cateogry: detail.category,
-      date: detail.date,
+      date: tunedDate,
       taken: detail.taken
     }
 
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀 상세페이지 조회 성공',
-      keepin
+      data
     })
+  } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+      });
+      return;
+  }
+}
+
+/**
+ * @api {put} /keepin 키핀 수정
+ * 
+ * @apiVersion 1.0.0
+ * @apiName modifyKeepin
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+    "keepinArray": ["60e322167887874ecccad066"]
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+     "status": 200,
+     "message": "키핀 수정 완료"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "keepinID Array 값이 없습니다."
+ * }
+ *
+ */
+// 키핀 수정
+const modifyKeepin = async (req, res) => {
+  const userIdx = req._id;
+  const keepinId = req.params.keepinIdx;
+  const errors = validationResult(req);
+
+  let {title, photo, taken, date, category, record, friendIdx} = req.body;
+  if( !title || !photo || taken==undefined || !date || category==undefined || !record ||!friendIdx){
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보를 입력하세요.'
+    });
+    return;
+  }
+
+  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  // let photo = null;
+/*
+  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+
+  if (req.files !== undefined) {
+    locationArray = req.files.map( img => img.location);
+    
+    //형식은 고려해보자
+    const type = req.files.mimetype.split('/')[1];
+    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+      return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+    }
+  } 
+  */
+  
+  //photo: locationArray
+  var locationArray = ["abc","def"];
+
+  try {
+
+    var data = await keepinService.modifyKeepinByKeepinIdx({ keepinIdx: keepinId, title, photo: locationArray, taken, date, category, record, friendIdx});
+  
+    return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 수정 완료', data});
+
   } catch (err) {
       console.error(err.message);
       res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -450,7 +586,7 @@ const getDetailKeepin = async (req, res) => {
  * 
  * @apiParamExample {json} Request-Example:
  * {
-    "keepinArray": ["60e322167887874ecccad066","60e3221f7887874ecccad06a"]
+    "keepinArray": ["60e322167887874ecccad066"]
  * }
  * 
  * @apiSuccessExample {json} Success-Response:
@@ -488,10 +624,16 @@ const deleteKeepin = async (req, res) => {
   }
 
   try {
+      // 친구 삭제 로직
+      const ll = await friendService.findFriendsByKeepinIdx({keepinIdx: keepinIdArray[0].toString()}); // keepinId 하나씩 삭제 
+      console.log(ll)
+
       // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
       for (var keepinId of keepinIdArray){ 
           await keepinService.deleteKeepinByKeepinIdx({keepinIdx: keepinId}); // reminderId 하나씩 삭제 
       }
+
+    
 
       return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 삭제 완료' });
 
@@ -511,5 +653,6 @@ export default {
   searchKeepin,
   getKeepinByCategory,
   getDetailKeepin,
+  modifyKeepin,
   deleteKeepin
 }

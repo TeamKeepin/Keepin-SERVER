@@ -1,4 +1,5 @@
 import Friend from "../models/Friend";
+import mongoose from "mongoose";
 
 
 export interface friendsFindUserIdxInput {
@@ -39,9 +40,27 @@ export interface friendKeepinInput{
 
 export interface KeepinArrayInput{
     friendIdx: string,
-    keepinIdxArray: string[]
+    keepinIdxArray: [string]
 }
 
+export interface KeepinIdInput{
+    keepinIdx: string
+}
+
+const findFriendsByKeepinIdx = (data: KeepinIdInput) => {
+
+    //const result = Friend.find({keepinIdx: { "$in" : [mongoose.Types.ObjectId(data.keepinIdx)]}});
+    
+    
+    const filter = {
+        keepinIdx: { "$in" : [mongoose.Types.ObjectId(data.keepinIdx)]},
+    };
+
+    const result = Friend.updateMany(filter, {$pull: {keepinIdx: mongoose.Types.ObjectId(data.keepinIdx)}}, { multi: true });
+    
+
+    return result;
+}
 
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
     const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name:-1});
@@ -94,6 +113,7 @@ const filter = {
     await adminModel.findOneAndUpdate(filter, update, {
       new: true,
     });
+}
 */
 
 // 친구 검색
@@ -106,6 +126,10 @@ const searchFriendByKeyword = (data: friendSearchInput) => {
 const findKeepinFriend = (data: friendKeepinInput) => {
     const result = Friend.findOne({_id:data.friendIdx});
     return result;
+}
+
+const deleteFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
+    return Friend.deleteOne({_id:data.friendIdx});
 }
 
 
@@ -129,5 +153,7 @@ export default {
   findKeepinFriend,
   findFriendByFriendIdx,
   findFriendByNameAnduserIdx,
+  deleteFriendByFriendIdx,
+  findFriendsByKeepinIdx
 //   saveKeepinInFriend
 }
