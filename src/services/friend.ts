@@ -12,6 +12,7 @@ export interface friendFindNameInput {
 
 export interface friendCreateInput{
     name: string,
+    memo: string,
     userIdx: string
 }
 
@@ -84,7 +85,8 @@ const findFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
 
 //친구 등록
 const saveFriend = (data: friendCreateInput) => {
-    Friend.create(data);
+    return Friend.create(data);
+    
 }
 
 // 친구에 키핀 등록

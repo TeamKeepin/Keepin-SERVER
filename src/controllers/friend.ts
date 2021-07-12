@@ -46,6 +46,7 @@ import { Console } from "console";
 const createFriend= async(req,res) => {
     const userIdx = req._id;  
     const {name} = req.body;
+    const memo = "";
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
@@ -64,7 +65,7 @@ const createFriend= async(req,res) => {
             });
         }
 
-        await friendService.saveFriend({name, userIdx});
+        await friendService.saveFriend({name, userIdx, memo});
         return res.status(returnCode.CREATED).json({
             status:returnCode.CREATED,
             message:"친구 등록 성공",
