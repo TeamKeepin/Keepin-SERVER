@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // token check middleware
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config"));
+const returnCode_1 = __importDefault(require("../library/returnCode"));
 const services_1 = require("../services");
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
@@ -28,18 +29,25 @@ exports.default = {
         }
         // Verify token
         const user = yield jsonwebtoken_1.default.verify(token, config_1.default.jwtSecret);
-        console.log(user);
+        // console.log(user)
         if (user === TOKEN_EXPIRED) {
-            return res.status(405).json({ message: '만료된 토큰입니다.' });
+            return res.status(401).json({
+                status: returnCode_1.default.UNAUTHORIZED,
+                message: '만료된 토큰입니다.'
+            });
         }
         if (user === TOKEN_INVALID) {
-            return res.status(405).json({ message: '유효하지 않은 토큰입니다.' });
+            return res.status(401).json({
+                status: returnCode_1.default.UNAUTHORIZED,
+                message: '유효하지 않은 토큰입니다.'
+            });
         }
         const userEmail = user.email;
         const userIdx = user.id;
-        if (!userEmail) {
-            return res.status(405).json({
-                message: '유효하지 않은 토큰입니다.(userEmail 값 확인)',
+        if (!userEmail || !userIdx) {
+            return res.status(401).json({
+                status: returnCode_1.default.UNAUTHORIZED,
+                message: '유효하지 않은 토큰입니다.'
             });
         }
         else {

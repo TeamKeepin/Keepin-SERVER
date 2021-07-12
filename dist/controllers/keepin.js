@@ -26,7 +26,7 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
  *
  * @apiHeaderExample {json} Header-Example:
  * {
-    "Content-Type": "application/json"
+    "Content-Type": "multipart/form-data"
     "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
  * }
  *
@@ -79,13 +79,10 @@ const createKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const userIdx = req._id;
     const errors = express_validator_1.validationResult(req);
     let { title, taken, date, category, record, friendIdx } = req.body;
-    var tt = { title, taken, date, category, record, friendIdx };
-    console.log(tt);
-    //console.log(title)
     if (!title || taken == undefined || !date || category == undefined || !record || !friendIdx) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: '필수 정보를 입력하세요.'
+            message: '필수 정보를 입력하세요.',
         });
         return;
     }
@@ -93,7 +90,7 @@ const createKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     // let photo = null;
     var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
     if (req.files !== undefined) {
-        locationArray = req.files.map(img => img.location);
+        locationArray = req.files.map((img) => img.location);
         //형식은 고려해보자
         // const type = req.files.mimetype.split('/')[1];
         // if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
@@ -103,7 +100,7 @@ const createKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     //photo: locationArray
     //var locationArray = ["abc","def"];
     try {
-        const keepin = yield services_1.keepinService.saveKeepin({ title, photo: ["abc", "def"], taken, date, category, record, userIdx, friendIdx });
+        const keepin = yield services_1.keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx });
         const friends = keepin.friendIdx;
         const keepinIdx = keepin._id;
         for (const friendId of friends) {
@@ -117,8 +114,8 @@ const createKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "키핀하기 생성 성공",
-            keepin
+            message: '키핀하기 생성 성공',
+            keepin,
         });
     }
     catch (err) {
@@ -178,7 +175,7 @@ const getTakenKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function*
     if (!taken) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: "준/받은 여부를 선택하세요."
+            message: '준/받은 여부를 선택하세요.',
         });
     }
     try {
@@ -186,8 +183,8 @@ const getTakenKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const keepins = [];
         for (var i = 0; i < keepinss.length; i++) {
             const year = keepinss[i].date.substring(0, 4);
-            const month = keepinss[i].date.substring(4, 6);
-            const day = keepinss[i].date.substring(6, 8);
+            const month = keepinss[i].date.substring(5, 7);
+            const day = keepinss[i].date.substring(8, 10);
             const tunedDate = year + '.' + month + '.' + day;
             const { _id, taken, title, photo } = keepinss[i];
             const pKeepin = { _id: _id, taken: taken, title: title, photo: photo[0], date: tunedDate };
@@ -197,7 +194,7 @@ const getTakenKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function*
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
             message: '모아보기 준/받은 조회 성공',
-            data
+            data,
         });
     }
     catch (err) {
@@ -259,7 +256,7 @@ const searchKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: "요청바디가 없습니다."
+            message: '요청바디가 없습니다.',
         });
     }
     try {
@@ -267,8 +264,8 @@ const searchKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const keepins = [];
         for (var keepin of keepinss) {
             const year = keepin.date.substring(0, 4);
-            const month = keepin.date.substring(4, 6);
-            const day = keepin.date.substring(6, 8);
+            const month = keepin.date.substring(5, 7);
+            const day = keepin.date.substring(8, 10);
             const tunedDate = year + '.' + month + '.' + day;
             const { _id, taken, title, photo } = keepin;
             const pKeepin = { _id: _id, taken: taken, title: title, photo: photo[0], date: tunedDate };
@@ -278,7 +275,7 @@ const searchKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
             message: '키핀 검색어 조회 성공',
-            data
+            data,
         });
     }
     catch (err) {
@@ -340,11 +337,10 @@ const getKeepinByCategory = (req, res) => __awaiter(void 0, void 0, void 0, func
     const userIdx = req._id;
     const category = req.query.category;
     const errors = express_validator_1.validationResult(req);
-    console.log(category);
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: "요청바디가 없습니다."
+            message: '요청바디가 없습니다.',
         });
     }
     try {
@@ -352,17 +348,18 @@ const getKeepinByCategory = (req, res) => __awaiter(void 0, void 0, void 0, func
         const keepins = [];
         for (var keepin of keepinss) {
             const year = keepin.date.substring(0, 4);
-            const month = keepin.date.substring(4, 6);
-            const day = keepin.date.substring(6, 8);
+            const month = keepin.date.substring(5, 7);
+            const day = keepin.date.substring(8, 10);
             const tunedDate = year + '.' + month + '.' + day;
             const { _id, taken, title, photo } = keepin;
             const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate };
+            keepins.push(pKeepin);
         }
         const data = { keepins };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
             message: '카테고리 조회 성공',
-            data
+            data,
         });
     }
     catch (err) {
@@ -428,7 +425,7 @@ const getDetailKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: "요청바디가 없습니다."
+            message: '요청바디가 없습니다.',
         });
     }
     try {
@@ -436,32 +433,32 @@ const getDetailKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function
         console.log(detail);
         console.log(detail.friendIdx);
         //friend의 이름 가져오기
-        var friendNames = [];
-        const friendIds = detail.friendIdx;
-        var frienddata;
-        for (var i = 0; i < friendIds.length; i++) {
-            frienddata = yield services_1.friendService.findKeepinFriend({ friendIdx: friendIds[i].toString() });
-            console.log(friendIds[i]);
-            friendNames.push(frienddata.name);
-        }
+        // var friendNames = [];
+        // const friendIds = detail.friendIdx;
+        // var frienddata;
+        // for (var i=0; i<friendIds.length; i++) {
+        //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+        //   console.log(friendIds[i])
+        //   friendNames.push(frienddata.name);
+        // }
         const year = detail.date.substring(0, 4);
-        const month = detail.date.substring(4, 6);
-        const day = detail.date.substring(6, 8);
+        const month = detail.date.substring(5, 7);
+        const day = detail.date.substring(8, 10);
         const tunedDate = year + '.' + month + '.' + day;
         const data = {
             _id: detail._id,
             title: detail.title,
             photo: detail.photo,
-            friends: friendNames,
+            // friends: friendNames,
             record: detail.record,
             cateogry: detail.category,
             date: tunedDate,
-            taken: detail.taken
+            taken: detail.taken,
         };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
             message: '키핀 상세페이지 조회 성공',
-            data
+            data,
         });
     }
     catch (err) {
@@ -482,7 +479,7 @@ const getDetailKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function
  *
  * @apiHeaderExample {json} Header-Example:
  * {
-    "Content-Type": "application/json"
+    "Content-Type": "multipart/form-data"
     "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
  * }
  *
@@ -524,29 +521,34 @@ const modifyKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (!title || !photo || taken == undefined || !date || category == undefined || !record || !friendIdx) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: '필수 정보를 입력하세요.'
+            message: '필수 정보를 입력하세요.',
         });
         return;
     }
     //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
     // let photo = null;
-    /*
-      var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
-    
-      if (req.files !== undefined) {
-        locationArray = req.files.map( img => img.location);
-        
+    var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+    if (req.files !== undefined) {
+        locationArray = req.files.map((img) => img.location);
+        /*
         //형식은 고려해보자
         const type = req.files.mimetype.split('/')[1];
         if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
           return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
-        }
-      }
-      */
+        }*/
+    }
     //photo: locationArray
-    var locationArray = ["abc", "def"];
     try {
-        var data = yield services_1.keepinService.modifyKeepinByKeepinIdx({ keepinIdx: keepinId, title, photo: locationArray, taken, date, category, record, friendIdx });
+        var data = yield services_1.keepinService.modifyKeepinByKeepinIdx({
+            keepinIdx: keepinId,
+            title,
+            photo: locationArray,
+            taken,
+            date,
+            category,
+            record,
+            friendIdx,
+        });
         return res.status(returnCode_1.default.OK).json({ status: returnCode_1.default.OK, message: '키핀 수정 완료' });
     }
     catch (err) {
@@ -609,10 +611,10 @@ const deleteKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     try {
         // 친구 삭제 로직
-        const ll = yield services_1.friendService.findFriendsByKeepinIdx({ keepinIdx: keepinIdArray[0].toString() }); // keepinId 하나씩 삭제 
+        const ll = yield services_1.friendService.findFriendsByKeepinIdx({ keepinIdx: keepinIdArray[0].toString() }); // keepinId 하나씩 삭제
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
         for (var keepinId of keepinIdArray) {
-            yield services_1.keepinService.deleteKeepinByKeepinIdx({ keepinIdx: keepinId }); // reminderId 하나씩 삭제 
+            yield services_1.keepinService.deleteKeepinByKeepinIdx({ keepinIdx: keepinId }); // reminderId 하나씩 삭제
         }
         return res.status(returnCode_1.default.OK).json({ status: returnCode_1.default.OK, message: '키핀 삭제 완료' });
     }
@@ -632,6 +634,6 @@ exports.default = {
     getKeepinByCategory,
     getDetailKeepin,
     modifyKeepin,
-    deleteKeepin
+    deleteKeepin,
 };
 //# sourceMappingURL=keepin.js.map

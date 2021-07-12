@@ -16,7 +16,7 @@ router.get('/', auth.checkToken, reminderController.getAllReminder);
 router.get('/date', auth.checkToken, reminderController.getMonthReminder);
 
 // 가장 가까운 2개 리마인더 조회
-router.get('/oncomming', auth.checkToken, reminderController.getOncommingReminder);
+router.get('/oncoming', auth.checkToken, reminderController.getOncomingReminder);
 
 //리마인더 상세 조회
 router.get('/detail/:reminderId', auth.checkToken, reminderController.getDetailReminder);

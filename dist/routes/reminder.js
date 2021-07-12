@@ -12,10 +12,10 @@ const router = express_1.default();
 router.post('/', auth_1.default.checkToken, controllers_1.reminderController.createReminder);
 //리마인더 전체 목록 조회
 router.get('/', auth_1.default.checkToken, controllers_1.reminderController.getAllReminder);
+// 월별 목록 조회
+router.get('/date', auth_1.default.checkToken, controllers_1.reminderController.getMonthReminder);
 // 가장 가까운 2개 리마인더 조회
 router.get('/oncomming', auth_1.default.checkToken, controllers_1.reminderController.getOncommingReminder);
-// 월별 목록 조회
-router.get('/date/:year/:month', auth_1.default.checkToken, controllers_1.reminderController.getMonthReminder);
 //리마인더 상세 조회
 router.get('/detail/:reminderId', auth_1.default.checkToken, controllers_1.reminderController.getDetailReminder);
 // 선택된 리마인더 삭제(1개 or 복수개 선택 가능)

@@ -117,7 +117,7 @@ const createReminder = (req, res) => __awaiter(void 0, void 0, void 0, function*
         else {
             res.status(returnCode_1.default.BAD_REQUEST).json({
                 status: returnCode_1.default.BAD_REQUEST,
-                message: 'daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.'
+                message: 'daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.',
             });
             return;
         }
@@ -132,7 +132,7 @@ const createReminder = (req, res) => __awaiter(void 0, void 0, void 0, function*
             isAlarm: isAlarm,
             isImportant: isImportant,
             year: year,
-            month: month
+            month: month,
         };
         yield services_1.reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
         return res.status(returnCode_1.default.OK).json({ status: returnCode_1.default.OK, message: '리마인더 생성 성공', data });
@@ -252,7 +252,7 @@ const getDetailReminder = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const year = result[0].date.substring(0, 4); //2021-05-01
         const month = result[0].date.substring(5, 7);
         const day = result[0].date.substring(8, 10);
-        const date_day = year + "." + month + "." + day;
+        const date_day = year + '.' + month + '.' + day;
         result[0].date = date_day;
         const data = result[0];
         return res.status(returnCode_1.default.OK).json({ status: returnCode_1.default.OK, message: '리마인더 상세 조회 성공', data });
@@ -280,7 +280,7 @@ const getDetailReminder = (req, res) => __awaiter(void 0, void 0, void 0, functi
  * }
  *
  * @apiParamExample {json} Request-Example:
- * * url: /reminder/date/2021/06
+ * * url: /reminder/date?year=2021&month=06
  * * year : 조회 연도
  * * month: 조회 달
  *
@@ -320,13 +320,13 @@ const getDetailReminder = (req, res) => __awaiter(void 0, void 0, void 0, functi
  * - 400 요청바디가 없음
  * {
     "status": 400,
-    "message": "파라미터(year, month)를 입력하세요."
+    "message": "쿼리(year, month)를 입력하세요."
  * }
  *
  * - 400 파라미터 형식이 맞지 않음
  * {
     "status": 400,
-    "message": "파라미터(year, month) 형식을 맞춰주세요."
+    "message": "쿼리(year, month) 형식을 맞춰주세요."
  * }
  * - 400 등록된 리마인더가 없음
  *
@@ -338,8 +338,8 @@ const getDetailReminder = (req, res) => __awaiter(void 0, void 0, void 0, functi
 // 리마인더 월별 목록 조회
 const getMonthReminder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req._id;
-    const year = req.params.year;
-    const month = req.params.month;
+    const year = req.query.year; //
+    const month = req.query.month;
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
@@ -371,9 +371,9 @@ const getMonthReminder = (req, res) => __awaiter(void 0, void 0, void 0, functio
         var dataArray = [];
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
         for (var result of resultArray) {
-            const month = result[0].date.substring(5, 7);
-            const day = result[0].date.substring(8, 10);
-            const date_day = month + "." + day;
+            const month = result.date.substring(5, 7);
+            const day = result.date.substring(8, 10);
+            const date_day = month + '.' + day;
             result.date = date_day;
             dataArray.push(result);
         }
@@ -438,7 +438,7 @@ const getMonthReminder = (req, res) => __awaiter(void 0, void 0, void 0, functio
 const getOncommingReminder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req._id;
     const errors = express_validator_1.validationResult(req);
-    console.log("today: " + userId); //
+    console.log('today: ' + userId); //
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
@@ -460,7 +460,7 @@ const getOncommingReminder = (req, res) => __awaiter(void 0, void 0, void 0, fun
         for (var result of resultArray) {
             const month = result.date.substring(5, 7);
             const day = result.date.substring(8, 10);
-            const date_day = month + "." + day;
+            const date_day = month + '.' + day;
             result.date = date_day;
             dataArray.push(result);
         }
@@ -529,7 +529,7 @@ const deleteReminder = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
         for (var reminderId of reminderIdArray) {
-            yield services_1.reminderService.deleteReminderbyReminderId({ reminderIdx: reminderId }); // reminderId 하나씩 삭제 
+            yield services_1.reminderService.deleteReminderbyReminderId({ reminderIdx: reminderId }); // reminderId 하나씩 삭제
         }
         return res.status(returnCode_1.default.OK).json({ status: returnCode_1.default.OK, message: '리마인더 삭제 완료' });
     }
@@ -548,6 +548,6 @@ exports.default = {
     getDetailReminder,
     getMonthReminder,
     getOncommingReminder,
-    deleteReminder
+    deleteReminder,
 };
 //# sourceMappingURL=reminder.js.map

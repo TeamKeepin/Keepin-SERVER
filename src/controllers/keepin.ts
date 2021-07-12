@@ -16,7 +16,7 @@ import moment from 'moment';
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "multipart/form-data"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -25,7 +25,7 @@ import moment from 'moment';
  * 
  * {
     "title": "보리 생일",
-    "photo": ["보리가 좋아하는 강아지 김밥"],
+    "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
     "taken": false,
     "date": "2021-12-02",
     "category": ["생일", "축하"],
@@ -139,7 +139,7 @@ const createKeepin = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -224,7 +224,7 @@ const getTakenKeepin = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -312,7 +312,7 @@ const searchKeepin = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -418,7 +418,7 @@ const getKeepinByCategory = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -523,16 +523,17 @@ const getDetailKeepin = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "multipart/form-data"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:
  * * taken: 준/받은 여부 -> taken: true이면 받은
  * * friendIdx: friend name을 표시하기 위함
  * 
+ * 
  * {
     "title": "보리 생일",
-    "photo": ["보리가 좋아하는 강아지 김밥"],
+    "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
     "taken": false,
     "date": "2021-12-02",
     "category": ["생일", "축하"],
@@ -561,8 +562,8 @@ const modifyKeepin = async (req, res) => {
   const keepinId = req.params.keepinIdx;
   const errors = validationResult(req);
 
-  let { title, photo, taken, date, category, record, friendIdx } = req.body;
-  if (!title || !photo || taken == undefined || !date || category == undefined || !record || !friendIdx) {
+  let { title, taken, date, category, record, friendIdx } = req.body;
+  if (!title || taken == undefined || !date || category == undefined || !record || !friendIdx) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.',
@@ -621,7 +622,7 @@ const modifyKeepin = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  * 
  * @apiParamExample {json} Request-Example:

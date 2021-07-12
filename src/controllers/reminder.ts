@@ -450,7 +450,7 @@ const getMonthReminder = async (req, res) => {
  * }
  */
 // 다가오는 리마인더, 가장 가까운 리마인더 2개만
-const getOncommingReminder = async (req, res) => {
+const getOncomingReminder = async (req, res) => {
   const userId = req._id;
   const errors = validationResult(req);
 
@@ -576,6 +576,6 @@ export default {
   getAllReminder,
   getDetailReminder,
   getMonthReminder,
-  getOncommingReminder,
+  getOncomingReminder,
   deleteReminder,
 };

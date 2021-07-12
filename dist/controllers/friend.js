@@ -57,11 +57,12 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
 const createFriend = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdx = req._id;
     const { name } = req.body;
+    const memo = '';
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
-            message: "필수 정보(name))를 입력하세요."
+            message: '필수 정보(name))를 입력하세요.',
         });
     }
     try {
@@ -70,14 +71,14 @@ const createFriend = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (alFriend.length > 0) {
             return res.status(returnCode_1.default.BAD_REQUEST).json({
                 status: returnCode_1.default.BAD_REQUEST,
-                message: "중복된 친구가 있습니다."
+                message: '중복된 친구가 있습니다.',
             });
         }
-        yield services_1.friendService.saveFriend({ name, userIdx });
+        yield services_1.friendService.saveFriend({ name, userIdx, memo });
         return res.status(returnCode_1.default.CREATED).json({
             status: returnCode_1.default.CREATED,
-            message: "친구 등록 성공",
-            name: name
+            message: '친구 등록 성공',
+            name: name,
         });
     }
     catch (err) {
@@ -143,8 +144,8 @@ const getFriends = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const data = { friends };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "친구 조회 성공",
-            data
+            message: '친구 조회 성공',
+            data,
         });
     }
     catch (err) {
@@ -222,8 +223,8 @@ const getFriendDetail = (req, res) => __awaiter(void 0, void 0, void 0, function
         const data = { name, total, taken, given, memo };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "친구 상세 조회 성공",
-            data
+            message: '친구 상세 조회 성공',
+            data,
         });
     }
     catch (err) {
@@ -295,11 +296,11 @@ const getTakenGivenList = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const friendIdx = req.params.friendId;
     try {
         const friend = yield services_1.friendService.findFriendByFriendIdx({ friendIdx });
-        //내 친구 인지 아닌지 확인 
+        //내 친구 인지 아닌지 확인
         if (!friend) {
             return res.status(returnCode_1.default.BAD_REQUEST).json({
                 status: returnCode_1.default.BAD_REQUEST,
-                message: "일치하는 친구가 없습니다"
+                message: '일치하는 친구가 없습니다',
             });
         }
         let takenList = [];
@@ -310,8 +311,8 @@ const getTakenGivenList = (req, res) => __awaiter(void 0, void 0, void 0, functi
             const keepin = yield services_1.keepinService.findKeepinForTaken({ keepinIdx });
             const { _id, title, photo } = keepin;
             const year = keepin.date.substring(0, 4);
-            const month = keepin.date.substring(4, 6);
-            const day = keepin.date.substring(6, 8);
+            const month = keepin.date.substring(5, 7);
+            const day = keepin.date.substring(8, 10);
             const tunedDate = year + '.' + month + '.' + day;
             keepin.date = tunedDate;
             const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate };
@@ -325,8 +326,8 @@ const getTakenGivenList = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const data = { takenList, givenList };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "친구에게 준/받은 keepin 목록 조회 성공",
-            data
+            message: '친구에게 준/받은 keepin 목록 조회 성공',
+            data,
         });
     }
     catch (err) {
@@ -380,14 +381,14 @@ const editFriendMemo = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (!friend) {
             return res.status(returnCode_1.default.BAD_REQUEST).json({
                 status: returnCode_1.default.BAD_REQUEST,
-                message: "일치하는 친구가 없습니다"
+                message: '일치하는 친구가 없습니다',
             });
         }
         friend.memo = memo;
         yield friend.save();
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "메모 수정 성공",
+            message: '메모 수정 성공',
         });
     }
     catch (err) {
@@ -427,6 +428,13 @@ const editFriendMemo = (req, res) => __awaiter(void 0, void 0, void 0, function*
  *  "status": 400,
  *  "message": "일치하는 친구가 없습니다."
  * }
+ *
+ * -400 친구 이름 중복
+ * {
+ *  "status": 400,
+ *  "message": "중복된 친구가 있습니다."
+ * }
+ *
  * -500 서버error
  * {
  *  "status": 500,
@@ -434,6 +442,7 @@ const editFriendMemo = (req, res) => __awaiter(void 0, void 0, void 0, function*
  * }
  */
 const editFriendName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userIdx = req._Id;
     const friendIdx = req.params.friendId;
     const { name } = req.body;
     try {
@@ -441,14 +450,22 @@ const editFriendName = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (!friend) {
             return res.status(returnCode_1.default.BAD_REQUEST).json({
                 status: returnCode_1.default.BAD_REQUEST,
-                message: "일치하는 친구가 없습니다"
+                message: '일치하는 친구가 없습니다',
+            });
+        }
+        //중복 check   //이거 name 하고 userIdx로 해야 함 !
+        const alFriend = yield services_1.friendService.findFriendByNameAnduserIdx({ name, userIdx });
+        if (alFriend.length > 0) {
+            return res.status(returnCode_1.default.BAD_REQUEST).json({
+                status: returnCode_1.default.BAD_REQUEST,
+                message: '중복된 친구가 있습니다.',
             });
         }
         friend.name = name;
         yield friend.save();
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "이름 수정 성공",
+            message: '이름 수정 성공',
         });
     }
     catch (err) {
@@ -485,27 +502,29 @@ const editFriendName = (req, res) => __awaiter(void 0, void 0, void 0, function*
  *  "message": "INTERNAL_SERVER_ERROR"
  * }
  */
-//친구 삭제 
+//친구 삭제
 const deleteFriend = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const friendIdx = req.params.friendId;
     try {
-        //1. 친구 찾고 2. 친구 삭제  3. 찾은 친구의 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull  
+        //1. 친구 찾고 2. 친구 삭제  3. 찾은 친구의 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull
         yield services_1.friendService.deleteFriendByFriendIdx({ friendIdx });
         const keepins = yield services_1.keepinService.findKeepinFriend({ friendIdx });
         for (const keepin of keepins) {
             console.log(keepin.friendIdx.length);
-            if (keepin.friendIdx.length > 1) { //배열의 길이가 1이상이면 keepin의 friendIdx에서 friend 삭제 
+            if (keepin.friendIdx.length > 1) {
+                //배열의 길이가 1이상이면 keepin의 friendIdx에서 friend 삭제
                 const keepinIdx = keepin._id;
                 yield services_1.keepinService.deleteFriend({ keepinIdx, friendIdx });
             }
-            else if (keepin.friendIdx.length == 1) { //배열의 길이가 1이면 삭제 
+            else if (keepin.friendIdx.length == 1) {
+                //배열의 길이가 1이면 삭제
                 const keepinIdx = keepin._id;
                 yield services_1.keepinService.deleteKeepinByKeepinIdx({ keepinIdx });
             }
         }
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "친구 삭제 성공",
+            message: '친구 삭제 성공',
         });
     }
     catch (err) {
@@ -574,8 +593,8 @@ const searchFriends = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const data = { friends };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "친구 검색 성공",
-            data
+            message: '친구 검색 성공',
+            data,
         });
     }
     catch (err) {
@@ -595,6 +614,6 @@ exports.default = {
     editFriendMemo,
     editFriendName,
     searchFriends,
-    deleteFriend
+    deleteFriend,
 };
 //# sourceMappingURL=friend.js.map

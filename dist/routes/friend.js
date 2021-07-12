@@ -23,7 +23,7 @@ router.get('/:friendId', auth_1.default.checkToken, controllers_1.friendControll
 //친구에게 준/받은 키핀 조회 
 router.get('/keepin/:friendId', auth_1.default.checkToken, controllers_1.friendController.getTakenGivenList);
 //친구 메모 수정 
-router.put('/memo:friendId', auth_1.default.checkToken, express_validator_1.check("memo", "Memo is required").not().isEmpty(), controllers_1.friendController.editFriendMemo);
+router.put('/memo/:friendId', auth_1.default.checkToken, express_validator_1.check("memo", "Memo is required").not().isEmpty(), controllers_1.friendController.editFriendMemo);
 //친구 이름 수정 
 router.put('/:friendId', auth_1.default.checkToken, express_validator_1.check("name", "Name is required").not().isEmpty(), controllers_1.friendController.editFriendName);
 //친구 삭제 
