@@ -342,6 +342,11 @@ const searchKeepin = async (req, res) => {
     "status": 400,
     "message": "요청바디가 없습니다"."
  * }
+ * - 400 category가 정해진 8개 중에 있는 것인 지 확인
+ * {
+    "status": 400,
+    "message": "존재하지 않는 카테고리 입니다."
+ * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -352,10 +357,23 @@ const getKeepinByCategory = async (req, res) => {
   const userIdx = req._id;
   const category = req.query.category;
   const errors = validationResult(req);
+
   if (!errors.isEmpty()) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '요청바디가 없습니다.',
+    });
+  }
+  //(생일, 기념일, 축하, 칭찬, 응원, 감사, 깜짝, 기타)
+  let pass=false;
+  if(category==="생일" || category==="기넘일" || category==="축하" || category==="칭찬" || category==="응원" || category==="감사" || category==="깜짝" || category==="기타"){
+    pass=true;
+  }
+  
+  if(pass===false){
+    return res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '존재하지 않는 카테고리 입니다.',
     });
   }
 
