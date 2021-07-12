@@ -188,7 +188,7 @@ const signIn = async (req, res) => {
             accessToken: jwt.sign(
             payload,
             config.jwtSecret,
-            { expiresIn: "2h" }),
+            { expiresIn: "7d" }),
             refreshToken: jwt.sign(
             payload,
             config.jwtSecret,

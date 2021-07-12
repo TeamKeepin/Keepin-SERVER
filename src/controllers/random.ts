@@ -39,9 +39,7 @@ const getRandom= async(req,res) => {
     const userIdx = req._id;
     try{
         const randoms = await randomService.findRandoms({userIdx});
-        console.log(`랜덤 길이: ${randoms.length}`);
         const randomNumber = Math.floor(Math.random() * randoms.length);
-        console.log(randomNumber);
         const randomId = randoms[randomNumber]._id;
         const dataa = await randomService.findRandom({randomId});
         
