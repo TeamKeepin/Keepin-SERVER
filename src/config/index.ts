@@ -31,10 +31,5 @@ export default {
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubSecret: process.env.GITHUB_SECRET,
 
-  s3info: {
-    accessKeyId: process.env.accessKeyId,
-    secretAccessKey: process.env.secretAccessKey,
-    region: process.env.region
-  }
   
 };
