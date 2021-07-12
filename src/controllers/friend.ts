@@ -306,8 +306,8 @@ const getTakenGivenList= async(req,res) => {
             const{ _id, title, photo } = keepin;
 
             const year = keepin.date.substring(0,4);
-            const month = keepin.date.substring(4,6);
-            const day = keepin.date.substring(6,8);
+            const month = keepin.date.substring(5,7);
+            const day = keepin.date.substring(8,10);
             const tunedDate = year+'.'+month+'.'+day;
             keepin.date=tunedDate;
             const pKeepin = {_id:_id,title:title, photo:photo[0], date:tunedDate};

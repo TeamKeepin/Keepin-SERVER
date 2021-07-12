@@ -190,8 +190,8 @@ const getTakenKeepin = async (req, res) => {
 
     for(var i=0; i<keepinss.length; i++){
       const year = keepinss[i].date.substring(0,4);
-      const month = keepinss[i].date.substring(4,6);
-      const day = keepinss[i].date.substring(6,8);
+      const month = keepinss[i].date.substring(5,7);
+      const day = keepinss[i].date.substring(8,10);
       const tunedDate = year+'.'+month+'.'+day;
       const{_id, taken, title, photo } = keepinss[i];
       const pKeepin = {_id:_id, taken:taken,title:title, photo:photo[0], date:tunedDate};
@@ -277,8 +277,8 @@ const searchKeepin = async (req, res) => {
    
     for(var keepin of keepinss){
       const year = keepin.date.substring(0,4);
-      const month = keepin.date.substring(4,6);
-      const day = keepin.date.substring(6,8);
+      const month = keepin.date.substring(5,7);
+      const day = keepin.date.substring(8,10);
       const tunedDate = year+'.'+month+'.'+day;
       const{_id, taken, title, photo } = keepin;
       const pKeepin = {_id:_id, taken:taken,title:title, photo:photo[0], date:tunedDate};
@@ -368,8 +368,8 @@ const getKeepinByCategory = async (req, res) => {
     
     for(var keepin of keepinss){
         const year = keepin.date.substring(0,4);
-        const month = keepin.date.substring(4,6);
-        const day = keepin.date.substring(6,8);
+        const month = keepin.date.substring(5,7);
+        const day = keepin.date.substring(8,10);
         const tunedDate = year+'.'+month+'.'+day;
         const{_id, taken, title, photo } = keepin;
         const pKeepin = {_id:_id, title:title, photo:photo[0], date:tunedDate};
@@ -470,8 +470,8 @@ const getDetailKeepin = async (req, res) => {
 
  
     const year = detail.date.substring(0,4);
-    const month = detail.date.substring(4,6);
-    const day = detail.date.substring(6,8);
+    const month = detail.date.substring(5,7);
+    const day = detail.date.substring(8,10);
     const tunedDate = year+'.'+month+'.'+day;
 
     const data ={
