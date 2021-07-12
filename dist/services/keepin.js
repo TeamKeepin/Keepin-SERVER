@@ -12,21 +12,21 @@ const saveKeepin = (data) => {
 };
 //모아보기 받은/준
 const findKeepin = (data) => {
-    const result = Keepin_1.default.find({ taken: data.taken }, { title: 1, photo: 1, date: 1 }).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+    const result = Keepin_1.default.find({ taken: data.taken }, { title: 1, photo: 1, date: 1 }).where('userIdx').equals(data.userIdx).sort({ date: -1 });
     return result;
 };
 //모아보기 전체 키워드 검색
 const searchKeepinByKeyword = (data) => {
-    const result = Keepin_1.default.find({ title: { $regex: data.title } }, { title: 1, photo: 1, taken: 1, date: 1 }).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+    const result = Keepin_1.default.find({ title: { $regex: data.title } }, { title: 1, photo: 1, taken: 1, date: 1 }).where('userIdx').equals(data.userIdx).sort({ date: -1 });
     return result;
 };
 // 모아보기 카테고리 조회 
 const findkeepinByUserIdxAndCategory = (data) => {
-    const result = Keepin_1.default.find({ category: { "$in": [data.category] }, userIdx: data.userIdx }, { title: 1, photo: 1, date: 1 }).sort({ date: 1 });
+    const result = Keepin_1.default.find({ category: { "$in": [data.category] }, userIdx: data.userIdx }, { title: 1, photo: 1, date: 1 }).sort({ date: -1 });
     return result;
 };
 const findDetailKeepin = (data) => {
-    const result = Keepin_1.default.findOne({ _id: data.keepinIdx }).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+    const result = Keepin_1.default.findOne({ _id: data.keepinIdx }).where('userIdx').equals(data.userIdx).sort({ date: -1 });
     return result;
 };
 const findkeepinByUserIdx = (data) => {
@@ -41,7 +41,7 @@ const findKeepinByKeepinIdx = (data) => {
 const findKeepinForTaken = (data) => {
     //최신 순 정렬 해야 함 
     // const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
-    const keepin = Keepin_1.default.findOne({ _id: data.keepinIdx }).select('title photo date taken').sort({ date: 1 });
+    const keepin = Keepin_1.default.findOne({ _id: data.keepinIdx }).select('title photo date taken').sort({ date: -1 });
     return keepin;
 };
 // 키핀 수정

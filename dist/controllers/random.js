@@ -50,15 +50,10 @@ const getRandom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdx = req._id;
     try {
         const randoms = yield services_1.randomService.findRandoms({ userIdx });
-        // if(randoms.length==0) {
-        //     return res.status(returnCode.BAD_REQUEST).json({
-        //         status: returnCode.BAD_REQUEST,
-        //         message: "등록된 키핀이 없습니다" 
-        //       });
-        // }
-        const randomNumber = Math.floor(Math.random() * randoms.length + 1);
+        const randomNumber = Math.floor(Math.random() * randoms.length);
         const randomId = randoms[randomNumber]._id;
-        const data = yield services_1.randomService.findRandom({ randomId });
+        const dataa = yield services_1.randomService.findRandom({ randomId });
+        const data = { _id: dataa._id, title: dataa.title, photo: dataa.photo[0] };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
             message: "랜덤 키핀 조회 성공",

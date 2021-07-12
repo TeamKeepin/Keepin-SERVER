@@ -48,10 +48,7 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
  * 200 OK
  * {
  *  "status": 200,
- *  "message":    ,
- *  "data": {
- *    "jwt":""
- *  }
+ *  "message": "회원가입 성공"
  * }
  *
  * @apiErrorExample Error-Response:
@@ -189,7 +186,7 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: user.email
         };
         const result = {
-            accessToken: jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "2h" }),
+            accessToken: jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "7d" }),
             refreshToken: jsonwebtoken_1.default.sign(payload, config_1.default.jwtSecret, { expiresIn: "7d" }),
         };
         // refreshToken을 DB에 저장
@@ -264,8 +261,8 @@ const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         const year = data.birth.substring(0, 4);
-        const month = data.birth.substring(4, 6);
-        const day = data.birth.substring(6, 8);
+        const month = data.birth.substring(5, 7);
+        const day = data.birth.substring(8, 10);
         const tunedBirth = year + '.' + month + '.' + day;
         data.birth = tunedBirth;
         return res.status(200).json({
@@ -348,7 +345,7 @@ const editProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 /**
- * @api {put} /my/profile 비밀번호 수정
+ * @api {put} /my/password/profile 비밀번호 수정
  *
  * @apiVersion 1.0.0
  * @apiName editProfile

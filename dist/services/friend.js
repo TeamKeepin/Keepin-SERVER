@@ -14,7 +14,7 @@ const findFriendsByKeepinIdx = (data) => {
     return result;
 };
 const findFriendsByUserIdx = (data) => {
-    const friends = Friend_1.default.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({ name: -1 });
+    const friends = Friend_1.default.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({ name: 1 });
     return friends;
 };
 const findFriendByName = (data) => {
@@ -31,7 +31,7 @@ const findFriendByFriendIdx = (data) => {
 };
 //친구 등록
 const saveFriend = (data) => {
-    Friend_1.default.create(data);
+    return Friend_1.default.create(data);
 };
 // 친구에 키핀 등록
 //const saveKeepinInFriend = (data: KeepinArrayInput) => {
