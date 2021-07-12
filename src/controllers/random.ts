@@ -39,17 +39,11 @@ const getRandom= async(req,res) => {
     const userIdx = req._id;
     try{
         const randoms = await randomService.findRandoms({userIdx});
-
-        // if(randoms.length==0) {
-        //     return res.status(returnCode.BAD_REQUEST).json({
-        //         status: returnCode.BAD_REQUEST,
-        //         message: "등록된 키핀이 없습니다" 
-        //       });
-        // }
-
-        const randomNumber = Math.floor(Math.random() * randoms.length+1);
+        const randomNumber = Math.floor(Math.random() * randoms.length);
         const randomId = randoms[randomNumber]._id;
-        const data = await randomService.findRandom({randomId});
+        const dataa = await randomService.findRandom({randomId});
+        
+        const data = {_id:dataa._id, title:dataa.title, photo: dataa.photo[0]};
 
         return res.status(returnCode.OK).json({
             status:returnCode.OK,
