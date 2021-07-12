@@ -359,7 +359,6 @@ const getKeepinByCategory = async (req, res) => {
   const userIdx = req._id;
   const category = req.query.category;
   const errors = validationResult(req);
-  console.log(category);
   if(!errors.isEmpty()){
     res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
@@ -369,7 +368,6 @@ const getKeepinByCategory = async (req, res) => {
 
   try {
     const keepinss = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
-
     const keepins = [];
     
     for(var keepin of keepinss){
@@ -379,6 +377,7 @@ const getKeepinByCategory = async (req, res) => {
         const tunedDate = year+'.'+month+'.'+day;
         const{_id, taken, title, photo } = keepin;
         const pKeepin = {_id:_id, title:title, photo:photo[0], date:tunedDate};
+        keepins.push(pKeepin);
     }
 
     const data = {keepins};
@@ -463,18 +462,17 @@ const getDetailKeepin = async (req, res) => {
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
     console.log(detail)
     console.log(detail.friendIdx)
+    
     //friend의 이름 가져오기
-    var friendNames = [];
-    const friendIds = detail.friendIdx;
-    var frienddata;
-    for (var i=0; i<friendIds.length; i++) {
-      frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
-      console.log(friendIds[i])
-      friendNames.push(frienddata.name);
-    }
+    // var friendNames = [];
+    // const friendIds = detail.friendIdx;
+    // var frienddata;
+    // for (var i=0; i<friendIds.length; i++) {
+    //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+    //   console.log(friendIds[i])
+    //   friendNames.push(frienddata.name);
+    // }
 
-
- 
     const year = detail.date.substring(0,4);
     const month = detail.date.substring(5,7);
     const day = detail.date.substring(8,10);
@@ -484,7 +482,7 @@ const getDetailKeepin = async (req, res) => {
       _id: detail._id,
       title: detail.title,
       photo: detail.photo,
-      friends: friendNames,
+      // friends: friendNames,
       record: detail.record,
       cateogry: detail.category,
       date: tunedDate,
