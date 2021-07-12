@@ -1,7 +1,9 @@
 // token check middleware
 import jwt from "jsonwebtoken";
 import config from "../config";
+import returnCode from "../library/returnCode";
 import { userService } from "../services";
+
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
@@ -16,21 +18,25 @@ export default {
   
     // Verify token
     const user = await jwt.verify(token, config.jwtSecret);
-    console.log(user)
+    // console.log(user)
     if (user === TOKEN_EXPIRED) {
-      return res.status(405).json({message: '만료된 토큰입니다.'});
+      return res.status(401).json({
+        status: returnCode.UNAUTHORIZED,
+        message: '만료된 토큰입니다.'});
     }
     if (user === TOKEN_INVALID) {
-      return res.status(405).json({message: '유효하지 않은 토큰입니다.'});
+      return res.status(401).json({
+        status: returnCode.UNAUTHORIZED,
+        message: '유효하지 않은 토큰입니다.'});
     }
 
     const userEmail = user.email;
     const userIdx = user.id;
     
-    if (!userEmail) {
-      return res.status(405).json({
-        message: '유효하지 않은 토큰입니다.(userEmail 값 확인)',
-      });
+    if (!userEmail || !userIdx) {
+      return res.status(401).json({
+        status: returnCode.UNAUTHORIZED,
+        message: '유효하지 않은 토큰입니다.'});
     } else {
       req.email = userEmail;
       req._id = userIdx;
