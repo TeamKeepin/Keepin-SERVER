@@ -36,10 +36,7 @@ import returnCode from "../library/returnCode";
  * 200 OK
  * {
  *  "status": 200,
- *  "message":    ,
- *  "data": {
- *    "jwt":""
- *  }
+ *  "message": "회원가입 성공"
  * }
  * 
  * @apiErrorExample Error-Response:
