@@ -25,7 +25,7 @@ import moment from "moment";
  * 
  * {
     "title": "보리 생일",
-    "photo": "보리가 좋아하는 강아지 김밥",
+    "photo": ["보리가 좋아하는 강아지 김밥"],
     "taken": false,
     "date": "2021-12-02",
     "category": ["생일", "축하"],
@@ -41,7 +41,7 @@ import moment from "moment";
     "keepin": {
         "_id": "60e1d4070e50e39654b4bb5f",
         "title": "보리 생일",
-        "photo": "보리가 좋아하는 강아지 김밥",
+        "photo": ["보리가 좋아하는 강아지 김밥"],
         "taken": false,
         "date": "2021.12.02",
         "category": [
@@ -69,8 +69,14 @@ const createKeepin = async (req, res) => {
   const userIdx = req._id;
   const errors = validationResult(req);
 
-  let {title, photo, taken, date, category, record, friendIdx} = req.body;
-  if( !title || !photo || taken==undefined || !date || category==undefined || !record ||!friendIdx){
+  let {title, taken, date, category, record, friendIdx} = req.body;
+
+  var tt = {title, taken, date, category, record, friendIdx};
+  console.log(tt)
+
+  //console.log(title)
+
+  if( !title || taken==undefined || !date || category==undefined || !record ||!friendIdx){
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.'
@@ -80,25 +86,25 @@ const createKeepin = async (req, res) => {
 
   //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
   // let photo = null;
-/*
+
   var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
   if (req.files !== undefined) {
     locationArray = req.files.map( img => img.location);
     
     //형식은 고려해보자
-    const type = req.files.mimetype.split('/')[1];
-    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
-      return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
-    }
+    // const type = req.files.mimetype.split('/')[1];
+    // if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+    //   return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+    // }
   } 
-  */
+  
 
   //photo: locationArray
-  var locationArray = ["abc","def"];
+  //var locationArray = ["abc","def"];
 
   try {
-    const keepin = await keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx});
+    const keepin = await keepinService.saveKeepin({title, photo: ["abc","def"], taken, date, category, record, userIdx, friendIdx});
 
     const friends = keepin.friendIdx;
     const keepinIdx = keepin._id;
@@ -156,7 +162,7 @@ const createKeepin = async (req, res) => {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": ["탕수육 사진"],
+            "photo": "탕수육 사진",
             "date": "2021.06.21"
           }
         ]
@@ -184,14 +190,18 @@ const getTakenKeepin = async (req, res) => {
   }
 
   try {
-    const keepins = await keepinService.findKeepin({taken, userIdx});
+    const keepinss = await keepinService.findKeepin({taken, userIdx});
 
-    for(var keepin of keepins){
-      const year = keepin.date.substring(0,4);
-      const month = keepin.date.substring(5,7);
-      const day = keepin.date.substring(8,10);
+    const keepins = [];
+
+    for(var i=0; i<keepinss.length; i++){
+      const year = keepinss[i].date.substring(0,4);
+      const month = keepinss[i].date.substring(5,7);
+      const day = keepinss[i].date.substring(8,10);
       const tunedDate = year+'.'+month+'.'+day;
-      keepin.date=tunedDate;
+      const{_id, taken, title, photo } = keepinss[i];
+      const pKeepin = {_id:_id, taken:taken,title:title, photo:photo[0], date:tunedDate};
+      keepins.push(pKeepin);
     }
 
     const data = {keepins};
@@ -237,7 +247,7 @@ const getTakenKeepin = async (req, res) => {
             "taken": true,
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": ["탕수육 사진"],
+            "photo": "탕수육 사진",
             "date": "2021.06.21"
          }
          ...
@@ -267,16 +277,20 @@ const searchKeepin = async (req, res) => {
   }
 
   try {
-    const keepins = await keepinService.searchKeepinByKeyword({title, userIdx});
+    const keepinss = await keepinService.searchKeepinByKeyword({title, userIdx});
     
+    const keepins = [];
    
-    for(var keepin of keepins){
+    for(var keepin of keepinss){
       const year = keepin.date.substring(0,4);
       const month = keepin.date.substring(5,7);
       const day = keepin.date.substring(8,10);
       const tunedDate = year+'.'+month+'.'+day;
-      keepin.date=tunedDate;
+      const{_id, taken, title, photo } = keepin;
+      const pKeepin = {_id:_id, taken:taken,title:title, photo:photo[0], date:tunedDate};
+      keepins.push(pKeepin);
     }
+
     const data = {keepins};
 
     return res.status(returnCode.OK).json({
@@ -321,7 +335,7 @@ const searchKeepin = async (req, res) => {
           { 
             "_id": "60e420f9909d3063102be161",
             "title": "PM이 탕수육 사줬지롱",
-            "photo": ["탕수육 사진"],
+            "photo": "탕수육 사진",
             "date": "2021.06.21"
           },
           ... 
@@ -345,7 +359,6 @@ const getKeepinByCategory = async (req, res) => {
   const userIdx = req._id;
   const category = req.query.category;
   const errors = validationResult(req);
-  console.log(category);
   if(!errors.isEmpty()){
     res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
@@ -354,17 +367,21 @@ const getKeepinByCategory = async (req, res) => {
   }
 
   try {
-    const keepins = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
-
-    for(var keepin of keepins){
+    const keepinss = await keepinService.findkeepinByUserIdxAndCategory({category, userIdx});
+    const keepins = [];
+    
+    for(var keepin of keepinss){
         const year = keepin.date.substring(0,4);
         const month = keepin.date.substring(5,7);
         const day = keepin.date.substring(8,10);
         const tunedDate = year+'.'+month+'.'+day;
-        keepin.date=tunedDate;
+        const{_id, taken, title, photo } = keepin;
+        const pKeepin = {_id:_id, title:title, photo:photo[0], date:tunedDate};
+        keepins.push(pKeepin);
     }
 
     const data = {keepins};
+
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '카테고리 조회 성공',
@@ -405,7 +422,7 @@ const getKeepinByCategory = async (req, res) => {
     "data": {
         "_id": "60e42158909d3063102be165",
         "title": "보리 생일",
-        "photo": "보리가 좋아하는 강아지 김밥",
+        "photo": ["보리가 좋아하는 강아지 김밥"],
         "friends": [
             "보리",
             "밀키"
@@ -445,18 +462,17 @@ const getDetailKeepin = async (req, res) => {
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
     console.log(detail)
     console.log(detail.friendIdx)
+    
     //friend의 이름 가져오기
-    var friendNames = [];
-    const friendIds = detail.friendIdx;
-    var frienddata;
-    for (var i=0; i<friendIds.length; i++) {
-      frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
-      console.log(friendIds[i])
-      friendNames.push(frienddata.name);
-    }
+    // var friendNames = [];
+    // const friendIds = detail.friendIdx;
+    // var frienddata;
+    // for (var i=0; i<friendIds.length; i++) {
+    //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+    //   console.log(friendIds[i])
+    //   friendNames.push(frienddata.name);
+    // }
 
-
- 
     const year = detail.date.substring(0,4);
     const month = detail.date.substring(5,7);
     const day = detail.date.substring(8,10);
@@ -466,7 +482,7 @@ const getDetailKeepin = async (req, res) => {
       _id: detail._id,
       title: detail.title,
       photo: detail.photo,
-      friends: friendNames,
+      // friends: friendNames,
       record: detail.record,
       cateogry: detail.category,
       date: tunedDate,
@@ -502,8 +518,17 @@ const getDetailKeepin = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
+ * * taken: 준/받은 여부 -> taken: true이면 받은
+ * * friendIdx: friend name을 표시하기 위함
+ * 
  * {
-    "keepinArray": ["60e322167887874ecccad066"]
+    "title": "보리 생일",
+    "photo": ["보리가 좋아하는 강아지 김밥"],
+    "taken": false,
+    "date": "2021-12-02",
+    "category": ["생일", "축하"],
+    "record": "우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.",
+    "friendIdx":["60e416d15d759051988d18d0", "60e416d95d759051988d18d3"]
  * }
  * 
  * @apiSuccessExample {json} Success-Response:
@@ -559,7 +584,8 @@ const modifyKeepin = async (req, res) => {
 
     var data = await keepinService.modifyKeepinByKeepinIdx({ keepinIdx: keepinId, title, photo: locationArray, taken, date, category, record, friendIdx});
   
-    return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 수정 완료', data});
+
+    return res.status(returnCode.OK).json({status: returnCode.OK, message: '키핀 수정 완료'});
 
   } catch (err) {
       console.error(err.message);
@@ -626,7 +652,6 @@ const deleteKeepin = async (req, res) => {
   try {
       // 친구 삭제 로직
       const ll = await friendService.findFriendsByKeepinIdx({keepinIdx: keepinIdArray[0].toString()}); // keepinId 하나씩 삭제 
-      console.log(ll)
 
       // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
       for (var keepinId of keepinIdArray){ 

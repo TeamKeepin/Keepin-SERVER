@@ -70,24 +70,24 @@ const saveKeepin = (data: keepinCreateInput) => {
 
 //모아보기 받은/준
 const findKeepin = (data: keepinFindInput) => {
-  const result = Keepin.find({taken: data.taken}, {title: 1, photo:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+  const result = Keepin.find({taken: data.taken}, {title: 1, photo:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: -1 });
   return result;
 }
 
 //모아보기 전체 키워드 검색
 const searchKeepinByKeyword = (data: keepinSearchInput) => {
-  const result = Keepin.find({title:{$regex:data.title}}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+  const result = Keepin.find({title:{$regex:data.title}}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: -1 });
   return result;
 }
 
 // 모아보기 카테고리 조회 
 const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) => {
-  const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1,  date:1}).sort({ date: 1 });
+  const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1,  date:1}).sort({ date: -1 });
   return result;
 }
 
 const findDetailKeepin = (data: keepinDetailInput) => {
-  const result = Keepin.findOne({_id: data.keepinIdx}).where('userIdx').equals(data.userIdx).sort({ date: 1 });
+  const result = Keepin.findOne({_id: data.keepinIdx}).where('userIdx').equals(data.userIdx).sort({ date: -1 });
   return result;
 }
 
@@ -105,7 +105,7 @@ const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
 const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
   //최신 순 정렬 해야 함 
   // const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
-  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('title photo date taken').sort({date: 1});
+  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('title photo date taken').sort({date: -1});
   return keepin;
 }
 

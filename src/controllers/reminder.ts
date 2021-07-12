@@ -46,14 +46,15 @@ import returnCode from "../library/returnCode";
     "status": 200,
     "message": "리마인더 생성 성공",
     "data": {
-        "_id": "60e1d4070e50e39654b4bb5f",
-        "title": "여자친구 생일",
-        "date": "2021-08-02",
-        "isAlarm": false,
+        "_id": "60e4163d5d759051988d18cb",
+        "title": "더미데이터11",
+        "date": "2021-08-03",
+        "sendDate": "2021-07-27",
+        "isAlarm": true,
         "isImportant": true,
         "year": "2021",
         "month": "08"
-     }
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -92,13 +93,20 @@ const createReminder = async (req, res) => {
 
     // date를 년과 월 분할
     const year = date.substring(0,4);
-    const month = date.substring(4,6);
+    const month = date.substring(5,7);
+    const day = date.substring(8,10);
+
+    console.log(date)
+    console.log(month)
+
+    const customDate = year+month+day;
+    console.log(customDate)
 
     // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
     if (isAlarm==true) {
         if(daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 ||daysAgo == 7 ) {
             // realDate = date - daysAgo
-            var realDate = moment(date).subtract(daysAgo, 'd').format('YYYYMMDD');
+            var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYY-MM-DD');
 
         } else {
             res.status(returnCode.BAD_REQUEST).json({
@@ -175,7 +183,7 @@ const getAllReminder = async (req, res) => {
 
 
 /**
- * @api {get} /reminder/:reminderId 리마인더 상세 조회
+ * @api {get} /reminder/detail/:reminderId 리마인더 상세 조회
  * 
  * @apiVersion 1.0.0
  * @apiName getDetailReminder
@@ -235,7 +243,7 @@ const getDetailReminder = async (req, res) => {
     if(!reminderId || reminderId == undefined){
         res.status(returnCode.BAD_REQUEST).json({
             status: returnCode.BAD_REQUEST,
-            message: '파라미터(year, month)를 입력하세요.',
+            message: '파라미터(reminderId)를 입력하세요.',
         });
     }
 
@@ -373,9 +381,8 @@ const getMonthReminder = async (req, res) => {
     }
 
     try {
-    
         const resultArray = await reminderService.findMonthReminder({userIdx:userId, year:year, month:month});
-
+        
         if(resultArray.length==0) {
             res.status(returnCode.BAD_REQUEST).json({
                 status: returnCode.BAD_REQUEST,
@@ -387,9 +394,9 @@ const getMonthReminder = async (req, res) => {
         var dataArray = [];
 
         // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
-        for (var result of resultArray){ 
-            const month = result[0].date.substring(5,7);
-            const day = result[0].date.substring(8,10);
+        for (var result of resultArray){
+            const month = result.date.substring(5,7);
+            const day = result.date.substring(8,10);
             const date_day = month+"."+day;
             result.date = date_day;
             dataArray.push(result);
@@ -460,6 +467,8 @@ const getOncommingReminder = async (req, res) => {
     const userId = req._id;
     const errors = validationResult(req);
 
+    console.log("today: "+userId);  //
+
     if(!errors.isEmpty()){
         res.status(returnCode.BAD_REQUEST).json({
             status: returnCode.BAD_REQUEST,
@@ -468,7 +477,8 @@ const getOncommingReminder = async (req, res) => {
     }
 
     try {
-        const today = moment().format('YYYYMMDD');
+        const today = moment().format('YYYY-MM-DD');
+
         const resultArray = await reminderService.findReminderOncoming({userIdx:userId, start:today});
 
         if(resultArray.length==0) {
