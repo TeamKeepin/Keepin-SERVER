@@ -63,7 +63,7 @@ const findFriendsByKeepinIdx = (data: KeepinIdInput) => {
 }
 
 const findFriendsByUserIdx = (data: friendsFindUserIdxInput) => {
-    const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name:-1});
+    const friends = Friend.find().where('userIdx').equals(data.userIdx).select('-__v -userIdx -keepinIdx').sort({name: 1});
     return friends;
 }
 
