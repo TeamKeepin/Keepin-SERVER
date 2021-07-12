@@ -354,7 +354,7 @@ const editProfile = async(req,res) => {
 }
 
 /**
- * @api {put} /my/profile 비밀번호 수정
+ * @api {put} /my/password/profile 비밀번호 수정
  * 
  * @apiVersion 1.0.0
  * @apiName editProfile
