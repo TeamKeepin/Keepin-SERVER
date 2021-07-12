@@ -117,7 +117,7 @@ const createKeepin = async (req, res) => {
 }
 
 /**
- * @api {get} /keepin?taken=true 모아보기 준/받은 조회
+ * @api {get} /keepin?taken=true&recent=true 모아보기 준/받은 및 최신순/오래된순 조회
  * 
  * @apiVersion 1.0.0
  * @apiName getTakenKeepin
@@ -131,6 +131,7 @@ const createKeepin = async (req, res) => {
  * 
  * @apiParamExample {json} Request-Example:
  * * [Querystring] taken: 준/받은 여부 -> taken: true이면 받은
+ * * [Querystring] recent: 오래된순/최신순 여부 -> recent: true이면 최신순
  * 
  * @apiSuccessExample {json} Success-Response:
  * - 200 OK
@@ -162,6 +163,7 @@ const createKeepin = async (req, res) => {
 const getTakenKeepin = async (req, res) => {
   const userIdx = req._id;
   const taken = req.query.taken;
+  const recent = req.query.recent;
 
   if(!taken){
     res.status(returnCode.BAD_REQUEST).json({
@@ -170,8 +172,15 @@ const getTakenKeepin = async (req, res) => {
     });
   }
 
+  if(!recent){
+    res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: "최신순/오래된순 여부를 선택하세요." 
+    });
+  }
+
   try {
-    const keepins = await keepinService.findKeepin({taken, userIdx});
+    const keepins = await keepinService.findKeepin({recent: recent, taken: taken, userIdx: userIdx});
 
     for(var keepin of keepins){
       const year = keepin.date.substring(0,4);
@@ -184,7 +193,7 @@ const getTakenKeepin = async (req, res) => {
     const data = {keepins};
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
-      message: '모아보기 준/받은 조회 성공',
+      message: '모아보기 준/받은 및 최신순/오래된 순 조회 성공',
       data
     })
     } catch (err) {
@@ -431,7 +440,6 @@ const getDetailKeepin = async (req, res) => {
   try {
 
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
-    console.log(detail)
     console.log(detail.friendIdx)
     //friend의 이름 가져오기
     var friendNames = [];
