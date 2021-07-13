@@ -130,7 +130,7 @@ const createKeepin = async (req, res) => {
 };
 
 /**
- * @api {get} /keepin?taken=true 모아보기 준/받은 조회
+ * @api {get} /keepin?taken=true&recent=true 모아보기 준/받은 및 최신순/오래된순 조회
  * 
  * @apiVersion 1.0.0
  * @apiName getTakenKeepin
@@ -144,6 +144,7 @@ const createKeepin = async (req, res) => {
  * 
  * @apiParamExample {json} Request-Example:
  * * [Querystring] taken: 준/받은 여부 -> taken: true이면 받은
+ * * [Querystring] recent: 오래된순/최신순 여부 -> recent: true이면 최신순
  * 
  * @apiSuccessExample {json} Success-Response:
  * - 200 OK
@@ -169,12 +170,20 @@ const createKeepin = async (req, res) => {
     "status": 400,
     "message": "준/받은 여부를 선택하세요."
  * }
+ *
+ * @apiErrorExample Error-Response:
+ * - 400 recent이 빈 값인 경우
+ * {
+    "status": 400,
+    "message": "최신순/오래된순 여부를 선택하세요."
+ * }
  * 
  */
 
 const getTakenKeepin = async (req, res) => {
   const userIdx = req._id;
   const taken = req.query.taken;
+  const recent = req.query.recent;
 
   if (!taken) {
     res.status(returnCode.BAD_REQUEST).json({
@@ -183,8 +192,15 @@ const getTakenKeepin = async (req, res) => {
     });
   }
 
+  if(!recent){
+    res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: "최신순/오래된순 여부를 선택하세요." 
+    });
+  }
+
   try {
-    const keepinss = await keepinService.findKeepin({ taken, userIdx });
+    const keepinss = await keepinService.findKeepin({ recent: recent, taken: taken, userIdx: userIdx });
 
     const keepins = [];
 
@@ -201,16 +217,16 @@ const getTakenKeepin = async (req, res) => {
     const data = { keepins };
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
-      message: '모아보기 준/받은 조회 성공',
-      data,
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-      status: returnCode.INTERNAL_SERVER_ERROR,
-      message: err.message,
-    });
-    return;
+      message: '모아보기 준/받은 및 최신순/오래된 순 조회 성공',
+      data
+    })
+    } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+      });
+      return;
   }
 };
 
@@ -474,26 +490,27 @@ const getDetailKeepin = async (req, res) => {
   }
 
   try {
-    const detail = await keepinService.findDetailKeepin({ userIdx: userIdx, keepinIdx: keepinIdx });
-    // console.log(detail);
-    // console.log(detail.friendIdx);
 
-    // friend의 이름 가져오기
-    // var friendNames = [];
-    // const friendIds = detail.friendIdx;
-    // var frienddata;
-    // for (var i=0; i<friendIds.length; i++) {
-    //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
-    //   console.log(friendIds[i])
-    //   friendNames.push(frienddata.name);
-    // }
+    const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
+    console.log(detail.friendIdx)
+    //friend의 이름 가져오기
+    var friendNames = [];
+    const friendIds = detail.friendIdx;
+    var frienddata;
+    for (var i=0; i<friendIds.length; i++) {
+      frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+      console.log(friendIds[i])
+      friendNames.push(frienddata.name);
+    }
 
-    const year = detail.date.substring(0, 4);
-    const month = detail.date.substring(5, 7);
-    const day = detail.date.substring(8, 10);
-    const tunedDate = year + '.' + month + '.' + day;
 
-    const data = {
+ 
+    const year = detail.date.substring(0,4);
+    const month = detail.date.substring(5,7);
+    const day = detail.date.substring(8,10);
+    const tunedDate = year+'.'+month+'.'+day;
+
+    const data ={
       _id: detail._id,
       title: detail.title,
       photo: detail.photo,
