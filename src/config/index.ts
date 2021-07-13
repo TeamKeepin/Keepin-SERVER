@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 // Set the NODE_ENV to 'development' by default
-process.env.NODE_ENV = process.env.NODE_ENV || "development";
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const envFound = dotenv.config();
 if (envFound.error) {
@@ -30,15 +30,4 @@ export default {
 
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubSecret: process.env.GITHUB_SECRET,
-
-  jwtOption: {
-    algorithm: process.env.JWT_ALGO,
-    expiresIn: "2h",
-    issuer: "keepin"
-  },
-  refreshOption: {
-    algorithm: process.env.JWT_ALGO,
-    expiresIn: "7d",
-    issuer: "keepin"
-  }
 };

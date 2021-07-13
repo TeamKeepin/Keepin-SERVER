@@ -7,7 +7,7 @@ import { check, validationResult } from "express-validator"
 import { userService } from "../services";
 import { keepinService } from "../services";
 import returnCode from "../library/returnCode";
-import randToken from "rand-token";
+
 /**
  * @api {post} /user/signup 회원가입
  * 
@@ -22,12 +22,12 @@ import randToken from "rand-token";
  * 
  * @apiParamExample {json} Request-Example:
  * {
- *  "email": "keepin@gmail.com",
- *  "password": "1234abcd",
- *  "name": "유키핀",
- *  "birth": "19970627",
- *  "phone": "01012345678",
- *    
+    "email": "whatisthis@naver.com",
+    "password": "1234567",
+    "name": "mk",
+    "birth": "19980322",
+    "phoneToken": "1" ,
+    "phone": "01012345678"
  * }
  *
  * @apiSuccess {String} jwt
@@ -36,10 +36,7 @@ import randToken from "rand-token";
  * 200 OK
  * {
  *  "status": 200,
- *  "message":    ,
- *  "data": {
- *    "jwt":""
- *  }
+ *  "message": "회원가입 성공"
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -133,6 +130,8 @@ const signUp = async (req: Request, res: Response) => {
  *  "message": "로그인 성공"   ,
  *  "data": {
  *    "jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *    "name": "김키핀"
  *  }
  * }
  * 
@@ -158,7 +157,7 @@ const signIn = async (req, res) => {
     }
     const { email, password } = req.body;
     try {
-        let user = await userService.findUser({email});
+        const user = await userService.findUser({email});
 
         if(!user) {
             res.status(400).json({
@@ -176,19 +175,17 @@ const signIn = async (req, res) => {
             });
         }
 
-        
-
         // Return jsonwebtoken
         const payload = {
             id: user._id,
             email: user.email
         };
-        
+
         const result = {
             accessToken: jwt.sign(
             payload,
             config.jwtSecret,
-            { expiresIn: "2h" }),
+            { expiresIn: "7d" }),
             refreshToken: jwt.sign(
             payload,
             config.jwtSecret,
@@ -203,11 +200,12 @@ const signIn = async (req, res) => {
               message: "로그인 성공",
               data: {
                   "jwt": result.accessToken,
-                  "refreshToken": result.refreshToken
+                  "refreshToken": result.refreshToken,
+                  "name":user.name
               }
         });
 
-        } catch (err) {
+        }catch (err) {
             console.error(err.message);
             res.status(returnCode.INTERNAL_SERVER_ERROR).json({
                 status: returnCode.INTERNAL_SERVER_ERROR,
@@ -236,12 +234,11 @@ const signIn = async (req, res) => {
  *   "status": 200,
  *   "msg": "프로필 조회 성공",
  *   "data": {
- *       "_id": "60e349893460ec398ea1dc45",
  *       "email": "fbduddn97@naver.com",
  *       "password": "$2a$10$svbqi40QZQcWkRc2Jx8clOcoY5Q/urnAvdfcr0eVnIKk6M8.R9iRm",
  *       "name": "yboy",
- *       "birth": "19970322",
- *       "phone": "01012345678"
+ *       "birth": "1997.03.22",
+ *       "phone": "010-1234-5678"
  *   }
  *}
  *  
@@ -357,7 +354,7 @@ const editProfile = async(req,res) => {
 }
 
 /**
- * @api {put} /my/profile 비밀번호 수정
+ * @api {put} /my/password 비밀번호 수정
  * 
  * @apiVersion 1.0.0
  * @apiName editProfile
@@ -379,7 +376,7 @@ const editProfile = async(req,res) => {
  * -201 OK
  *{
  *   "status": 201,
- *   "msg": "비밀번호 수정 성공",
+ *   "message": "비밀번호 수정 성공",
  *}
  *  
  * @apiErrorExample Error-Response:

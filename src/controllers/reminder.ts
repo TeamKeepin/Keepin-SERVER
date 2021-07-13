@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { check, validationResult } from "express-validator"
-import { reminderService } from "../services";
-import moment from "moment";
-import returnCode from "../library/returnCode";
+import { Request, Response } from 'express';
+import { check, validationResult } from 'express-validator';
+import { reminderService } from '../services';
+import moment from 'moment';
+import returnCode from '../library/returnCode';
 
 /**
  * @api {post} /reminder 리마인더 생성
@@ -46,14 +46,18 @@ import returnCode from "../library/returnCode";
     "status": 200,
     "message": "리마인더 생성 성공",
     "data": {
-        "_id": "60e1d4070e50e39654b4bb5f",
-        "title": "여자친구 생일",
-        "date": "2021-08-02",
-        "isAlarm": false,
+        "sendDate": "2021-07-27",
+        "isAlarm": true,
         "isImportant": true,
+        "_id": "60ecef7de731197a10f19a65",
+        "title": "더미데이터112222111",
+        "date": "2021-08-03",
+        "userIdx": "60e349893460ec398ea1dc45",
         "year": "2021",
-        "month": "08"
-     }
+        "month": "08",
+        "daysAgo": "7",
+        "__v": 0
+    }
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -70,112 +74,118 @@ import returnCode from "../library/returnCode";
  * }
  */
 const createReminder = async (req, res) => {
-    const userId = req._id;
-    const errors = validationResult(req);
+  const userId = req._id;
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '요청바디가 없습니다.',
-        });
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  let { title, date, daysAgo, isAlarm, isImportant } = req.body;
+  // 파라미터 확인
+  if (!title || !date || isAlarm == undefined || isImportant == undefined) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보(title, date, isAlarm, isImportant)를 입력하세요.',
+    });
+    return;
+  }
+
+  // date를 년과 월 분할
+  const year = date.substring(0, 4);
+  const month = date.substring(5, 7);
+  const day = date.substring(8, 10);
+
+  const customDate = year + month + day;
+
+  // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
+  if (isAlarm == true) {
+    if (daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 || daysAgo == 7) {
+      // realDate = date - daysAgo
+      var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYY-MM-DD');
+    } else {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: 'daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.',
+      });
+      return;
+    }
+  }
+
+  try {
+    var result;
+    if (!isAlarm) {
+      // alarm 안받을 거면, daysAgo 값은 없음.
+      result = await reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
+    } else {
+      // alarm 받을 거면, daysAgo 값이 있음.
+      result = await reminderService.saveReminderWithDaysAgo({
+        title,
+        date,
+        sendDate: realDate,
+        isAlarm,
+        isImportant,
+        userIdx: userId,
+        year,
+        month,
+        daysAgo,
+      });
     }
 
-    let { title, date, daysAgo, isAlarm, isImportant } = req.body;
-    // 파라미터 확인
-    if (!title || !date || isAlarm==undefined || isImportant==undefined) {
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '필수 정보(title, date, isAlarm, isImportant)를 입력하세요.',
-        });
-        return;
-      }
+    // for res
+    const data = result;
 
-    // date를 년과 월 분할
-    const year = date.substring(0,4);
-    const month = date.substring(4,6);
-
-    // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
-    if (isAlarm==true) {
-        if(daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 ||daysAgo == 7 ) {
-            // realDate = date - daysAgo
-            var realDate = moment(date).subtract(daysAgo, 'd').format('YYYYMMDD');
-
-        } else {
-            res.status(returnCode.BAD_REQUEST).json({
-                status: returnCode.BAD_REQUEST, 
-                message: 'daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.'
-            });
-            return;
-        }
-    }
-
-    try {
-          // for res
-        const data = {
-            _id: userId,
-            title: title,
-            date: date,
-            sendDate: realDate,
-            isAlarm: isAlarm,
-            isImportant: isImportant,
-            year: year,
-            month: month
-        };
-  
-      await reminderService.saveReminder({  title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
-      return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 생성 성공', data});
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-            status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message,
-        });
-        return;
-    }
-}
-
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 생성 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 // 리마인더 모든 목록 조회
 const getAllReminder = async (req, res) => {
-    const userId = req._id;
-    const errors = validationResult(req);
+  const userId = req._id;
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '요청바디가 없습니다.',
-        });
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  try {
+    const resultArray = await reminderService.findReminder({ userIdx: userId });
+    if (resultArray.length == 0) {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '등록된 리마인더가 없습니다.',
+      });
+      return;
     }
 
-    try {
-        const resultArray = await reminderService.findReminder({userIdx:userId});
-        if(resultArray.length==0) {
-            res.status(returnCode.BAD_REQUEST).json({
-                status: returnCode.BAD_REQUEST,
-                message: '등록된 리마인더가 없습니다.',
-            });
-            return;
-        }
+    const data = { reminders: resultArray };
 
-        const data = {reminders:resultArray}; 
-  
-        
-        return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 목록 조회 성공', data});
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-            status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message,
-        });
-        return;
-    }
-}
-
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 목록 조회 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 /**
- * @api {get} /reminder/:reminderId 리마인더 상세 조회
+ * @api {get} /reminder/detail/:reminderId 리마인더 상세 조회
  * 
  * @apiVersion 1.0.0
  * @apiName getDetailReminder
@@ -201,7 +211,8 @@ const getAllReminder = async (req, res) => {
         "isImportant": true,
         "_id": "60e651b32821d6242df8291a",
         "title": "더미데이터4",
-        "date": "2021.05.01"
+        "date": "2021.05.01",
+        "daysAgo": "2"
     }
  * }
  * 
@@ -221,59 +232,52 @@ const getAllReminder = async (req, res) => {
  */
 // 리마인더 상세 조회
 const getDetailReminder = async (req, res) => {
-    const userId = req._id;
-    const reminderId = req.params.reminderId;
-    const errors = validationResult(req);
+  const userId = req._id;
+  const reminderId = req.params.reminderId;
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '요청바디가 없습니다.',
-        });
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  if (!reminderId || reminderId == undefined) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '파라미터(reminderId)를 입력하세요.',
+    });
+  }
+
+  try {
+    const result = await reminderService.findDetailReminder({ reminderIdx: reminderId });
+
+    if (result.length == 0) {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '등록된 리마인더가 없습니다.',
+      });
+      return;
     }
 
-    if(!reminderId || reminderId == undefined){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '파라미터(year, month)를 입력하세요.',
-        });
-    }
+    const year = result[0].date.substring(0, 4); //2021-05-01
+    const month = result[0].date.substring(5, 7);
+    const day = result[0].date.substring(8, 10);
+    const date_day = year + '.' + month + '.' + day;
+    result[0].date = date_day;
+    const data = result[0];
 
-    try {
-    
-        const result = await reminderService.findDetailReminder({reminderIdx:reminderId});
-
-        console.log(result);
-
-        if(result.length==0) {
-            res.status(returnCode.BAD_REQUEST).json({
-                status: returnCode.BAD_REQUEST,
-                message: '등록된 리마인더가 없습니다.',
-            });
-            return;
-        }
-
-        
-        const year = result[0].date.substring(0,4); //2021-05-01
-        const month = result[0].date.substring(5,7);
-        const day = result[0].date.substring(8,10);
-        const date_day = year+"."+month+"."+day;
-        result[0].date = date_day;
-        const data = result[0];
-
-        return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 상세 조회 성공', data});
-        
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-            status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message,
-        });
-        return;
-    }
-}
-
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 상세 조회 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 /**
  * @api {get} /reminder/date/:year/:month 리마인더 월별 목록 조회
@@ -289,7 +293,7 @@ const getDetailReminder = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
- * * url: /reminder/date/2021/06
+ * * url: /reminder/date?year=2021&month=06
  * * year : 조회 연도
  * * month: 조회 달
  * 
@@ -329,13 +333,13 @@ const getDetailReminder = async (req, res) => {
  * - 400 요청바디가 없음
  * {
     "status": 400,
-    "message": "파라미터(year, month)를 입력하세요."
+    "message": "쿼리(year, month)를 입력하세요."
  * }
  *
  * - 400 파라미터 형식이 맞지 않음
  * {
     "status": 400,
-    "message": "파라미터(year, month) 형식을 맞춰주세요."
+    "message": "쿼리(year, month) 형식을 맞춰주세요."
  * }
  * - 400 등록된 리마인더가 없음
  * 
@@ -346,69 +350,66 @@ const getDetailReminder = async (req, res) => {
  */
 // 리마인더 월별 목록 조회
 const getMonthReminder = async (req, res) => {
-    const userId = req._id;
-    const year = req.params.year;
-    const month = req.params.month;
-    const errors = validationResult(req);
+  const userId = req._id;
+  const year = req.query.year; //
+  const month = req.query.month;
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '요청바디가 없습니다.',
-        });
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  if (year.length != 4 || month.length != 2) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '파라미터(year, month) 형식을 맞춰주세요.',
+    });
+  }
+
+  if (!year || !month) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '파라미터(year, month)를 입력하세요.',
+    });
+  }
+
+  try {
+    const resultArray = await reminderService.findMonthReminder({ userIdx: userId, year: year, month: month });
+
+    if (resultArray.length == 0) {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '등록된 리마인더가 없습니다.',
+      });
+      return;
     }
 
-    if(year.length!=4 || month.length!=2){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '파라미터(year, month) 형식을 맞춰주세요.',
-        });
+    var dataArray = [];
+
+    // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
+    for (var result of resultArray) {
+      const month = result.date.substring(5, 7);
+      const day = result.date.substring(8, 10);
+      const date_day = month + '.' + day;
+      result.date = date_day;
+      dataArray.push(result);
     }
 
-    if(!year || !month){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '파라미터(year, month)를 입력하세요.',
-        });
-    }
+    const data = { reminders: dataArray };
 
-    try {
-    
-        const resultArray = await reminderService.findMonthReminder({userIdx:userId, year:year, month:month});
-
-        if(resultArray.length==0) {
-            res.status(returnCode.BAD_REQUEST).json({
-                status: returnCode.BAD_REQUEST,
-                message: '등록된 리마인더가 없습니다.',
-            });
-            return;
-        }
-
-        var dataArray = [];
-
-        // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
-        for (var result of resultArray){ 
-            const month = result[0].date.substring(5,7);
-            const day = result[0].date.substring(8,10);
-            const date_day = month+"."+day;
-            result.date = date_day;
-            dataArray.push(result);
-        }
-
-        const data = {reminders:dataArray}; 
-
-        return res.status(returnCode.OK).json({status: returnCode.OK, message: '월별 목록 조회 성공', data});
-        
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-            status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message,
-        });
-        return;
-    }
-}
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '월별 목록 조회 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 /**
  * @api {get} /reminder/oncoming [홈화면] 다가오는 리마인더 2개 조회
@@ -456,53 +457,53 @@ const getMonthReminder = async (req, res) => {
  * }
  */
 // 다가오는 리마인더, 가장 가까운 리마인더 2개만
-const getOncommingReminder = async (req, res) => {
-    const userId = req._id;
-    const errors = validationResult(req);
+const getOncomingReminder = async (req, res) => {
+  const userId = req._id;
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '요청바디가 없습니다.',
-        });
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  try {
+    const today = moment().format('YYYY-MM-DD');
+
+    const resultArray = await reminderService.findReminderOncoming({ userIdx: userId, start: today });
+
+    if (resultArray.length == 0) {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '다가오는 리마인더가 없습니다.',
+      });
+      return;
     }
 
-    try {
-        const today = moment().format('YYYYMMDD');
-        const resultArray = await reminderService.findReminderOncoming({userIdx:userId, start:today});
+    var dataArray = [];
 
-        if(resultArray.length==0) {
-            res.status(returnCode.BAD_REQUEST).json({
-                status: returnCode.BAD_REQUEST,
-                message: '다가오는 리마인더가 없습니다.',
-            });
-            return;
-        }
-
-        var dataArray = [];
-
-        // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
-        for (var result of resultArray){ 
-            const month = result.date.substring(5,7);
-            const day = result.date.substring(8,10);
-            const date_day = month+"."+day;
-            result.date = date_day;
-            dataArray.push(result);
-        }
-
-        const data = {reminders:dataArray}; 
-  
-      return res.status(returnCode.OK).json({status: returnCode.OK, message: '다가오는 리마인더(2개) 목록 조회 성공', data});
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-            status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message,
-        });
-        return;
+    // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
+    for (var result of resultArray) {
+      const month = result.date.substring(5, 7);
+      const day = result.date.substring(8, 10);
+      const date_day = month + '.' + day;
+      result.date = date_day;
+      dataArray.push(result);
     }
-}
+
+    const data = { reminders: dataArray };
+
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '다가오는 리마인더(2개) 목록 조회 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 /**
  * @api {delete} /reminder 리마인더 삭제
@@ -539,49 +540,47 @@ const getOncommingReminder = async (req, res) => {
  */
 // 리마인더 삭제 (파라미터: /:reminderArray)
 const deleteReminder = async (req, res) => {
-    const reminderIdArray = req.body.reminderArray; //배열로 reminderId 값들을 받음
-    const errors = validationResult(req);
+  const reminderIdArray = req.body.reminderArray; //배열로 reminderId 값들을 받음
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: '요청바디가 없습니다.',
-        });
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  if (!reminderIdArray || reminderIdArray.length == 0) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: 'reminderID Array 값이 없습니다.',
+    });
+  }
+
+  // 해당 reminderId 값이 존재하는지 체크
+
+  try {
+    // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
+    for (var reminderId of reminderIdArray) {
+      await reminderService.deleteReminderbyReminderId({ reminderIdx: reminderId }); // reminderId 하나씩 삭제
     }
 
-    if(!reminderIdArray || reminderIdArray.length == 0){
-        res.status(returnCode.BAD_REQUEST).json({
-            status: returnCode.BAD_REQUEST,
-            message: 'reminderID Array 값이 없습니다.',
-        });
-    }
-
-    // 해당 reminderId 값이 존재하는지 체크
-
-    try {
-
-        // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
-        for (var reminderId of reminderIdArray){ 
-            await reminderService.deleteReminderbyReminderId({reminderIdx: reminderId}); // reminderId 하나씩 삭제 
-        }
-
-        return res.status(returnCode.OK).json({status: returnCode.OK, message: '리마인더 삭제 완료' });
-
-    } catch (err) {
-        console.error(err.message);
-        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-            status: returnCode.INTERNAL_SERVER_ERROR,
-            message: err.message,
-        });
-        return;
-    }
-}
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 삭제 완료' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 export default {
   createReminder,
   getAllReminder,
   getDetailReminder,
   getMonthReminder,
-  getOncommingReminder,
-  deleteReminder
+  getOncomingReminder,
+  deleteReminder,
 };
