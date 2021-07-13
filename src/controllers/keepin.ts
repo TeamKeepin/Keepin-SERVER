@@ -493,17 +493,16 @@ const getDetailKeepin = async (req, res) => {
 
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
     console.log(detail.friendIdx)
+    
     //friend의 이름 가져오기
-    var friendNames = [];
-    const friendIds = detail.friendIdx;
-    var frienddata;
-    for (var i=0; i<friendIds.length; i++) {
-      frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
-      console.log(friendIds[i])
-      friendNames.push(frienddata.name);
-    }
-
-
+    // var friendNames = [];
+    // const friendIds = detail.friendIdx;
+    // var frienddata;
+    // for (var i=0; i<friendIds.length; i++) {
+    //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+    //   console.log(friendIds[i])
+    //   friendNames.push(frienddata.name);
+    // }
  
     const year = detail.date.substring(0,4);
     const month = detail.date.substring(5,7);
