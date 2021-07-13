@@ -444,7 +444,7 @@ const getKeepinByCategory = async (req, res) => {
             }
         ],
         "record": "우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.",
-        "cateogry": [
+        "category": [
             "생일",
             "축하"
         ],
