@@ -118,7 +118,7 @@ const searchFriendByKeyword = (data: friendSearchInput) => {
   const result = Friend.find({ name: { $regex: data.name } })
     .where('userIdx')
     .equals(data.userIdx)
-    .select('-__v -userIdx');
+    .select('-__v -userIdx -keepinIdx -memo');
   return result;
 };
 
