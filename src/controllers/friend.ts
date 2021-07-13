@@ -14,12 +14,12 @@ import { Console } from 'console';
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
  * {
-    "name": "보리"
+    "name": "떠효니🤩"
  * }
  * 
  * @apiSuccessExample {json} Success-Response:
@@ -27,15 +27,16 @@ import { Console } from 'console';
  * {
     "status": 201,
     "message": "친구 등록 성공",
-    "name": "보리"
+    "name": "떠효니🤩"
  * }
  * 
  * @apiErrorExample Error-Response:
  * - 400 요청바디가 없음
  * {
     "status": 400,
-    "message": "필수 정보(name))를 입력하세요."
+    "message": "필수 정보(name)를 입력하세요."
  * }
+ *   
  * 
  * - 400 중복된 값
  * {
@@ -49,12 +50,13 @@ const createFriend = async (req, res) => {
   const memo = '';
   const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
+  if (name == undefined) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
-      message: '필수 정보(name))를 입력하세요.',
+      message: '필수 정보(name)를 입력하세요.',
     });
   }
+
   try {
     //중복 check   //이거 name 하고 userIdx로 해야 함 !
     const alFriend = await friendService.findFriendByNameAnduserIdx({ name, userIdx });
@@ -91,28 +93,35 @@ const createFriend = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  *
  *
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
- *{
+ * {
     "status": 200,
     "message": "친구 조회 성공",
     "data": {
         "friends": [
             {
-                "_id": "60ec0be1dc961a2d4c31d115",
-                "name": "눈부신서버"
+                "_id": "60ed9ebee51ad110481cd9ef",
+                "name": "가으니",
+                "memo": ""
             },
             {
-                "_id": "60ebb30ebee2d727e34a004d",
-                "name": "든든한서버"
+                "_id": "60ed9e14e51ad110481cd9cb",
+                "name": "떠효니🤩",
+                "memo": ""
             },
             {
-                "_id": "60ec52412658c1375955dbe5",
-                "name": "서버최강",
+                "_id": "60ed9ebae51ad110481cd9ec",
+                "name": "민지언닝",
+                "memo": ""
+            },
+            {
+                "_id": "60eda05e8fb6950b8404cfc8",
+                "name": "박박이",
                 "memo": ""
             },
         ]
@@ -163,24 +172,28 @@ const getFriends = async (req, res) => {
  * @apiGroup Friend
  *
  * @apiHeaderExample {json} Header-Example:
+ *
+ * * * friendId : 친구 id
+ * * /friend/60ed9e98e51ad110481cd9d7
+ * 
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  *
  *
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
- *{
- *  "status": 200,
- *  "message": "친구 상세 조회 성공",
- *  "data": {
- *      "name": "코코",
- *      "total": 3,
- *      "taken": 2,
- *      "given": 1,
- *      "memo": "코코는 초콜릿을 너무 좋아한당"
- *   }
+ * {
+    "status": 200,
+    "message": "친구 상세 조회 성공",
+    "data": {
+        "name": "뽀민이💭",
+        "total": 5,
+        "taken": 3,
+        "given": 2,
+        "memo": "보민이 신발 👟 사이즈 230 << 컨버스 개조아함, 제일 좋아하는 책 장르: 소설 📘, 아기자기 귀여운 거 딱히 좋아하지 않음 🙅🏻, 실용적인 거 좋아함 🙆🏻, 요새 헤드셋 🎧 알아보는 것 같음!"
+    }
  * }
  *
  * @apiErrorExample Error-Response:
@@ -242,41 +255,56 @@ const getFriendDetail = async (req, res) => {
  * @apiGroup Friend
  *
  * @apiHeaderExample {json} Header-Example:
+ * * friendId : 친구 id
+ * * /friend/keepin/60ed9e98e51ad110481cd9d7
+ * 
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  *
  *
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
  *{
- *  "status": 200,
- *  "message": "친구에게 준/받은 keepin 목록 조회 성공",
- *  "data": {
- *       "takenList": [
- *           {
- *               "_id": "60e5ddb55c157b183255b0d1",
- *               "title": "밀키가 좋아하는 장난감 먹었지",
- *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
- *               "date": "2021.12.02"
- *           },
- *           {
- *               "_id": "60e650fe2821d6242df82904",
- *               "title": "메렁 메롱",
- *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
- *               "date": "2021.12.02"
- *           }
- *       ],
- *       "givenList": [
- *           {
- *               "_id": "60e651142821d6242df82908",
- *               "title": "나에게만 선물같아",
- *               "photo": "밀키가 좋아하는 강아지 뼈다귀",
- *               "date": "2021.12.02"
- *           }
- *       ]
- *   }
+    "status": 200,
+    "message": "친구에게 준/받은 keepin 목록 조회 성공",
+    "data": {
+        "takenList": [
+            {
+                "_id": "60eda9cd36d5ca07e047a980",
+                "title": "가장 달콤했던 생일 선물",
+                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234438.png",
+                "date": "2021.06.07"
+            },
+            {
+                "_id": "60edad7757025c487c8e611a",
+                "title": "라이언보다네가더귀여워알지",
+                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626191569724.jpg",
+                "date": "2021.04.20"
+            },
+            {
+                "_id": "60edadcfd4886805c4ca3497",
+                "title": "커플 꽃반지 조아",
+                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189254295.png",
+                "date": "2021.03.28"
+            }
+        ],
+        "givenList": [
+            {
+                "_id": "60edae24d4886805c4ca349b",
+                "title": "내가 알바하는 이유",
+                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189337886.png",
+                "date": "2021.05.03"
+            },
+            {
+                "_id": "60edaebbd4886805c4ca349f",
+                "title": "밀키맘 김보 생일",
+                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189491228.png",
+                "date": "2021.03.11"
+            }
+        ]
+    }
  * }
  *
  * @apiErrorExample Error-Response:
@@ -348,14 +376,21 @@ const getTakenGivenList = async (req, res) => {
  * @apiName editFriendMemo
  * @apiGroup Friend
  * 
+ * 60ed9e98e51ad110481cd9d7
+ * 
  * @apiHeaderExample {json} Header-Example:
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
+ * 
  * @apiParamExample {json} Request-Example:
+ * param :friendId 친구의 Idx
+ * /friend/memo/60ed9e98e51ad110481cd9d7
+ * 
+ * req.body json
  * {
-    "memo": "보리는 수박을 좋아해요"
+    "memo" : "보민이 신발 👟 사이즈 230 << 컨버스 개조아함, 제일 좋아하는 책 장르: 소설 📘, 아기자기 귀여운 거 딱히 좋아하지 않음 🙅🏻, 실용적인 거 좋아함 🙆🏻, 요새 헤드셋 🎧 알아보는 것 같음!"
  * }
  *  
  * @apiSuccessExample {json} Success-Response:
@@ -365,6 +400,12 @@ const getTakenGivenList = async (req, res) => {
  *  "message": "메모 수정 성공",
  *}
  * @apiErrorExample Error-Response:
+ * 
+ * * -400 req.body 내용 빠짐
+ * {
+ *  "status": 400,
+ *  "message": "memo의 내용을 입력해주세요."
+ * }
  * -400 친구 유무 확인
  * {
  *  "status": 400,
@@ -379,6 +420,14 @@ const getTakenGivenList = async (req, res) => {
 const editFriendMemo = async (req, res) => {
   const friendIdx = req.params.friendId;
   const { memo } = req.body;
+
+  if (memo == undefined) {
+    return res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: 'memo의 내용을 입력해주세요.',
+    });
+  }
+
   try {
     const friend = await friendService.findFriendByFriendIdx({ friendIdx });
     if (!friend) {
@@ -411,9 +460,13 @@ const editFriendMemo = async (req, res) => {
  * @apiGroup Friend
  * 
  * @apiHeaderExample {json} Header-Example:
+ * 
+ * * * friendId : 친구 id
+ * * /friend/60ed9e98e51ad110481cd9d7
+ * 
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
   * @apiParamExample {json} Request-Example:
  * {
@@ -490,9 +543,12 @@ const editFriendName = async (req, res) => {
  * @apiGroup Friend
  *
  * @apiHeaderExample {json} Header-Example:
+ * * * friendId : 친구 id
+ * * /friend/60ed9e98e51ad110481cd9d7
+ *
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -517,7 +573,6 @@ const deleteFriend = async (req, res) => {
     await friendService.deleteFriendByFriendIdx({ friendIdx });
     const keepins = await keepinService.findKeepinFriend({ friendIdx });
     for (const keepin of keepins) {
-      console.log(keepin.friendIdx.length);
       if (keepin.friendIdx.length > 1) {
         //배열의 길이가 1이상이면 keepin의 friendIdx에서 friend 삭제
         const keepinIdx = keepin._id;
@@ -552,30 +607,38 @@ const deleteFriend = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTcxNjY2OCwiZXhwIjoxNjI1NzUyNjY4fQ.dPel-hfK740tlHQNpLRxClb6SldfDduiAeSGOFf7vg4"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
  * 
  * - [QueryString]: keyword에 검색할 단어를 넣음
  * {
-    "name": "보리" 
+    "name": "뽀" 
  * }
  * 
  * @apiSuccessExample {json} Success-Response:
  * - 200 OK
- * {
+ {
     "status": 200,
     "message": "친구 검색 성공",
     "data": {
         "friends": [
             {
-                "_id": "60e416d15d759051988d18d0",
-                "name": "보리"
+                "keepinIdx": [
+                    "60eda9cd36d5ca07e047a980",
+                    "60edad7757025c487c8e611a",
+                    "60edadcfd4886805c4ca3497",
+                    "60edae24d4886805c4ca349b",
+                    "60edaebbd4886805c4ca349f"
+                ],
+                "_id": "60ed9e98e51ad110481cd9d7",
+                "name": "뽀민이💭",
+                "memo": "보민이 신발 👟 사이즈 230 << 컨버스 개조아함, 제일 좋아하는 책 장르: 소설 📘, 아기자기 귀여운 거 딱히 좋아하지 않음 🙅🏻, 실용적인 거 좋아함 🙆🏻, 요새 헤드셋 🎧 알아보는 것 같음!"
             }
         ]
     }
- * }
+}
  * 
  * 
  */
@@ -584,7 +647,6 @@ const searchFriends = async (req, res) => {
   const name = req.query.name;
   try {
     const friends = await friendService.searchFriendByKeyword({ name: name, userIdx: userIdx });
-    console.log(friends);
     // if(friends.length==0){
     //     return res.status(returnCode.BAD_REQUEST).json({
     //         status:returnCode.BAD_REQUEST,

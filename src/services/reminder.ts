@@ -14,6 +14,24 @@ export interface reminderCreateInputWithDaysAgo {
   daysAgo: string;
 }
 
+export interface reminderModifyInputWithDaysAgo {
+  reminderId: string;
+  title: string;
+  date: string;
+  sendDate: string;
+  isAlarm: boolean;
+  isImportant: boolean;
+  daysAgo: string;
+}
+
+export interface reminderModifyInput {
+  reminderId: string;
+  title: string;
+  date: string;
+  isAlarm: boolean;
+  isImportant: boolean;
+}
+
 export interface reminderCreateInput {
   title: string;
   date: string;
@@ -100,12 +118,45 @@ const findReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.findOne({ _id: data.reminderIdx });
 };
 
+// 리마인더 수정 -> 알람이 true일 때, with daysago
+const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderId },
+    {
+      isAlarm: data.isAlarm,
+      isImportant: data.isImportant,
+      title: data.title,
+      date: data.date,
+      daysAgo: data.daysAgo,
+      sendDate: data.sendDate,
+    },
+    { new: true }
+  );
+  return result;
+};
+
+// 리마인더 수정 -> 알람이 false일 때
+const modifyReminder = (data: reminderModifyInput) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderId },
+    {
+      isAlarm: data.isAlarm,
+      isImportant: data.isImportant,
+      title: data.title,
+      date: data.date,
+      sendDate: '0',
+    },
+    { new: true }
+  );
+  return result;
+};
+
 const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.deleteOne({ _id: data.reminderIdx });
 };
 
 const deleteUserData = (data: reminderFindInput) => {
-  return Reminder.deleteMany({userIdx: data.userIdx});
+  return Reminder.deleteMany({ userIdx: data.userIdx });
 };
 
 export default {
@@ -117,5 +168,7 @@ export default {
   findReminderOncoming,
   deleteReminderbyReminderId,
   saveReminderWithDaysAgo,
-  deleteUserData
+  deleteUserData,
+  modifyReminder,
+  modifyReminderWithDaysAgo,
 };

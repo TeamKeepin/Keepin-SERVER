@@ -1,6 +1,6 @@
-import keepin from "../controllers/keepin";
-import Keepin from "../models/Keepin";
-import mongoose from "mongoose";
+import keepin from '../controllers/keepin';
+import Keepin from '../models/Keepin';
+import mongoose from 'mongoose';
 
 export interface keepinCreateInput {
   title: string;
@@ -24,78 +24,89 @@ export interface keepinModifyInput {
   keepinIdx: string;
 }
 
-export interface keepinFindInput{
+export interface keepinFindInput {
   userIdx: string;
   taken: boolean;
   recent: boolean;
 }
 
-export interface keepinFindByKeepinIdxInput{
+export interface keepinFindByKeepinIdxInput {
   keepinIdx: string;
 }
 
-export interface keepinSearchInput{
+export interface keepinSearchInput {
   userIdx: string;
   title: string;
 }
 
-export interface keepinFindByUserIdxAndCategory{
+export interface keepinFindByUserIdxAndCategory {
   userIdx: string;
   category: string;
 }
 
-export interface keepinDetailInput{
+export interface keepinDetailInput {
   userIdx: string;
   keepinIdx: string;
 }
 
 export interface keepinFindUserIdxInput {
-  userIdx: string //user _id 
+  userIdx: string; //user _id
 }
 
-export interface keepinFindByFriendIdx{
-  friendIdx: string 
+export interface keepinFindByFriendIdx {
+  friendIdx: string;
 }
 
-export interface keepinFindByKeepinIdxAndRevFriendIdx{
-  keepinIdx: string,
-  friendIdx: string
+export interface keepinFindByKeepinIdxAndRevFriendIdx {
+  keepinIdx: string;
+  friendIdx: string;
 }
-
 
 //키핀하기 생성
 const saveKeepin = (data: keepinCreateInput) => {
-    const keepin = Keepin.create( data );
-    return keepin;
+  const keepin = Keepin.create(data);
+  return keepin;
 };
 
 //모아보기 받은/준
 const findKeepin = (data: keepinFindInput) => {
   var convertDate;
-  if (String(data.recent) === "true"){
-    convertDate = -1;
+
+  if (String(data.recent) === 'true') {
+    convertDate = -1; //최신순
+  } else {
+    convertDate = 1; //오래된 순
   }
-  else {
-    convertDate = 1;
-  }
-  const result = Keepin.find({taken: data.taken}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: convertDate });
+  const result = Keepin.find({ taken: data.taken }, { title: 1, photo: 1, taken: 1, date: 1 })
+    .where('userIdx')
+    .equals(data.userIdx)
+    .sort({ date: convertDate });
   return result;
 };
 
 //모아보기 전체 키워드 검색
 const searchKeepinByKeyword = (data: keepinSearchInput) => {
-  const result = Keepin.find({title:{$regex:data.title}}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: -1 });
+  const result = Keepin.find({ title: { $regex: data.title } }, { title: 1, photo: 1, taken: 1, date: 1 })
+    .where('userIdx')
+    .equals(data.userIdx)
+    .sort({ date: -1 });
   return result;
 };
 
-// 모아보기 카테고리 조회 
+// 모아보기 카테고리 조회
 const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) => {
-  const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1,  date:1}).sort({ date: -1 });
+  const result = Keepin.find({ category: { $in: [data.category] }, userIdx: data.userIdx }, { title: 1, photo: 1, date: 1 }).sort({
+    date: -1,
+  });
   return result;
 };
 
 const findDetailKeepin = (data: keepinDetailInput) => {
-  const result = Keepin.findOne({_id: data.keepinIdx}).where('userIdx').equals(data.userIdx).populate("friendIdx",["name"]).sort({ date: -1 });
+  const result = Keepin.findOne({ _id: data.keepinIdx })
+    .where('userIdx')
+    .equals(data.userIdx)
+    .populate('friendIdx', ['name'])
+    .sort({ date: -1 });
   return result;
 };
 
@@ -105,59 +116,53 @@ const findkeepinByUserIdx = (data: keepinFindUserIdxInput) => {
 };
 
 const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
-  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx');
+  const keepin = Keepin.findOne({ _id: data.keepinIdx }).select('-__v -userIdx');
   return keepin;
 };
 
-//친구와 준/받은 keepin 목록 조회 
+//친구와 준/받은 keepin 목록 조회
 const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
-  //최신 순 정렬 해야 함 
+  //최신 순 정렬 해야 함
   // const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
-  const keepin = Keepin.findOne({_id:data.keepinIdx}).select('title photo date taken').sort({date: -1});
+  const keepin = Keepin.findOne({ _id: data.keepinIdx }).select('title photo date taken').sort({ date: -1 });
   return keepin;
 };
 
 // 키핀 수정
 const modifyKeepinByKeepinIdx = (data: keepinModifyInput) => {
-  const updateData = {
-    title: data.title,
-    photo: data.photo,
-    taken: data.taken,
-    date: data.date,
-    category: data.category,
-    record: data.record,
-    friendIdx: data.friendIdx,
-  };
-
-  const keepins = Keepin.findOneAndUpdate({_id:data.keepinIdx},{
-    title: data.title,
-    photo: data.photo,
-    taken: data.taken,
-    date: data.date,
-    category: data.category,
-    record: data.record,
-    friendIdx: data.friendIdx,
-  },{new: true});
+  const keepins = Keepin.findOneAndUpdate(
+    { _id: data.keepinIdx },
+    {
+      title: data.title,
+      photo: data.photo,
+      taken: data.taken,
+      date: data.date,
+      category: data.category,
+      record: data.record,
+      friendIdx: data.friendIdx,
+    },
+    { new: true }
+  );
   return keepins;
 };
 
 // 키핀 삭제
 const deleteKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
-  return Keepin.deleteOne({_id:data.keepinIdx});
+  return Keepin.deleteOne({ _id: data.keepinIdx });
 };
 
 const findKeepinFriend = (data: keepinFindByFriendIdx) => {
   // const result = Keepin.find({category: { "$in" : [data.category]}, userIdx: data.userIdx}, {title: 1, photo:1,  date:1}).sort({ date: 1 });
   // [mongoose.Types.ObjectId(data.keepinIdx)]
-  return Keepin.find({friendIdx: {"$in" : [mongoose.Types.ObjectId(data.friendIdx)]}});
+  return Keepin.find({ friendIdx: { $in: [mongoose.Types.ObjectId(data.friendIdx)] } });
 };
 
 const deleteFriend = (data: keepinFindByKeepinIdxAndRevFriendIdx) => {
-  return Keepin.updateOne({_id:data.keepinIdx},{ $pull: { friendIdx: data.friendIdx} });
+  return Keepin.updateOne({ _id: data.keepinIdx }, { $pull: { friendIdx: data.friendIdx } });
 };
 
-const deleteUserData = (data: keepinFindUserIdxInput ) => {
-  return Keepin.deleteMany({userIdx:data.userIdx})
+const deleteUserData = (data: keepinFindUserIdxInput) => {
+  return Keepin.deleteMany({ userIdx: data.userIdx });
 };
 
 export default {
@@ -173,5 +178,5 @@ export default {
   deleteKeepinByKeepinIdx,
   findKeepinFriend,
   deleteFriend,
-  deleteUserData
-}
+  deleteUserData,
+};
