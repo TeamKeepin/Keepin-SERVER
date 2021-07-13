@@ -14,21 +14,21 @@ import returnCode from '../library/returnCode';
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
  * * isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청
  * * isImportant : 중요 여부(true/false)
- * * daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전)
+ * * daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전) -> String으로 요청
  * 
  * - 알람 받는 경우, daysAgo 값 요청
  * {
-    "title": "할아버지 생일",
-    "date": "2021-07-05",
+    "title": "아빠생일♥♥🍰",
+    "date": "2021-08-22",
     "isAlarm": true,
-    "daysAgo": 2,
-    "isImportant": false
+    "daysAgo": "2",
+    "isImportant": true
  * }
  * 
  * - 알람 받지 않는 경우
@@ -42,20 +42,20 @@ import returnCode from '../library/returnCode';
  * 
  * @apiSuccessExample {json} Success-Response:
  * - 200 OK
- * {
+ *{
     "status": 200,
     "message": "리마인더 생성 성공",
     "data": {
-        "sendDate": "2021-07-27",
+        "sendDate": "2021-08-20",
         "isAlarm": true,
         "isImportant": true,
-        "_id": "60ecef7de731197a10f19a65",
-        "title": "더미데이터112222111",
-        "date": "2021-08-03",
-        "userIdx": "60e349893460ec398ea1dc45",
+        "_id": "60edbf347cd20b065409869b",
+        "title": "아빠생일♥♥🍰",
+        "date": "2021-08-22",
+        "userIdx": "60ed9c404b360576d0805b7c",
         "year": "2021",
         "month": "08",
-        "daysAgo": "7",
+        "daysAgo": "2",
         "__v": 0
     }
  * }
@@ -103,7 +103,7 @@ const createReminder = async (req, res) => {
 
   // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
   if (isAlarm == true) {
-    if (daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 || daysAgo == 7) {
+    if (daysAgo === '0' || daysAgo == '1' || daysAgo == '2' || daysAgo == '3' || daysAgo == '7') {
       // realDate = date - daysAgo
       var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYY-MM-DD');
     } else {
@@ -117,7 +117,7 @@ const createReminder = async (req, res) => {
 
   try {
     var result;
-    if (!isAlarm) {
+    if (isAlarm == false) {
       // alarm 안받을 거면, daysAgo 값은 없음.
       result = await reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
     } else {
@@ -187,7 +187,7 @@ const getAllReminder = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -267,7 +267,7 @@ const getDetailReminder = async (req, res) => {
 };
 
 /**
- * @api {get} /reminder/date/:year/:month 리마인더 월별 목록 조회
+ * @api {get} /reminder/date?year=2021&month=05 리마인더 월별 목록 조회
  * 
  * @apiVersion 1.0.0
  * @apiName getMonthReminder
@@ -276,7 +276,7 @@ const getDetailReminder = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -293,24 +293,17 @@ const getDetailReminder = async (req, res) => {
         "reminders": [
             {
                 "isAlarm": true,
-                "isImportant": true,
-                "_id": "60e314a82175d36678ecb905",
-                "title": "남자친구 생일",
-                "date": "06.04"
+                "isImportant": false,
+                "_id": "60edbaa0ce001e7a245596b7",
+                "title": "오랜만에 챈니🧡 보는 날",
+                "date": "05.02"
             },
             {
                 "isAlarm": false,
                 "isImportant": false,
-                "_id": "60e1d4230e50e39654b4bb62",
-                "title": "할머니 생일",
-                "date": "06.15"
-            },
-            {
-                "isAlarm": false,
-                "isImportant": false,
-                "_id": "60e1d4310e50e39654b4bb64",
-                "title": "엄마 생일",
-                "date": "06.25"
+                "_id": "60edbdf27cd20b065409868f",
+                "title": "스승의날 (이채은교수님)",
+                "date": "05.15"
             }
         ]
     }
@@ -323,7 +316,7 @@ const getDetailReminder = async (req, res) => {
     "message": "쿼리(year, month)를 입력하세요."
  * }
  *
- * - 400 파라미터 형식이 맞지 않음
+ * - 400 QUERY 형식이 맞지 않음
  * {
     "status": 400,
     "message": "쿼리(year, month) 형식을 맞춰주세요."
@@ -402,7 +395,7 @@ const getMonthReminder = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * 
@@ -415,19 +408,19 @@ const getMonthReminder = async (req, res) => {
         "reminders": [
             {
                 "isImportant": true,
-                "_id": "60e31f4c8f432a4ec071fce3",
-                "title": "남자친구 생일",
-                "date": "07.06"
+                "_id": "60edbef67cd20b0654098697",
+                "title": "서현생일 🍰",
+                "date": "07.29"
             },
             {
                 "isImportant": true,
-                "_id": "60e30b950fea5314141f0608",
-                "title": "여자친구 생일",
-                "date": "08.02"
+                "_id": "60edbf1a7cd20b0654098699",
+                "title": "영민쓰 생일 🍰",
+                "date": "08.11"
             }
         ]
     }
- * }
+ * } 
  */
 // 다가오는 리마인더, 가장 가까운 리마인더 2개만
 const getOncomingReminder = async (req, res) => {
@@ -488,7 +481,7 @@ const getOncomingReminder = async (req, res) => {
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
@@ -549,6 +542,151 @@ const deleteReminder = async (req, res) => {
   }
 };
 
+/**
+ * @api {put} /reminder 리마인더 수정
+ * 
+ * @apiVersion 1.0.0
+ * @apiName modifyReminder
+ * @apiGroup Reminder
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * * url: /reminder/60e5bdc46c3cdb135f1da1dc
+ * * reminderId : 리마인더 Id
+ * 
+ * 
+ * * isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청
+ * * isImportant : 중요 여부(true/false)
+ * * daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전) -> String으로 요청
+ * 
+ * - 알람 받는 경우, daysAgo 값 요청
+ * {
+    "title": "아빠생일♥♥🍰",
+    "date": "2021-08-22",
+    "isAlarm": true,
+    "daysAgo": "2",
+    "isImportant": true
+ * }
+ * 
+ * - 알람 받지 않는 경우
+ * {
+    "title": "여자친구 생일",
+    "date": "2021-08-02",
+    "isAlarm": false,
+    "isImportant": false
+ * }
+ *
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "리마인더 수정 성공"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "필수 정보(title, date, isAlarm, isImportant)를 입력하세요."
+ * }
+ * 
+ * - 400 daysAgo이 없거나, 유효하지 않은 값 
+ * {
+    "status": 400,
+    "message": "daysAgo 값(0,1,2,3,7)이 유효하지 않습니다."
+ * }
+ */
+const modifyReminder = async (req, res) => {
+  const userId = req._id;
+  const reminderId = req.params.reminderId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  let { title, date, daysAgo, isAlarm, isImportant } = req.body;
+  // 파라미터 확인
+  if (!title || !date || isAlarm == undefined || isImportant == undefined) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보(title, date, isAlarm, isImportant)를 입력하세요.',
+    });
+    return;
+  }
+
+  // date를 년과 월 분할
+  const year = date.substring(0, 4);
+  const month = date.substring(5, 7);
+  const day = date.substring(8, 10);
+
+  const customDate = year + month + day;
+
+  // 시나리오1) 알람 안받겠다했었는데 알람 받겠다고 바꿀 경우, daysago값 받고, sendDate 계산 후 저장
+  // 시나리오2) 알람 받겠다 했었는데 알람 안받겠다고 바꿀 경우, 그냥 저장. 대신 sendDate 값을 초기화 시켜야함.
+  // 시나리오3) 시나리오 2 상황에서 다시 알람을 받겠다고 바꿀 경우, sendDate값은 다시 저장이 되야함.
+
+  // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
+  if (isAlarm == true) {
+    if (daysAgo === '0' || daysAgo == '1' || daysAgo == '2' || daysAgo == '3' || daysAgo == '7') {
+      // realDate = date - daysAgo
+      var realDate = moment(customDate).subtract(daysAgo, 'd').format('YYYY-MM-DD');
+    } else {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: 'daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.',
+      });
+      return;
+    }
+  }
+
+  try {
+    var result;
+    if (isAlarm == false) {
+      // alarm 안받을 거면, daysAgo 값은 없음.
+      result = await reminderService.modifyReminder({
+        reminderId,
+        title,
+        date,
+        isAlarm,
+        isImportant,
+      });
+    } else {
+      // alarm 받을 거면, daysAgo 값이 있음.
+      result = await reminderService.modifyReminderWithDaysAgo({
+        reminderId,
+        title,
+        date,
+        sendDate: realDate,
+        isAlarm,
+        isImportant,
+        daysAgo,
+      });
+    }
+
+    // for res
+    const data = result;
+
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 수정 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
 export default {
   createReminder,
   getAllReminder,
@@ -556,4 +694,5 @@ export default {
   getMonthReminder,
   getOncomingReminder,
   deleteReminder,
+  modifyReminder,
 };

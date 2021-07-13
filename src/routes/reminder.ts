@@ -24,4 +24,7 @@ router.get('/detail/:reminderId', auth.checkToken, reminderController.getDetailR
 // 선택된 리마인더 삭제(1개 or 복수개 선택 가능)
 router.delete('/', auth.checkToken, reminderController.deleteReminder);
 
+// 리마인더 수정
+router.put('/:reminderId', auth.checkToken, reminderController.modifyReminder);
+
 export default router;
