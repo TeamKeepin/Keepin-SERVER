@@ -376,8 +376,6 @@ const getTakenGivenList = async (req, res) => {
  * @apiName editFriendMemo
  * @apiGroup Friend
  * 
- * 60ed9e98e51ad110481cd9d7
- * 
  * @apiHeaderExample {json} Header-Example:
  * {
  *  "Content-Type": "application/json",
