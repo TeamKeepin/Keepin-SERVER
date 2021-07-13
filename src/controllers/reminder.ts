@@ -163,13 +163,6 @@ const getAllReminder = async (req, res) => {
 
   try {
     const resultArray = await reminderService.findReminder({ userIdx: userId });
-    if (resultArray.length == 0) {
-      res.status(returnCode.BAD_REQUEST).json({
-        status: returnCode.BAD_REQUEST,
-        message: '등록된 리마인더가 없습니다.',
-      });
-      return;
-    }
 
     const data = { reminders: resultArray };
 
@@ -223,12 +216,6 @@ const getAllReminder = async (req, res) => {
     "message": "파라미터(reminderId)를 입력하세요."
  * }
  *
- * - 400 등록된 리마인더가 없음
- * 
- * {
-    "status": 400,
-    "message": "등록된 리마인더가 없습니다."
- * }
  */
 // 리마인더 상세 조회
 const getDetailReminder = async (req, res) => {
@@ -253,13 +240,13 @@ const getDetailReminder = async (req, res) => {
   try {
     const result = await reminderService.findDetailReminder({ reminderIdx: reminderId });
 
-    if (result.length == 0) {
-      res.status(returnCode.BAD_REQUEST).json({
-        status: returnCode.BAD_REQUEST,
-        message: '등록된 리마인더가 없습니다.',
-      });
-      return;
-    }
+    // if (result.length == 0) {
+    //   res.status(returnCode.BAD_REQUEST).json({
+    //     status: returnCode.BAD_REQUEST,
+    //     message: '등록된 리마인더가 없습니다.',
+    //   });
+    //   return;
+    // }
 
     const year = result[0].date.substring(0, 4); //2021-05-01
     const month = result[0].date.substring(5, 7);
@@ -341,12 +328,6 @@ const getDetailReminder = async (req, res) => {
     "status": 400,
     "message": "쿼리(year, month) 형식을 맞춰주세요."
  * }
- * - 400 등록된 리마인더가 없음
- * 
- * {
-    "status": 400,
-    "message": "등록된 리마인더가 없습니다."
- * }
  */
 // 리마인더 월별 목록 조회
 const getMonthReminder = async (req, res) => {
@@ -379,13 +360,13 @@ const getMonthReminder = async (req, res) => {
   try {
     const resultArray = await reminderService.findMonthReminder({ userIdx: userId, year: year, month: month });
 
-    if (resultArray.length == 0) {
-      res.status(returnCode.BAD_REQUEST).json({
-        status: returnCode.BAD_REQUEST,
-        message: '등록된 리마인더가 없습니다.',
-      });
-      return;
-    }
+    // if (resultArray.length == 0) {
+    //   res.status(returnCode.BAD_REQUEST).json({
+    //     status: returnCode.BAD_REQUEST,
+    //     message: '등록된 리마인더가 없습니다.',
+    //   });
+    //   return;
+    // }
 
     var dataArray = [];
 
@@ -447,14 +428,6 @@ const getMonthReminder = async (req, res) => {
         ]
     }
  * }
- * 
- * @apiErrorExample Error-Response:
- * - 400 다가오는 리마인더가 없음
- * 
- * {
-    "status": 400,
-    "message": "다가오는 리마인더가 없습니다."
- * }
  */
 // 다가오는 리마인더, 가장 가까운 리마인더 2개만
 const getOncomingReminder = async (req, res) => {
@@ -473,13 +446,13 @@ const getOncomingReminder = async (req, res) => {
 
     const resultArray = await reminderService.findReminderOncoming({ userIdx: userId, start: today });
 
-    if (resultArray.length == 0) {
-      res.status(returnCode.BAD_REQUEST).json({
-        status: returnCode.BAD_REQUEST,
-        message: '다가오는 리마인더가 없습니다.',
-      });
-      return;
-    }
+    // if (resultArray.length == 0) {
+    //   res.status(returnCode.BAD_REQUEST).json({
+    //     status: returnCode.BAD_REQUEST,
+    //     message: '다가오는 리마인더가 없습니다.',
+    //   });
+    //   return;
+    // }
 
     var dataArray = [];
 

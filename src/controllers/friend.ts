@@ -98,20 +98,25 @@ const createFriend = async (req, res) => {
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
  *{
- *  "status": 200,
- *  "message": "친구 조회 성공",
- *  "data": {
- *            "friends": [
- *             {
- *               "_id": "60e46c82c167c37c296bbf58",
- *               "name": "코코"
- *             },
- *             {
- *               "_id": "60e46d82c167c37c26bbf23",
- *               "name": "밀키"
- *             },
- *             ...
- *           ]
+    "status": 200,
+    "message": "친구 조회 성공",
+    "data": {
+        "friends": [
+            {
+                "_id": "60ec0be1dc961a2d4c31d115",
+                "name": "눈부신서버"
+            },
+            {
+                "_id": "60ebb30ebee2d727e34a004d",
+                "name": "든든한서버"
+            },
+            {
+                "_id": "60ec52412658c1375955dbe5",
+                "name": "서버최강",
+                "memo": ""
+            },
+        ]
+    }
  * }
  *
  * @apiErrorExample Error-Response:

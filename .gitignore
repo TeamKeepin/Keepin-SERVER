@@ -26,3 +26,5 @@ yarn.lock
 .env
 
 /src/s3config
+
+/dist
