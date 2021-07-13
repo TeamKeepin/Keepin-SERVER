@@ -132,6 +132,10 @@ const deleteFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
   return Friend.deleteOne({ _id: data.friendIdx });
 };
 
+const deleteUserData = (data: friendsFindUserIdxInput) => {
+    return Friend.deleteMany({userIdx: data.userIdx});
+};
+
 // 영우 오빠 주석처리
 
 // const findKeepinFriend = (data: friendKeepinInput) => {
@@ -154,5 +158,6 @@ export default {
   findFriendByNameAnduserIdx,
   deleteFriendByFriendIdx,
   findFriendsByKeepinIdx,
+  deleteUserData
   //   saveKeepinInFriend
 };
