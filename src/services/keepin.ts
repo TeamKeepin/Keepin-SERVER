@@ -71,14 +71,12 @@ const saveKeepin = (data: keepinCreateInput) => {
 
 //모아보기 받은/준
 const findKeepin = (data: keepinFindInput) => {
-  var convertDate
-  if (data.recent){
-    console.log(data.recent)
-    convertDate = -1
+  var convertDate;
+  if (String(data.recent) === "true"){
+    convertDate = -1;
   }
-  if(!data.recent){
-    console.log(data.recent)
-    convertDate = 1
+  else {
+    convertDate = 1;
   }
   const result = Keepin.find({taken: data.taken}, {title: 1, photo:1, taken:1, date:1}).where('userIdx').equals(data.userIdx).sort({ date: convertDate });
   return result;

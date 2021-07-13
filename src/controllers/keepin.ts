@@ -193,17 +193,7 @@ const getTakenKeepin = async (req, res) => {
   }
 
   try {
-<<<<<<< HEAD
-    const keepins = await keepinService.findKeepin({recent: recent, taken: taken, userIdx: userIdx});
-
-    for(var keepin of keepins){
-      const year = keepin.date.substring(0,4);
-      const month = keepin.date.substring(5,7);
-      const day = keepin.date.substring(8,10);
-      const tunedDate = year+'.'+month+'.'+day;
-      keepin.date=tunedDate;
-=======
-    const keepinss = await keepinService.findKeepin({ taken, userIdx });
+    const keepinss = await keepinService.findKeepin({ recent: recent, taken: taken, userIdx: userIdx });
 
     const keepins = [];
 
@@ -215,13 +205,11 @@ const getTakenKeepin = async (req, res) => {
       const { _id, taken, title, photo } = keepinss[i];
       const pKeepin = { _id: _id, taken: taken, title: title, photo: photo[0], date: tunedDate };
       keepins.push(pKeepin);
->>>>>>> 18b92953887f1d8c0d8f0153542ee74875bcc479
     }
 
     const data = { keepins };
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
-<<<<<<< HEAD
       message: '모아보기 준/받은 및 최신순/오래된 순 조회 성공',
       data
     })
@@ -232,18 +220,6 @@ const getTakenKeepin = async (req, res) => {
           message: err.message,
       });
       return;
-=======
-      message: '모아보기 준/받은 조회 성공',
-      data,
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-      status: returnCode.INTERNAL_SERVER_ERROR,
-      message: err.message,
-    });
-    return;
->>>>>>> 18b92953887f1d8c0d8f0153542ee74875bcc479
   }
 };
 
