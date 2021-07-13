@@ -443,7 +443,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 상세페이지 조회 성공\",\n    \"data\": {\n        \"_id\": \"60e42158909d3063102be165\",\n        \"title\": \"보리 생일\",\n        \"photo\": [\"보리가 좋아하는 강아지 김밥\"],\n       \"friends\": [\n            {\n                \"_id\": \"60ec0be1dc961a2d4c31d115\",\n                \"name\": \"눈부신서버\"\n            },\n            {\n                \"_id\": \"60ebb30ebee2d727e34a004d\",\n                \"name\": \"든든한서버\"\n            }\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"cateogry\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"date\": \"2021.12.02\",\n        \"taken\": false\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀 상세페이지 조회 성공\",\n    \"data\": {\n        \"_id\": \"60e42158909d3063102be165\",\n        \"title\": \"보리 생일\",\n        \"photo\": [\"보리가 좋아하는 강아지 김밥\"],\n       \"friends\": [\n            {\n                \"_id\": \"60ec0be1dc961a2d4c31d115\",\n                \"name\": \"눈부신서버\"\n            },\n            {\n                \"_id\": \"60ebb30ebee2d727e34a004d\",\n                \"name\": \"든든한서버\"\n            }\n        ],\n        \"record\": \"우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.\",\n        \"category\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"date\": \"2021.12.02\",\n        \"taken\": false\n    }\n}",
           "type": "json"
         }
       ]
@@ -462,8 +462,8 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/keepin?taken=true",
-    "title": "모아보기 준/받은 조회",
+    "url": "/keepin?taken=true&recent=true",
+    "title": "모아보기 준/받은 및 최신순/오래된순 조회",
     "version": "1.0.0",
     "name": "getTakenKeepin",
     "group": "Keepin",
@@ -480,7 +480,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* [Querystring] taken: 준/받은 여부 -> taken: true이면 받은",
+          "content": "* [Querystring] taken: 준/받은 여부 -> taken: true이면 받은\n* [Querystring] recent: 오래된순/최신순 여부 -> recent: true이면 최신순",
           "type": "json"
         }
       ]
