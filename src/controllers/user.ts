@@ -36,10 +36,7 @@ import returnCode from "../library/returnCode";
  * 200 OK
  * {
  *  "status": 200,
- *  "message":    ,
- *  "data": {
- *    "jwt":""
- *  }
+ *  "message": "회원가입 성공"
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -74,7 +71,7 @@ const signUp = async (req: Request, res: Response) => {
         if(user) {
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
-                msg: "유저가 이미 있습니다."
+                message: "유저가 이미 있습니다."
             });
 
         }
@@ -133,6 +130,8 @@ const signUp = async (req: Request, res: Response) => {
  *  "message": "로그인 성공"   ,
  *  "data": {
  *    "jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNTYyMjg4NywiZXhwIjoxNjI1NjU4ODg3fQ.fgXLnokOo1HhPSInL25m35Bx5tLSha7XeH1vWIQ2dmA"
+ *    "name": "김키핀"
  *  }
  * }
  * 
@@ -158,7 +157,7 @@ const signIn = async (req, res) => {
     }
     const { email, password } = req.body;
     try {
-        let user = await userService.findUser({email});
+        const user = await userService.findUser({email});
 
         if(!user) {
             res.status(400).json({
@@ -176,19 +175,17 @@ const signIn = async (req, res) => {
             });
         }
 
-        
-
         // Return jsonwebtoken
         const payload = {
             id: user._id,
             email: user.email
         };
-        
+
         const result = {
             accessToken: jwt.sign(
             payload,
             config.jwtSecret,
-            { expiresIn: "2h" }),
+            { expiresIn: "7d" }),
             refreshToken: jwt.sign(
             payload,
             config.jwtSecret,
@@ -203,11 +200,12 @@ const signIn = async (req, res) => {
               message: "로그인 성공",
               data: {
                   "jwt": result.accessToken,
-                  "refreshToken": result.refreshToken
+                  "refreshToken": result.refreshToken,
+                  "name":user.name
               }
         });
 
-        } catch (err) {
+        }catch (err) {
             console.error(err.message);
             res.status(returnCode.INTERNAL_SERVER_ERROR).json({
                 status: returnCode.INTERNAL_SERVER_ERROR,
@@ -356,7 +354,7 @@ const editProfile = async(req,res) => {
 }
 
 /**
- * @api {put} /my/profile 비밀번호 수정
+ * @api {put} /my/password 비밀번호 수정
  * 
  * @apiVersion 1.0.0
  * @apiName editProfile
