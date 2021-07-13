@@ -366,7 +366,7 @@ const getKeepinByCategory = async (req, res) => {
   }
   //(생일, 기념일, 축하, 칭찬, 응원, 감사, 깜짝, 기타)
   let pass=false;
-  if(category==="생일" || category==="기넘일" || category==="축하" || category==="칭찬" || category==="응원" || category==="감사" || category==="깜짝" || category==="기타"){
+  if(category==="생일" || category==="기념일" || category==="축하" || category==="칭찬" || category==="응원" || category==="감사" || category==="깜짝" || category==="기타"){
     pass=true;
   }
   
