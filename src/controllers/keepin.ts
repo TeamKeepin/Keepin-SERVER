@@ -433,9 +433,15 @@ const getKeepinByCategory = async (req, res) => {
         "_id": "60e42158909d3063102be165",
         "title": "보리 생일",
         "photo": ["보리가 좋아하는 강아지 김밥"],
-        "friends": [
-            "보리",
-            "밀키"
+       "friends": [
+            {
+                "_id": "60ec0be1dc961a2d4c31d115",
+                "name": "눈부신서버"
+            },
+            {
+                "_id": "60ebb30ebee2d727e34a004d",
+                "name": "든든한서버"
+            }
         ],
         "record": "우리 보리의 첫돌. 이대로만 쑥쑥 커다오. 우리가족과 함께 해줘서 고마워.",
         "cateogry": [
@@ -469,10 +475,10 @@ const getDetailKeepin = async (req, res) => {
 
   try {
     const detail = await keepinService.findDetailKeepin({ userIdx: userIdx, keepinIdx: keepinIdx });
-    console.log(detail);
-    console.log(detail.friendIdx);
+    // console.log(detail);
+    // console.log(detail.friendIdx);
 
-    //friend의 이름 가져오기
+    // friend의 이름 가져오기
     // var friendNames = [];
     // const friendIds = detail.friendIdx;
     // var frienddata;
@@ -491,7 +497,7 @@ const getDetailKeepin = async (req, res) => {
       _id: detail._id,
       title: detail.title,
       photo: detail.photo,
-      // friends: friendNames,
+      friends: detail.friendIdx,
       record: detail.record,
       cateogry: detail.category,
       date: tunedDate,

@@ -87,7 +87,7 @@ const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) =>
 }
 
 const findDetailKeepin = (data: keepinDetailInput) => {
-  const result = Keepin.findOne({_id: data.keepinIdx}).where('userIdx').equals(data.userIdx).sort({ date: -1 });
+  const result = Keepin.findOne({_id: data.keepinIdx}).where('userIdx').equals(data.userIdx).populate("friendIdx",["name"]).sort({ date: -1 });
   return result;
 }
 
