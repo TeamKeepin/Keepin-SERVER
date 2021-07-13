@@ -104,6 +104,10 @@ const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.deleteOne({ _id: data.reminderIdx });
 };
 
+const deleteUserData = (data: reminderFindInput) => {
+  return Reminder.deleteMany({userIdx: data.userIdx});
+};
+
 export default {
   saveReminder,
   findReminder,
@@ -113,4 +117,5 @@ export default {
   findReminderOncoming,
   deleteReminderbyReminderId,
   saveReminderWithDaysAgo,
+  deleteUserData
 };
