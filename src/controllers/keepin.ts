@@ -381,7 +381,7 @@ const getKeepinByCategory = async (req, res) => {
   }
   //(생일, 기념일, 축하, 칭찬, 응원, 감사, 깜짝, 기타)
   let pass=false;
-  if(category==="생일" || category==="기넘일" || category==="축하" || category==="칭찬" || category==="응원" || category==="감사" || category==="깜짝" || category==="기타"){
+  if(category==="생일" || category==="기념일" || category==="축하" || category==="칭찬" || category==="응원" || category==="감사" || category==="깜짝" || category==="기타"){
     pass=true;
   }
   
@@ -492,17 +492,16 @@ const getDetailKeepin = async (req, res) => {
 
     const detail = await keepinService.findDetailKeepin({ userIdx:userIdx, keepinIdx:keepinIdx });
     console.log(detail.friendIdx)
+    
     //friend의 이름 가져오기
-    var friendNames = [];
-    const friendIds = detail.friendIdx;
-    var frienddata;
-    for (var i=0; i<friendIds.length; i++) {
-      frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
-      console.log(friendIds[i])
-      friendNames.push(frienddata.name);
-    }
-
-
+    // var friendNames = [];
+    // const friendIds = detail.friendIdx;
+    // var frienddata;
+    // for (var i=0; i<friendIds.length; i++) {
+    //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
+    //   console.log(friendIds[i])
+    //   friendNames.push(frienddata.name);
+    // }
  
     const year = detail.date.substring(0,4);
     const month = detail.date.substring(5,7);
