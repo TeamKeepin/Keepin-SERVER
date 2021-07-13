@@ -27,7 +27,7 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "multipart/form-data"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:
@@ -36,7 +36,7 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
  *
  * {
     "title": "보리 생일",
-    "photo": ["보리가 좋아하는 강아지 김밥"],
+    "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
     "taken": false,
     "date": "2021-12-02",
     "category": ["생일", "축하"],
@@ -137,7 +137,7 @@ const createKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:
@@ -216,7 +216,7 @@ const getTakenKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function*
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:
@@ -297,7 +297,7 @@ const searchKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:
@@ -327,6 +327,11 @@ const searchKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     "status": 400,
     "message": "요청바디가 없습니다"."
  * }
+ * - 400 category가 정해진 8개 중에 있는 것인 지 확인
+ * {
+    "status": 400,
+    "message": "존재하지 않는 카테고리 입니다."
+ * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -341,6 +346,17 @@ const getKeepinByCategory = (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
             message: '요청바디가 없습니다.',
+        });
+    }
+    //(생일, 기념일, 축하, 칭찬, 응원, 감사, 깜짝, 기타)
+    let pass = false;
+    if (category === "생일" || category === "기넘일" || category === "축하" || category === "칭찬" || category === "응원" || category === "감사" || category === "깜짝" || category === "기타") {
+        pass = true;
+    }
+    if (pass === false) {
+        return res.status(returnCode_1.default.BAD_REQUEST).json({
+            status: returnCode_1.default.BAD_REQUEST,
+            message: '존재하지 않는 카테고리 입니다.',
         });
     }
     try {
@@ -381,7 +397,7 @@ const getKeepinByCategory = (req, res) => __awaiter(void 0, void 0, void 0, func
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:
@@ -480,16 +496,17 @@ const getDetailKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "multipart/form-data"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:
  * * taken: 준/받은 여부 -> taken: true이면 받은
  * * friendIdx: friend name을 표시하기 위함
  *
+ *
  * {
     "title": "보리 생일",
-    "photo": ["보리가 좋아하는 강아지 김밥"],
+    "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
     "taken": false,
     "date": "2021-12-02",
     "category": ["생일", "축하"],
@@ -517,8 +534,8 @@ const modifyKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const userIdx = req._id;
     const keepinId = req.params.keepinIdx;
     const errors = express_validator_1.validationResult(req);
-    let { title, photo, taken, date, category, record, friendIdx } = req.body;
-    if (!title || !photo || taken == undefined || !date || category == undefined || !record || !friendIdx) {
+    let { title, taken, date, category, record, friendIdx } = req.body;
+    if (!title || taken == undefined || !date || category == undefined || !record || !friendIdx) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
             message: '필수 정보를 입력하세요.',
@@ -570,7 +587,7 @@ const modifyKeepin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
  * @apiHeaderExample {json} Header-Example:
  * {
     "Content-Type": "application/json"
-    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiParamExample {json} Request-Example:

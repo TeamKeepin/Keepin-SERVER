@@ -15,7 +15,7 @@ const ReminderSchema = new mongoose_1.default.Schema({
     },
     sendDate: {
         type: String,
-        default: 0
+        default: 0,
     },
     isAlarm: {
         type: Boolean,
@@ -27,7 +27,7 @@ const ReminderSchema = new mongoose_1.default.Schema({
     },
     userIdx: {
         type: mongoose_1.default.SchemaTypes.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true,
     },
     year: {
@@ -38,6 +38,9 @@ const ReminderSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    daysAgo: {
+        type: String,
+    },
 });
-exports.default = mongoose_1.default.model("Reminder", ReminderSchema);
+exports.default = mongoose_1.default.model('Reminder', ReminderSchema);
 //# sourceMappingURL=Reminder.js.map

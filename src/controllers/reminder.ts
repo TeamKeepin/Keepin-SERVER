@@ -46,14 +46,17 @@ import returnCode from '../library/returnCode';
     "status": 200,
     "message": "리마인더 생성 성공",
     "data": {
-        "_id": "60e4163d5d759051988d18cb",
-        "title": "더미데이터11",
-        "date": "2021-08-03",
         "sendDate": "2021-07-27",
         "isAlarm": true,
         "isImportant": true,
+        "_id": "60ecef7de731197a10f19a65",
+        "title": "더미데이터112222111",
+        "date": "2021-08-03",
+        "userIdx": "60e349893460ec398ea1dc45",
         "year": "2021",
-        "month": "08"
+        "month": "08",
+        "daysAgo": "7",
+        "__v": 0
     }
  * }
  * 
@@ -96,11 +99,7 @@ const createReminder = async (req, res) => {
   const month = date.substring(5, 7);
   const day = date.substring(8, 10);
 
-  console.log(date);
-  console.log(month);
-
   const customDate = year + month + day;
-  console.log(customDate);
 
   // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
   if (isAlarm == true) {
@@ -117,19 +116,28 @@ const createReminder = async (req, res) => {
   }
 
   try {
-    // for res
-    const data = {
-      _id: userId,
-      title: title,
-      date: date,
-      sendDate: realDate,
-      isAlarm: isAlarm,
-      isImportant: isImportant,
-      year: year,
-      month: month,
-    };
+    var result;
+    if (!isAlarm) {
+      // alarm 안받을 거면, daysAgo 값은 없음.
+      result = await reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
+    } else {
+      // alarm 받을 거면, daysAgo 값이 있음.
+      result = await reminderService.saveReminderWithDaysAgo({
+        title,
+        date,
+        sendDate: realDate,
+        isAlarm,
+        isImportant,
+        userIdx: userId,
+        year,
+        month,
+        daysAgo,
+      });
+    }
 
-    await reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
+    // for res
+    const data = result;
+
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 생성 성공', data });
   } catch (err) {
     console.error(err.message);
@@ -203,7 +211,8 @@ const getAllReminder = async (req, res) => {
         "isImportant": true,
         "_id": "60e651b32821d6242df8291a",
         "title": "더미데이터4",
-        "date": "2021.05.01"
+        "date": "2021.05.01",
+        "daysAgo": "2"
     }
  * }
  * 
@@ -243,8 +252,6 @@ const getDetailReminder = async (req, res) => {
 
   try {
     const result = await reminderService.findDetailReminder({ reminderIdx: reminderId });
-
-    console.log(result);
 
     if (result.length == 0) {
       res.status(returnCode.BAD_REQUEST).json({
@@ -453,8 +460,6 @@ const getMonthReminder = async (req, res) => {
 const getOncomingReminder = async (req, res) => {
   const userId = req._id;
   const errors = validationResult(req);
-
-  console.log('today: ' + userId); //
 
   if (!errors.isEmpty()) {
     res.status(returnCode.BAD_REQUEST).json({

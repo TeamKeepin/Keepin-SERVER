@@ -24,7 +24,7 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
  * @apiHeaderExample {json} Header-Example:
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZ~~"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
  * }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -56,8 +56,8 @@ const getRandom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const data = { _id: dataa._id, title: dataa.title, photo: dataa.photo[0] };
         return res.status(returnCode_1.default.OK).json({
             status: returnCode_1.default.OK,
-            message: "랜덤 키핀 조회 성공",
-            data
+            message: '랜덤 키핀 조회 성공',
+            data,
         });
     }
     catch (err) {
@@ -70,6 +70,6 @@ const getRandom = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.default = {
-    getRandom
+    getRandom,
 };
 //# sourceMappingURL=random.js.map
