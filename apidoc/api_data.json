@@ -1,51 +1,5 @@
 [
   {
-    "type": "put",
-    "url": "/friend/memo/:friendId",
-    "title": "친구 메모 수정",
-    "version": "1.0.0",
-    "name": "editFriendMemo",
-    "group": "Friend_60ed9e98e51ad110481cd9d7",
-    "header": {
-      "examples": [
-        {
-          "title": "Header-Example:",
-          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "parameter": {
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "param :friendId 친구의 Idx\n/friend/memo/60ed9e98e51ad110481cd9d7\n\nreq.body json\n{\n    \"memo\" : \"보민이 신발 👟 사이즈 230 << 컨버스 개조아함, 제일 좋아하는 책 장르: 소설 📘, 아기자기 귀여운 거 딱히 좋아하지 않음 🙅🏻, 실용적인 거 좋아함 🙆🏻, 요새 헤드셋 🎧 알아보는 것 같음!\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"메모 수정 성공\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "\n* -400 req.body 내용 빠짐\n{\n \"status\": 400,\n \"message\": \"memo의 내용을 입력해주세요.\"\n}\n-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "src/controllers/friend.ts",
-    "groupTitle": "Friend_60ed9e98e51ad110481cd9d7"
-  },
-  {
     "type": "post",
     "url": "/friend",
     "title": "친구 생성",
@@ -84,6 +38,52 @@
         {
           "title": "Error-Response:",
           "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"필수 정보(name)를 입력하세요.\"\n}\n  \n\n- 400 중복된 값\n{\n    \"status\": 400,\n    \"message\": \"중복된 친구가 있습니다.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/friend.ts",
+    "groupTitle": "Friend"
+  },
+  {
+    "type": "put",
+    "url": "/friend/memo/:friendId",
+    "title": "친구 메모 수정",
+    "version": "1.0.0",
+    "name": "editFriendMemo",
+    "group": "Friend",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "param :friendId 친구의 Idx\n/friend/memo/60ed9e98e51ad110481cd9d7\n\nreq.body json\n{\n    \"memo\" : \"보민이 신발 👟 사이즈 230 << 컨버스 개조아함, 제일 좋아하는 책 장르: 소설 📘, 아기자기 귀여운 거 딱히 좋아하지 않음 🙅🏻, 실용적인 거 좋아함 🙆🏻, 요새 헤드셋 🎧 알아보는 것 같음!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n \"status\": 200,\n \"message\": \"메모 수정 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n* -400 req.body 내용 빠짐\n{\n \"status\": 400,\n \"message\": \"memo의 내용을 입력해주세요.\"\n}\n-400 친구 유무 확인\n{\n \"status\": 400,\n \"message\": \"일치하는 친구가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -937,6 +937,34 @@
         {
           "title": "Error-Response:",
           "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"reminderID Array 값이 없습니다.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/reminder.ts",
+    "groupTitle": "Reminder"
+  },
+  {
+    "type": "get",
+    "url": "/reminder",
+    "title": "리마인더 모든 목록 조회",
+    "version": "1.0.0",
+    "name": "getDetailReminder",
+    "group": "Reminder",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"리마인더 목록 조회 성공\",\n    \"data\": {\n        \"reminders\": [\n            {\n                \"sendDate\": \"2021-05-01\",\n                \"isAlarm\": true,\n                \"isImportant\": false,\n                \"_id\": \"60edbaa0ce001e7a245596b7\",\n                \"title\": \"오랜만에 챈니🧡 보는 날\",\n                \"date\": \"2021-05-02\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"05\",\n                \"daysAgo\": \"1\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"0\",\n                \"isAlarm\": false,\n                \"isImportant\": false,\n                \"_id\": \"60edbdf27cd20b065409868f\",\n                \"title\": \"스승의날 (이채은교수님)\",\n                \"date\": \"2021-05-15\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"05\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"2021-06-20\",\n                \"isAlarm\": true,\n                \"isImportant\": false,\n                \"_id\": \"60edbe167cd20b0654098691\",\n                \"title\": \"유영우유 생일 🍰\",\n                \"date\": \"2021-06-27\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"06\",\n                \"daysAgo\": \"7\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"0\",\n                \"isAlarm\": false,\n                \"isImportant\": true,\n                \"_id\": \"60edbe5e7cd20b0654098693\",\n                \"title\": \"아요 합숙 시작일🏠\",\n                \"date\": \"2021-07-07\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"07\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"2021-07-10\",\n                \"isAlarm\": true,\n                \"isImportant\": false,\n                \"_id\": \"60edbed97cd20b0654098695\",\n                \"title\": \"민지언니 결혼식 👰🏻\",\n                \"date\": \"2021-07-10\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"07\",\n                \"daysAgo\": \"0\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"2021-07-26\",\n                \"isAlarm\": true,\n                \"isImportant\": true,\n                \"_id\": \"60edbef67cd20b0654098697\",\n                \"title\": \"서현생일 🍰\",\n                \"date\": \"2021-07-29\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"07\",\n                \"daysAgo\": \"3\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"0\",\n                \"isAlarm\": false,\n                \"isImportant\": true,\n                \"_id\": \"60edbf1a7cd20b0654098699\",\n                \"title\": \"영민쓰 생일 🍰\",\n                \"date\": \"2021-08-11\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"08\",\n                \"__v\": 0\n            },\n            {\n                \"sendDate\": \"2021-08-20\",\n                \"isAlarm\": true,\n                \"isImportant\": true,\n                \"_id\": \"60edbf347cd20b065409869b\",\n                \"title\": \"아빠생일♥♥🍰\",\n                \"date\": \"2021-08-22\",\n                \"userIdx\": \"60ed9c404b360576d0805b7c\",\n                \"year\": \"2021\",\n                \"month\": \"08\",\n                \"daysAgo\": \"2\",\n                \"__v\": 0\n            }\n        ]\n    }\n}",
           "type": "json"
         }
       ]

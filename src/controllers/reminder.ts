@@ -149,6 +149,134 @@ const createReminder = async (req, res) => {
   }
 };
 
+/**
+ * @api {get} /reminder 리마인더 모든 목록 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getDetailReminder
+ * @apiGroup Reminder
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * 
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "리마인더 목록 조회 성공",
+    "data": {
+        "reminders": [
+            {
+                "sendDate": "2021-05-01",
+                "isAlarm": true,
+                "isImportant": false,
+                "_id": "60edbaa0ce001e7a245596b7",
+                "title": "오랜만에 챈니🧡 보는 날",
+                "date": "2021-05-02",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "05",
+                "daysAgo": "1",
+                "__v": 0
+            },
+            {
+                "sendDate": "0",
+                "isAlarm": false,
+                "isImportant": false,
+                "_id": "60edbdf27cd20b065409868f",
+                "title": "스승의날 (이채은교수님)",
+                "date": "2021-05-15",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "05",
+                "__v": 0
+            },
+            {
+                "sendDate": "2021-06-20",
+                "isAlarm": true,
+                "isImportant": false,
+                "_id": "60edbe167cd20b0654098691",
+                "title": "유영우유 생일 🍰",
+                "date": "2021-06-27",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "06",
+                "daysAgo": "7",
+                "__v": 0
+            },
+            {
+                "sendDate": "0",
+                "isAlarm": false,
+                "isImportant": true,
+                "_id": "60edbe5e7cd20b0654098693",
+                "title": "아요 합숙 시작일🏠",
+                "date": "2021-07-07",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "07",
+                "__v": 0
+            },
+            {
+                "sendDate": "2021-07-10",
+                "isAlarm": true,
+                "isImportant": false,
+                "_id": "60edbed97cd20b0654098695",
+                "title": "민지언니 결혼식 👰🏻",
+                "date": "2021-07-10",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "07",
+                "daysAgo": "0",
+                "__v": 0
+            },
+            {
+                "sendDate": "2021-07-26",
+                "isAlarm": true,
+                "isImportant": true,
+                "_id": "60edbef67cd20b0654098697",
+                "title": "서현생일 🍰",
+                "date": "2021-07-29",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "07",
+                "daysAgo": "3",
+                "__v": 0
+            },
+            {
+                "sendDate": "0",
+                "isAlarm": false,
+                "isImportant": true,
+                "_id": "60edbf1a7cd20b0654098699",
+                "title": "영민쓰 생일 🍰",
+                "date": "2021-08-11",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "08",
+                "__v": 0
+            },
+            {
+                "sendDate": "2021-08-20",
+                "isAlarm": true,
+                "isImportant": true,
+                "_id": "60edbf347cd20b065409869b",
+                "title": "아빠생일♥♥🍰",
+                "date": "2021-08-22",
+                "userIdx": "60ed9c404b360576d0805b7c",
+                "year": "2021",
+                "month": "08",
+                "daysAgo": "2",
+                "__v": 0
+            }
+        ]
+    }
+ * }
+ * 
+ *
+ */
 // 리마인더 모든 목록 조회
 const getAllReminder = async (req, res) => {
   const userId = req._id;
