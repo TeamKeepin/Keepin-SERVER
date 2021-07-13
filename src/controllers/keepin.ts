@@ -170,6 +170,13 @@ const createKeepin = async (req, res) => {
     "status": 400,
     "message": "준/받은 여부를 선택하세요."
  * }
+ *
+ * @apiErrorExample Error-Response:
+ * - 400 recent이 빈 값인 경우
+ * {
+    "status": 400,
+    "message": "최신순/오래된순 여부를 선택하세요."
+ * }
  * 
  */
 

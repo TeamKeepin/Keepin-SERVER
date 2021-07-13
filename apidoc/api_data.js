@@ -500,6 +500,11 @@ define({ "api": [
           "title": "Error-Response:",
           "content": "- 400 taken이 빈 값인 경우\n{\n    \"status\": 400,\n    \"message\": \"준/받은 여부를 선택하세요.\"\n}",
           "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "- 400 recent이 빈 값인 경우\n{\n    \"status\": 400,\n    \"message\": \"최신순/오래된순 여부를 선택하세요.\"\n}",
+          "type": "json"
         }
       ]
     },
