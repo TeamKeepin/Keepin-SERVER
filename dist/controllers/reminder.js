@@ -58,14 +58,17 @@ const returnCode_1 = __importDefault(require("../library/returnCode"));
     "status": 200,
     "message": "리마인더 생성 성공",
     "data": {
-        "_id": "60e4163d5d759051988d18cb",
-        "title": "더미데이터11",
-        "date": "2021-08-03",
         "sendDate": "2021-07-27",
         "isAlarm": true,
         "isImportant": true,
+        "_id": "60ecef7de731197a10f19a65",
+        "title": "더미데이터112222111",
+        "date": "2021-08-03",
+        "userIdx": "60e349893460ec398ea1dc45",
         "year": "2021",
-        "month": "08"
+        "month": "08",
+        "daysAgo": "7",
+        "__v": 0
     }
  * }
  *
@@ -104,10 +107,7 @@ const createReminder = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const year = date.substring(0, 4);
     const month = date.substring(5, 7);
     const day = date.substring(8, 10);
-    console.log(date);
-    console.log(month);
     const customDate = year + month + day;
-    console.log(customDate);
     // important가 1일 경우: sendDate도 필수적으로 값을 받아야함
     if (isAlarm == true) {
         if (daysAgo == 0 || daysAgo == 1 || daysAgo == 2 || daysAgo == 3 || daysAgo == 7) {
@@ -123,18 +123,27 @@ const createReminder = (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
     }
     try {
+        var result;
+        if (!isAlarm) {
+            // alarm 안받을 거면, daysAgo 값은 없음.
+            result = yield services_1.reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
+        }
+        else {
+            // alarm 받을 거면, daysAgo 값이 있음.
+            result = yield services_1.reminderService.saveReminderWithDaysAgo({
+                title,
+                date,
+                sendDate: realDate,
+                isAlarm,
+                isImportant,
+                userIdx: userId,
+                year,
+                month,
+                daysAgo,
+            });
+        }
         // for res
-        const data = {
-            _id: userId,
-            title: title,
-            date: date,
-            sendDate: realDate,
-            isAlarm: isAlarm,
-            isImportant: isImportant,
-            year: year,
-            month: month,
-        };
-        yield services_1.reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month });
+        const data = result;
         return res.status(returnCode_1.default.OK).json({ status: returnCode_1.default.OK, message: '리마인더 생성 성공', data });
     }
     catch (err) {
@@ -204,7 +213,8 @@ const getAllReminder = (req, res) => __awaiter(void 0, void 0, void 0, function*
         "isImportant": true,
         "_id": "60e651b32821d6242df8291a",
         "title": "더미데이터4",
-        "date": "2021.05.01"
+        "date": "2021.05.01",
+        "daysAgo": "2"
     }
  * }
  *
@@ -241,7 +251,6 @@ const getDetailReminder = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     try {
         const result = yield services_1.reminderService.findDetailReminder({ reminderIdx: reminderId });
-        console.log(result);
         if (result.length == 0) {
             res.status(returnCode_1.default.BAD_REQUEST).json({
                 status: returnCode_1.default.BAD_REQUEST,
@@ -435,10 +444,9 @@ const getMonthReminder = (req, res) => __awaiter(void 0, void 0, void 0, functio
  * }
  */
 // 다가오는 리마인더, 가장 가까운 리마인더 2개만
-const getOncommingReminder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getOncomingReminder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req._id;
     const errors = express_validator_1.validationResult(req);
-    console.log('today: ' + userId); //
     if (!errors.isEmpty()) {
         res.status(returnCode_1.default.BAD_REQUEST).json({
             status: returnCode_1.default.BAD_REQUEST,
@@ -547,7 +555,7 @@ exports.default = {
     getAllReminder,
     getDetailReminder,
     getMonthReminder,
-    getOncommingReminder,
+    getOncomingReminder,
     deleteReminder,
 };
 //# sourceMappingURL=reminder.js.map
