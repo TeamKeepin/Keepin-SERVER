@@ -499,7 +499,7 @@ const getDetailKeepin = async (req, res) => {
       photo: detail.photo,
       friends: detail.friendIdx,
       record: detail.record,
-      cateogry: detail.category,
+      category: detail.category,
       date: tunedDate,
       taken: detail.taken,
     };
