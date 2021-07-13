@@ -71,7 +71,7 @@ const signUp = async (req: Request, res: Response) => {
         if(user) {
             res.status(400).json({
                 status: returnCode.BAD_REQUEST,
-                msg: "유저가 이미 있습니다."
+                message: "유저가 이미 있습니다."
             });
 
         }
