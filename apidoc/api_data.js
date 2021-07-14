@@ -678,7 +678,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n \"name\": \"유키핀\"\n}",
+          "content": "{\n\"phone\": \"010-1234-1234\"\n}",
           "type": "json"
         }
       ]
@@ -687,7 +687,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-201 OK\n{\n  \"status\": 201,\n  \"msg\": \"프로필 수정 성공\",\n}",
+          "content": "-200 OK\n{\n  \"status\": 200,\n  \"message\": \"전화번호 수정 성공\"\n}",
           "type": "json"
         }
       ]
