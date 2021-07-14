@@ -71,7 +71,7 @@ const createKeepin = async (req, res) => {
 
   let { title, taken, date, category, record, friendIdx } = req.body;
 
-  if (!title || taken == undefined || !date || category == undefined || !record || !friendIdx) {
+  if (!title || taken == undefined || !date || !friendIdx) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.',
