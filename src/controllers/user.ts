@@ -592,14 +592,14 @@ const getKeepinCount = async (req, res) => {
  *
  * @apiParamExample {json} Request-Example:
  * {
- *  "name": "유키핀"
+ * "phone": "010-1234-1234"
  * }
  * @apiSuccessExample {json} Success-Response:
- * -201 OK
- *{
- *   "status": 201,
- *   "msg": "프로필 수정 성공",
- *}
+ * -200 OK
+ * {
+ *   "status": 200,
+ *   "message": "전화번호 수정 성공"
+ * }
  *
  * @apiErrorExample Error-Response:
  * -400 유저 유무 확인
