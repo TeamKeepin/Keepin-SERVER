@@ -661,7 +661,7 @@ const modifyKeepin = async (req, res) => {
 };
 
 /**
- * @api {delete} /keepin 키핀 삭제
+ * @api {post} /keepin/delete 키핀 삭제
  * 
  * @apiVersion 1.0.0
  * @apiName deleteKeepin
