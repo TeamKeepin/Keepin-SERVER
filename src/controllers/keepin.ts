@@ -563,7 +563,7 @@ const getDetailKeepin = async (req, res) => {
 };
 
 /**
- * @api {put} /keepin 키핀 수정
+ * @api {put} /keepin/modify/:keepinId 키핀 수정
  * 
  * @apiVersion 1.0.0
  * @apiName modifyKeepin
@@ -576,8 +576,8 @@ const getDetailKeepin = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
- * * taken: 준/받은 여부 -> taken: true이면 받은
- * * friendIdx: friend name을 표시하기 위함
+ * * url: /keepin/modify/60e5bdc46c3cdb135f1da1dc
+ * * keepinId : 리마인더 Id
  * 
  * {
     "title": "가장 달콤했던 생일 선물",

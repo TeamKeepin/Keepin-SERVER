@@ -684,7 +684,7 @@ const deleteReminder = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
- * * url: /reminder/60e5bdc46c3cdb135f1da1dc
+ * * url: /reminder/modify/60e5bdc46c3cdb135f1da1dc
  * * reminderId : 리마인더 Id
  * 
  * 
