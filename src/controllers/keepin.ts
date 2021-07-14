@@ -619,9 +619,6 @@ const modifyKeepin = async (req, res) => {
     return;
   }
 
-  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
-  // let photo = null;
-
   var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
   if (req.files !== undefined) {
@@ -635,11 +632,7 @@ const modifyKeepin = async (req, res) => {
     }*/
   }
 
-  //photo: locationArray
-
   try {
-    // 키핀id를 포함하고 있는 친구들한테 먼저 찾아가서
-    // 친구 3명이면 다 해당 키핀id를 빼버리는 거야
     const ll = await friendService.findFriendsByKeepinIdx({ keepinIdx: keepinId }); // keepinId 하나씩 삭제
 
     var data = await keepinService.modifyKeepinByKeepinIdx({
@@ -650,8 +643,12 @@ const modifyKeepin = async (req, res) => {
       date,
       category,
       record,
-      friendIdx,
+      friendIdx, //수정된 친구 배열이 다시 덮어쓰기 됨 : [실버영, 김씨워터]
     });
+
+    for (var friendId of friendIdx) {
+      const friendResult = await friendService.saveKeepinInFriend({ keepinIdx: keepinId, friendIdx: friendId });
+    }
 
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '키핀 수정 완료' });
   } catch (err) {
