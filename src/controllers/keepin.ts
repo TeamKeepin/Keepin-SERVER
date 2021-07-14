@@ -207,7 +207,6 @@ const getTakenKeepin = async (req, res) => {
     const keepinss = await keepinService.findKeepin({ recent: recent, taken: taken, userIdx: userIdx });
 
     const keepins = [];
-
     for (var i = 0; i < keepinss.length; i++) {
       const year = keepinss[i].date.substring(0, 4);
       const month = keepinss[i].date.substring(5, 7);

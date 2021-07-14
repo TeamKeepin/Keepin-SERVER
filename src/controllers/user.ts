@@ -578,6 +578,70 @@ const getKeepinCount = async (req, res) => {
   }
 };
 
+/**
+ * @api {put} /my/phone 전화번호 수정 *
+ * @apiVersion 1.0.0
+ * @apiName editPhone
+ * @apiGroup My
+ *
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "name": "유키핀"
+ * }
+ * @apiSuccessExample {json} Success-Response:
+ * -201 OK
+ *{
+ *   "status": 201,
+ *   "msg": "프로필 수정 성공",
+ *}
+ *
+ * @apiErrorExample Error-Response:
+ * -400 유저 유무 확인
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
+ const editPhone = async (req, res) => {
+  const userIdx = req._id;
+  const { phone } = req.body;
+  console.log(req.body.phone);
+  try {
+    const user = await userService.findUserbyIdx({ userIdx });
+    if (!user) {
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '유저가 없습니다.',
+      });
+    }
+    user.phone = phone;
+    await user.save();
+
+    return res.status(200).json({
+      status: returnCode.OK,
+      message: '전화번호 수정 성공',
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
 export default {
   signUp,
   signIn,
@@ -586,4 +650,5 @@ export default {
   editPassword,
   getKeepinCount,
   emailCheck,
+  editPhone
 };
