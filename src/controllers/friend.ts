@@ -217,7 +217,7 @@ const getFriendDetail = async (req, res) => {
     //     });
     // }
 
-    const{name, memo} = friend;
+    const { name, memo } = friend;
     const keepins = friend.keepinIdx;
     console.log(keepins);
     const total = keepins.length;
@@ -232,7 +232,7 @@ const getFriendDetail = async (req, res) => {
         taken++;
       }
     }
-   
+
     const data = { name, total, taken, given, memo };
 
     return res.status(returnCode.OK).json({
@@ -323,17 +323,17 @@ const getTakenGivenList = async (req, res) => {
       });
     }
 
-    const keepinss = await keepinService.findKeepinsByFriendIdxAndTaken({friendIdx,taken});
+    const keepinss = await keepinService.findKeepinsByFriendIdxAndTaken({ friendIdx, taken });
     var keepins = [];
     for (const keepin of keepinss) {
-        const { _id, title, photo } = keepin;
-        const year = keepin.date.substring(0, 4);
-        const month = keepin.date.substring(5, 7);
-        const day = keepin.date.substring(8, 10);
-        const tunedDate = year + '.' + month + '.' + day;
-        keepin.date = tunedDate;
-        const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate, taken: keepin.taken};
-        keepins.push(pKeepin);
+      const { _id, title, photo } = keepin;
+      const year = keepin.date.substring(0, 4);
+      const month = keepin.date.substring(5, 7);
+      const day = keepin.date.substring(8, 10);
+      const tunedDate = year + '.' + month + '.' + day;
+      keepin.date = tunedDate;
+      const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate, taken: keepin.taken };
+      keepins.push(pKeepin);
     }
 
     const data = { keepins };
