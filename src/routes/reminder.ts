@@ -25,6 +25,6 @@ router.get('/detail/:reminderId', auth.checkToken, reminderController.getDetailR
 router.post('/delete', auth.checkToken, reminderController.deleteReminder);
 
 // 리마인더 수정
-router.put('/:reminderId', auth.checkToken, reminderController.modifyReminder);
+router.put('/modify/:reminderId', auth.checkToken, reminderController.modifyReminder);
 
 export default router;
