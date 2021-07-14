@@ -1,10 +1,9 @@
-import jwt from "jsonwebtoken";
-import returnCode from "../library/returnCode";
-import auth from "../middlewares/auth";
+import jwt from 'jsonwebtoken';
+import returnCode from '../library/returnCode';
+import auth from '../middlewares/auth';
 
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
-
 
 /**
  * @api {get} /retoken 토큰 재발급
@@ -51,43 +50,45 @@ const TOKEN_INVALID = -2;
  */
 
 const reToken = async (req, res) => {
-    try {
-      const refreshToken = req.header("refreshToken");
-      
-      if (!refreshToken) {
-        return res.status(401).json({ 
-          status: returnCode.UNAUTHORIZED,
-          message: 'refreshToken header 값이 없습니다.' });
-      }
-      
-      const newToken = await auth.refresh(refreshToken);
+  try {
+    const refreshToken = req.header('refreshToken');
 
-      if (newToken == TOKEN_EXPIRED) {
-        return res.status(401).json({
-          status: returnCode.UNAUTHORIZED,
-          message: '만료된 토큰입니다.'});
-      }
-      if (newToken == TOKEN_INVALID) {
-        return res.status(401).json({
-          status: returnCode.UNAUTHORIZED,
-          message: '유효하지 않은 토큰입니다.'});
-      }
-      res.status(returnCode.OK).json({
-        status: returnCode.OK,
-        jwt: newToken,
-        message: '새로운 토큰이 발급 성공'
+    if (!refreshToken) {
+      return res.status(401).json({
+        status: returnCode.UNAUTHORIZED,
+        message: 'refreshToken header 값이 없습니다.',
       });
-    } catch (err) {
-      console.error(err.message);
-      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-          status: returnCode.INTERNAL_SERVER_ERROR,
-          message: err.message,
+    }
+
+    const newToken = await auth.refresh(refreshToken);
+
+    if (newToken == TOKEN_EXPIRED) {
+      return res.status(401).json({
+        status: returnCode.UNAUTHORIZED,
+        message: '만료된 토큰입니다.',
       });
+    }
+    if (newToken == TOKEN_INVALID) {
+      return res.status(401).json({
+        status: returnCode.UNAUTHORIZED,
+        message: '유효하지 않은 토큰입니다.',
+      });
+    }
+    res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      jwt: newToken,
+      message: '새로운 토큰이 발급 성공',
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
     return;
   }
-}
+};
 
 export default {
-  reToken
-}
-
+  reToken,
+};
