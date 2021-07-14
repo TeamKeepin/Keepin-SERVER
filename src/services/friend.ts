@@ -47,7 +47,9 @@ export interface KeepinIdInput {
   keepinIdx: string;
 }
 
+//키핀 삭제, 키핀 수정시 사용
 const findFriendsByKeepinIdx = (data: KeepinIdInput) => {
+  // 해당 keepinId를 가지고 있는 친구들을 찾아서 해당 keepinIdx를 제거시켜주는 로직
   //const result = Friend.find({keepinIdx: { "$in" : [mongoose.Types.ObjectId(data.keepinIdx)]}});
 
   const filter = {
@@ -133,7 +135,7 @@ const deleteFriendByFriendIdx = (data: friendFindFriendIdxInput) => {
 };
 
 const deleteUserData = (data: friendsFindUserIdxInput) => {
-    return Friend.deleteMany({userIdx: data.userIdx});
+  return Friend.deleteMany({ userIdx: data.userIdx });
 };
 
 // 영우 오빠 주석처리
@@ -158,6 +160,6 @@ export default {
   findFriendByNameAnduserIdx,
   deleteFriendByFriendIdx,
   findFriendsByKeepinIdx,
-  deleteUserData
+  deleteUserData,
   //   saveKeepinInFriend
 };

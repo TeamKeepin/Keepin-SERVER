@@ -217,12 +217,12 @@ const getFriendDetail = async (req, res) => {
     //     });
     // }
 
-    const name = friend.name;
-    const memo = friend.memo;
+    const { name, memo } = friend;
     const keepins = friend.keepinIdx;
+    console.log(keepins);
     const total = keepins.length;
-    let taken = 0;
-    let given = 0;
+    var taken = 0;
+    var given = 0;
     for (const keepinId of keepins) {
       const keepinIdx = keepinId.toString();
       const keepin = await keepinService.findKeepinByKeepinIdx({ keepinIdx });
@@ -232,6 +232,7 @@ const getFriendDetail = async (req, res) => {
         taken++;
       }
     }
+
     const data = { name, total, taken, given, memo };
 
     return res.status(returnCode.OK).json({
@@ -248,20 +249,22 @@ const getFriendDetail = async (req, res) => {
   }
 };
 /**
- * @api {get} /friend/keepin/:friendId 친구에게 받은/준 keepin 목록 조회
+ * @api {get} /friend/keepin/:friendId?taken=true 친구에게 받은/준 keepin 목록 조회
  *
  * @apiVersion 1.0.0
  * @apiName getTakenGivenList
  * @apiGroup Friend
  *
  * @apiHeaderExample {json} Header-Example:
- * * friendId : 친구 id
- * * /friend/keepin/60ed9e98e51ad110481cd9d7
- * 
  * {
  *  "Content-Type": "application/json",
  *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
+ *
+ * @apiParamExample {json} Request-Example:
+ *  [Querystring] taken: 준/받은 여부 -> taken: true이면 받은
+ *  [params]      friendId : 친구 id
+ *  /friend/keepin/60ed9e98e51ad110481cd9d7?taken=true
  *
  *
  * @apiSuccessExample {json} Success-Response:
@@ -270,7 +273,7 @@ const getFriendDetail = async (req, res) => {
     "status": 200,
     "message": "친구에게 준/받은 keepin 목록 조회 성공",
     "data": {
-        "takenList": [
+        "keepins": [
             {
                 "_id": "60eda9cd36d5ca07e047a980",
                 "title": "가장 달콤했던 생일 선물",
@@ -288,20 +291,6 @@ const getFriendDetail = async (req, res) => {
                 "title": "커플 꽃반지 조아",
                 "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189254295.png",
                 "date": "2021.03.28"
-            }
-        ],
-        "givenList": [
-            {
-                "_id": "60edae24d4886805c4ca349b",
-                "title": "내가 알바하는 이유",
-                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189337886.png",
-                "date": "2021.05.03"
-            },
-            {
-                "_id": "60edaebbd4886805c4ca349f",
-                "title": "밀키맘 김보 생일",
-                "photo": "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189491228.png",
-                "date": "2021.03.11"
             }
         ]
     }
@@ -321,39 +310,33 @@ const getFriendDetail = async (req, res) => {
  */
 const getTakenGivenList = async (req, res) => {
   const friendIdx = req.params.friendId;
+  const taken = req.query.taken;
+
   try {
+    //키핀 들 중에서 friendIdx에 friendIdx가 포함되어 있고 taken=true나 false인거 찾아서 보여주기
+    //그 keepin들의 date .으로 변환 + photo[0] 뽑아서 보여주기 (for 문)
     const friend = await friendService.findFriendByFriendIdx({ friendIdx });
-    //내 친구 인지 아닌지 확인
     if (!friend) {
       return res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: '일치하는 친구가 없습니다',
       });
     }
-    let takenList = [];
-    let givenList = [];
-    const keepins = friend.keepinIdx;
-    for (const keepinId of keepins) {
-      const keepinIdx = keepinId.toString();
-      const keepin = await keepinService.findKeepinForTaken({ keepinIdx });
 
+    const keepinss = await keepinService.findKeepinsByFriendIdxAndTaken({ friendIdx, taken });
+    var keepins = [];
+    for (const keepin of keepinss) {
       const { _id, title, photo } = keepin;
-
       const year = keepin.date.substring(0, 4);
       const month = keepin.date.substring(5, 7);
       const day = keepin.date.substring(8, 10);
       const tunedDate = year + '.' + month + '.' + day;
       keepin.date = tunedDate;
-      const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate };
-
-      if (keepin.taken === false) {
-        givenList.push(pKeepin);
-      } else {
-        takenList.push(pKeepin);
-      }
+      const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate, taken: keepin.taken };
+      keepins.push(pKeepin);
     }
 
-    const data = { takenList, givenList };
+    const data = { keepins };
 
     return res.status(returnCode.OK).json({
       status: returnCode.OK,

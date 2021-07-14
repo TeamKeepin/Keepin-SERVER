@@ -17,7 +17,7 @@ router.get('/detail/:keepinIdx', auth.checkToken, keepinController.getDetailKeep
 // 모아보기 카테고리 조회
 router.get('/category', auth.checkToken, keepinController.getKeepinByCategory);
 // 키핀 수정
-router.put('/:keepinIdx', auth.checkToken, upload.array('photo', 3), keepinController.modifyKeepin);
+router.put('/modify/:keepinIdx', auth.checkToken, upload.array('photo', 3), keepinController.modifyKeepin);
 // router.put('/:keepinIdx', auth.checkToken, keepinController.modifyKeepin);
 // 키핀 삭제
 router.post('/delete', auth.checkToken, keepinController.deleteKeepin);

@@ -22,6 +22,8 @@ export interface reminderModifyInputWithDaysAgo {
   isAlarm: boolean;
   isImportant: boolean;
   daysAgo: string;
+  year: string;
+  month: string;
 }
 
 export interface reminderModifyInput {
@@ -30,6 +32,8 @@ export interface reminderModifyInput {
   date: string;
   isAlarm: boolean;
   isImportant: boolean;
+  year: string;
+  month: string;
 }
 
 export interface reminderCreateInput {

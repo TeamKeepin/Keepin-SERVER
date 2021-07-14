@@ -671,7 +671,7 @@ const deleteReminder = async (req, res) => {
 };
 
 /**
- * @api {put} /reminder 리마인더 수정
+ * @api {put} /reminder/modify/:reminderId 리마인더 수정
  * 
  * @apiVersion 1.0.0
  * @apiName modifyReminder
@@ -684,7 +684,7 @@ const deleteReminder = async (req, res) => {
  * }
  * 
  * @apiParamExample {json} Request-Example:
- * * url: /reminder/60e5bdc46c3cdb135f1da1dc
+ * * url: /reminder/modify/60e5bdc46c3cdb135f1da1dc
  * * reminderId : 리마인더 Id
  * 
  * 
@@ -787,6 +787,8 @@ const modifyReminder = async (req, res) => {
         date,
         isAlarm,
         isImportant,
+        year,
+        month,
       });
     } else {
       // alarm 받을 거면, daysAgo 값이 있음.
@@ -798,13 +800,12 @@ const modifyReminder = async (req, res) => {
         isAlarm,
         isImportant,
         daysAgo,
+        year,
+        month,
       });
     }
 
-    // for res
-    const data = result;
-
-    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 수정 성공', data });
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 수정 성공' });
   } catch (err) {
     console.error(err.message);
     res.status(returnCode.INTERNAL_SERVER_ERROR).json({
