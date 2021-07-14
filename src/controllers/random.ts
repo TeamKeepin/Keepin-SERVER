@@ -27,6 +27,11 @@ import returnCode from '../library/returnCode';
  * }
  *
  * @apiErrorExample Error-Response:
+ * -400 유저 키핀 유뮤 확인
+ * {
+ *  "status": 400,
+ *  "message": "우선 키핀을 등록해주세요."
+ * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -38,6 +43,14 @@ const getRandom = async (req, res) => {
   const userIdx = req._id;
   try {
     const randoms = await randomService.findRandoms({ userIdx });
+
+    if(randoms.length==0){
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '우선 키핀을 등록해주세요.',
+      });
+    }
+
     const randomNumber = Math.floor(Math.random() * randoms.length);
     const randomId = randoms[randomNumber]._id;
     const dataa = await randomService.findRandom({ randomId });

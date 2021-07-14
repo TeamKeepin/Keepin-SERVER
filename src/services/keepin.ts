@@ -30,6 +30,16 @@ export interface keepinFindInput {
   recent: boolean;
 }
 
+export interface keepinFindByKeepinIdxAndTakenInput{
+  keepinIdx: string;
+  taken: boolean;
+}
+
+export interface keepinFindByFriendIdxAndTakenInput{
+  friendIdx: string;
+  taken: boolean;
+}
+
 export interface keepinFindByKeepinIdxInput {
   keepinIdx: string;
 }
@@ -120,12 +130,19 @@ const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
   return keepin;
 };
 
-//친구와 준/받은 keepin 목록 조회
-const findKeepinForTaken = (data: keepinFindByKeepinIdxInput) => {
-  //최신 순 정렬 해야 함
-  // const keepin = Keepin.findOne({_id:data.keepinIdx}).select('-__v -userIdx').populate("friendIdx",["name"]).sort({date: 1});
-  const keepin = Keepin.findOne({ _id: data.keepinIdx }).select('title photo date taken').sort({ date: -1 });
+
+const findKeepinForTaken = (data: keepinFindByKeepinIdxAndTakenInput) => {
+  const keepin = Keepin.findOne({ _id: data.keepinIdx },{title:1, photo:1, date:1, taken:1})
+      .where('taken').equals(data.taken)
+      .sort({ date: -1 });
   return keepin;
+};
+
+//친구와 준/받은 keepin 목록 조회
+const findKeepinsByFriendIdxAndTaken = (data: keepinFindByFriendIdxAndTakenInput) => {
+  return Keepin.find({ friendIdx: { $in: [mongoose.Types.ObjectId(data.friendIdx)] } },{title:1, photo:1, date:1, taken:1})
+      .where('taken').equals(data.taken)
+      .sort({ date: -1 });
 };
 
 // 키핀 수정
@@ -174,6 +191,7 @@ export default {
   findDetailKeepin,
   findKeepinByKeepinIdx,
   findKeepinForTaken,
+  findKeepinsByFriendIdxAndTaken,
   findkeepinByUserIdxAndCategory,
   deleteKeepinByKeepinIdx,
   findKeepinFriend,
