@@ -217,12 +217,12 @@ const getFriendDetail = async (req, res) => {
     //     });
     // }
 
-    const name = friend.name;
-    const memo = friend.memo;
+    const{name, memo} = friend;
     const keepins = friend.keepinIdx;
+    console.log(keepins);
     const total = keepins.length;
-    let taken = 0;
-    let given = 0;
+    var taken = 0;
+    var given = 0;
     for (const keepinId of keepins) {
       const keepinIdx = keepinId.toString();
       const keepin = await keepinService.findKeepinByKeepinIdx({ keepinIdx });
@@ -232,6 +232,7 @@ const getFriendDetail = async (req, res) => {
         taken++;
       }
     }
+   
     const data = { name, total, taken, given, memo };
 
     return res.status(returnCode.OK).json({
