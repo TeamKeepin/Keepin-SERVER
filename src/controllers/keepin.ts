@@ -577,7 +577,7 @@ const getDetailKeepin = async (req, res) => {
  * 
  * @apiParamExample {json} Request-Example:
  * * url: /keepin/modify/60e5bdc46c3cdb135f1da1dc
- * * keepinId : 리마인더 Id
+ * * keepinId : 키핀 Id
  * 
  * {
     "title": "가장 달콤했던 생일 선물",
@@ -638,6 +638,10 @@ const modifyKeepin = async (req, res) => {
   //photo: locationArray
 
   try {
+    // 키핀id를 포함하고 있는 친구들한테 먼저 찾아가서
+    // 친구 3명이면 다 해당 키핀id를 빼버리는 거야
+    const ll = await friendService.findFriendsByKeepinIdx({ keepinIdx: keepinId }); // keepinId 하나씩 삭제
+
     var data = await keepinService.modifyKeepinByKeepinIdx({
       keepinIdx: keepinId,
       title,
