@@ -250,7 +250,7 @@
   },
   {
     "type": "get",
-    "url": "/friend/keepin/:friendId",
+    "url": "/friend/keepin/:friendId?taken=true",
     "title": "친구에게 받은/준 keepin 목록 조회",
     "version": "1.0.0",
     "name": "getTakenGivenList",
@@ -259,7 +259,16 @@
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "* friendId : 친구 id\n* /friend/keepin/60ed9e98e51ad110481cd9d7\n\n{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "[Querystring] taken: 준/받은 여부 -> taken: true이면 받은\n[params]      friendId : 친구 id\n/friend/keepin/60ed9e98e51ad110481cd9d7?taken=true",
           "type": "json"
         }
       ]
@@ -268,7 +277,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n    \"status\": 200,\n    \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n    \"data\": {\n        \"takenList\": [\n            {\n                \"_id\": \"60eda9cd36d5ca07e047a980\",\n                \"title\": \"가장 달콤했던 생일 선물\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234438.png\",\n                \"date\": \"2021.06.07\"\n            },\n            {\n                \"_id\": \"60edad7757025c487c8e611a\",\n                \"title\": \"라이언보다네가더귀여워알지\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626191569724.jpg\",\n                \"date\": \"2021.04.20\"\n            },\n            {\n                \"_id\": \"60edadcfd4886805c4ca3497\",\n                \"title\": \"커플 꽃반지 조아\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189254295.png\",\n                \"date\": \"2021.03.28\"\n            }\n        ],\n        \"givenList\": [\n            {\n                \"_id\": \"60edae24d4886805c4ca349b\",\n                \"title\": \"내가 알바하는 이유\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189337886.png\",\n                \"date\": \"2021.05.03\"\n            },\n            {\n                \"_id\": \"60edaebbd4886805c4ca349f\",\n                \"title\": \"밀키맘 김보 생일\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189491228.png\",\n                \"date\": \"2021.03.11\"\n            }\n        ]\n    }\n}",
+          "content": "-200 OK\n{\n    \"status\": 200,\n    \"message\": \"친구에게 준/받은 keepin 목록 조회 성공\",\n    \"data\": {\n        \"keepins\": [\n            {\n                \"_id\": \"60eda9cd36d5ca07e047a980\",\n                \"title\": \"가장 달콤했던 생일 선물\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234438.png\",\n                \"date\": \"2021.06.07\"\n            },\n            {\n                \"_id\": \"60edad7757025c487c8e611a\",\n                \"title\": \"라이언보다네가더귀여워알지\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626191569724.jpg\",\n                \"date\": \"2021.04.20\"\n            },\n            {\n                \"_id\": \"60edadcfd4886805c4ca3497\",\n                \"title\": \"커플 꽃반지 조아\",\n                \"photo\": \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626189254295.png\",\n                \"date\": \"2021.03.28\"\n            }\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -513,7 +522,7 @@
   },
   {
     "type": "put",
-    "url": "/keepin",
+    "url": "/keepin/modify/:keepinId",
     "title": "키핀 수정",
     "version": "1.0.0",
     "name": "modifyKeepin",
@@ -531,7 +540,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"가장 달콤했던 생일 선물\",\n    \"photo\": [\"KakaoTalk_20210109_164556314_01.jpg\"],  (file로 올려주세요)\n    \"taken\": true,\n    \"date\": \"2021-06-07\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!\",\n    \"friendIdx\":[\"60ed9e98e51ad110481cd9d7\"]\n}",
+          "content": "* url: /keepin/modify/60e5bdc46c3cdb135f1da1dc\n* keepinId : 키핀 Id\n\n{\n    \"title\": \"가장 달콤했던 생일 선물\",\n    \"photo\": [\"KakaoTalk_20210109_164556314_01.jpg\"],  (file로 올려주세요)\n    \"taken\": true,\n    \"date\": \"2021-06-07\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!\",\n    \"friendIdx\":[\"60ed9e98e51ad110481cd9d7\"]\n}",
           "type": "json"
         }
       ]
@@ -890,7 +899,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "content": "-400 유저 키핀 유뮤 확인\n{\n \"status\": 400,\n \"message\": \"우선 키핀을 등록해주세요.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
           "type": "json"
         }
       ]
@@ -1140,7 +1149,7 @@
   },
   {
     "type": "put",
-    "url": "/reminder",
+    "url": "/reminder/modify/:reminderId",
     "title": "리마인더 수정",
     "version": "1.0.0",
     "name": "modifyReminder",
@@ -1158,7 +1167,7 @@
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "* url: /reminder/60e5bdc46c3cdb135f1da1dc\n* reminderId : 리마인더 Id\n\n\n* isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청\n* isImportant : 중요 여부(true/false)\n* daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전) -> String으로 요청\n\n- 알람 받는 경우, daysAgo 값 요청\n{\n    \"title\": \"아빠생일♥♥🍰\",\n    \"date\": \"2021-08-22\",\n    \"isAlarm\": true,\n    \"daysAgo\": \"2\",\n    \"isImportant\": true\n}\n\n- 알람 받지 않는 경우\n{\n    \"title\": \"여자친구 생일\",\n    \"date\": \"2021-08-02\",\n    \"isAlarm\": false,\n    \"isImportant\": false\n}",
+          "content": "* url: /reminder/modify/60e5bdc46c3cdb135f1da1dc\n* reminderId : 리마인더 Id\n\n\n* isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청\n* isImportant : 중요 여부(true/false)\n* daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전) -> String으로 요청\n\n- 알람 받는 경우, daysAgo 값 요청\n{\n    \"title\": \"아빠생일♥♥🍰\",\n    \"date\": \"2021-08-22\",\n    \"isAlarm\": true,\n    \"daysAgo\": \"2\",\n    \"isImportant\": true\n}\n\n- 알람 받지 않는 경우\n{\n    \"title\": \"여자친구 생일\",\n    \"date\": \"2021-08-02\",\n    \"isAlarm\": false,\n    \"isImportant\": false\n}",
           "type": "json"
         }
       ]
