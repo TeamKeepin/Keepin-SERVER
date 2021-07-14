@@ -314,7 +314,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n {\n    \"status\": 200,\n    \"message\": \"친구 검색 성공\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"keepinIdx\": [\n                    \"60eda9cd36d5ca07e047a980\",\n                    \"60edad7757025c487c8e611a\",\n                    \"60edadcfd4886805c4ca3497\",\n                    \"60edae24d4886805c4ca349b\",\n                    \"60edaebbd4886805c4ca349f\"\n                ],\n                \"_id\": \"60ed9e98e51ad110481cd9d7\",\n                \"name\": \"뽀민이💭\",\n                \"memo\": \"보민이 신발 👟 사이즈 230 << 컨버스 개조아함, 제일 좋아하는 책 장르: 소설 📘, 아기자기 귀여운 거 딱히 좋아하지 않음 🙅🏻, 실용적인 거 좋아함 🙆🏻, 요새 헤드셋 🎧 알아보는 것 같음!\"\n            }\n        ]\n    }\n}",
+          "content": "- 200 OK\n {\n    \"status\": 200,\n    \"message\": \"친구 검색 성공\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"_id\": \"60ed9e98e51ad110481cd9d7\",\n                \"name\": \"뽀민이💭\"\n            }\n        ]\n    }\n}",
           "type": "json"
         }
       ]
@@ -369,8 +369,8 @@
     "groupTitle": "Keepin"
   },
   {
-    "type": "delete",
-    "url": "/keepin",
+    "type": "post",
+    "url": "/keepin/delete",
     "title": "키핀 삭제",
     "version": "1.0.0",
     "name": "deleteKeepin",
@@ -899,8 +899,8 @@
     "groupTitle": "Reminder"
   },
   {
-    "type": "delete",
-    "url": "/reminder",
+    "type": "post",
+    "url": "/reminder/delete",
     "title": "리마인더 삭제",
     "version": "1.0.0",
     "name": "deleteReminder",

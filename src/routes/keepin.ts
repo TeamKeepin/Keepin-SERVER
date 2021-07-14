@@ -20,6 +20,6 @@ router.get('/category', auth.checkToken, keepinController.getKeepinByCategory);
 router.put('/:keepinIdx', auth.checkToken, upload.array('photo', 3), keepinController.modifyKeepin);
 // router.put('/:keepinIdx', auth.checkToken, keepinController.modifyKeepin);
 // 키핀 삭제
-router.delete('/', auth.checkToken, keepinController.deleteKeepin);
+router.post('/delete', auth.checkToken, keepinController.deleteKeepin);
 
 export default router;

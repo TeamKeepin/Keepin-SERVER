@@ -600,7 +600,7 @@ const getOncomingReminder = async (req, res) => {
 };
 
 /**
- * @api {delete} /reminder 리마인더 삭제
+ * @api {post} /reminder/delete 리마인더 삭제
  * 
  * @apiVersion 1.0.0
  * @apiName deleteReminder
