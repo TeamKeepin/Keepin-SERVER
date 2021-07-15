@@ -12,6 +12,7 @@ export interface reminderCreateInputWithDaysAgo {
   year: string;
   month: string;
   daysAgo: string;
+  fcm: string;
 }
 
 export interface reminderModifyInputWithDaysAgo {
@@ -45,6 +46,7 @@ export interface reminderCreateInput {
   userIdx: string;
   year: string;
   month: string;
+  fcm: string;
 }
 
 export interface reminderFindInput {
@@ -63,6 +65,10 @@ export interface reminderMonthFindInput {
 }
 export interface reminderFindInputByReminderId {
   reminderIdx: string;
+}
+
+export interface reminderAlarmInput{
+  today: string;
 }
 
 const saveReminderWithDaysAgo = (data: reminderCreateInputWithDaysAgo) => {
@@ -167,6 +173,10 @@ const deleteUserData = (data: reminderFindInput) => {
   return Reminder.deleteMany({ userIdx: data.userIdx });
 };
 
+const findAlarmReminder = (data: reminderAlarmInput) => {
+  return Reminder.find({sendDate: data.today}, {title:1, daysAgo:1, fcm:1})
+}
+
 export default {
   saveReminder,
   findReminder,
@@ -179,4 +189,5 @@ export default {
   deleteUserData,
   modifyReminder,
   modifyReminderWithDaysAgo,
+  findAlarmReminder
 };

@@ -18,7 +18,7 @@ export interface userIdxInput {
 }
 
 export interface refreshTokenInput {
-  email: string,
+  id: string,
   refreshToken: string
 }
 
@@ -37,13 +37,13 @@ const findUserbyIdx = (data: userIdxInput) => {
 };
 
 const findUserProfile = (data: userIdxInput) => {
-  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken');
+  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken -phoneToken');
   return user
 };
 
 const saveRefreshToken = (data: refreshTokenInput) => {
   const filter = {
-    email: data.email,
+    _id: data.id,
   };
 
   const update = {
