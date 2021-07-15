@@ -42,20 +42,18 @@ export default {
         });
       }
 
-      const userEmail = user.email;
       const userIdx = user.id;
       const fcm = user.fcm;
 
       // console.log(fcm);
     
 
-      if (!userEmail || !userIdx) {
+      if (!userIdx) {
         return res.status(401).json({
           status: returnCode.UNAUTHORIZED,
           message: '유효하지 않은 토큰입니다.',
         });
       } else {
-        req.email = userEmail;
         req._id = userIdx;
         req.decode = user;
         req.fcm = fcm;
