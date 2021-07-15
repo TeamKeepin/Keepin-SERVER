@@ -121,7 +121,17 @@ const createReminder = async (req, res) => {
     var result;
     if (isAlarm == false) {
       // alarm 안받을 거면, daysAgo 값은 없음.
-      result = await reminderService.saveReminder({ title, date, sendDate: realDate, isAlarm, isImportant, userIdx: userId, year, month, fcm });
+      result = await reminderService.saveReminder({
+        title,
+        date,
+        sendDate: realDate,
+        isAlarm,
+        isImportant,
+        userIdx: userId,
+        year,
+        month,
+        fcm,
+      });
     } else {
       // alarm 받을 거면, daysAgo 값이 있음.
       result = await reminderService.saveReminderWithDaysAgo({
@@ -134,7 +144,7 @@ const createReminder = async (req, res) => {
         year,
         month,
         daysAgo,
-        fcm
+        fcm,
       });
     }
 
@@ -819,9 +829,8 @@ const modifyReminder = async (req, res) => {
   }
 };
 
-//SendDate 조회 
+//SendDate 조회
 const getSendDate = async (req, res) => {
-  const userId = req._id;
   const today = moment().format('YYYY-MM-DD');
   const errors = validationResult(req);
 
@@ -833,11 +842,9 @@ const getSendDate = async (req, res) => {
   }
 
   try {
-    const resultArray = await reminderService.findAlarmReminder({today});
+    const resultArray = await reminderService.findAlarmReminder({ today });
 
-    const data = { reminders: resultArray };
-
-    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 목록 조회 성공', data });
+    return res.status(returnCode.OK).json(resultArray);
   } catch (err) {
     console.error(err.message);
     res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -848,8 +855,6 @@ const getSendDate = async (req, res) => {
   }
 };
 
-
-
 export default {
   createReminder,
   getAllReminder,
@@ -858,5 +863,5 @@ export default {
   getOncomingReminder,
   deleteReminder,
   modifyReminder,
-  getSendDate
+  getSendDate,
 };
