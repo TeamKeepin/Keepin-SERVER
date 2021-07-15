@@ -159,7 +159,6 @@ const signIn = async (req, res) => {
     // Return jsonwebtoken
     const payload = {
       id: user._id,
-      email: user.email,
       fcm: user.phoneToken
     };
 
@@ -169,7 +168,7 @@ const signIn = async (req, res) => {
     };
 
     // refreshToken을 DB에 저장
-    const userInfo = await userService.saveRefreshToken({ email: payload.email, refreshToken: result.refreshToken });
+    const userInfo = await userService.saveRefreshToken({ id: payload.id, refreshToken: result.refreshToken });
 
     res.json({
       status: returnCode.OK,

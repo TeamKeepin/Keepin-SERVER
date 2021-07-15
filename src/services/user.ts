@@ -18,7 +18,7 @@ export interface userIdxInput {
 }
 
 export interface refreshTokenInput {
-  email: string,
+  id: string,
   refreshToken: string
 }
 
@@ -43,7 +43,7 @@ const findUserProfile = (data: userIdxInput) => {
 
 const saveRefreshToken = (data: refreshTokenInput) => {
   const filter = {
-    email: data.email,
+    _id: data.id,
   };
 
   const update = {

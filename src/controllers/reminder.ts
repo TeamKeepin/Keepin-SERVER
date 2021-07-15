@@ -819,6 +819,37 @@ const modifyReminder = async (req, res) => {
   }
 };
 
+//SendDate 조회 
+const getSendDate = async (req, res) => {
+  const userId = req._id;
+  const today = moment().format('YYYY-MM-DD');
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  try {
+    const resultArray = await reminderService.findAlarmReminder({today});
+
+    const data = { reminders: resultArray };
+
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 목록 조회 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+
+
 export default {
   createReminder,
   getAllReminder,
@@ -827,4 +858,5 @@ export default {
   getOncomingReminder,
   deleteReminder,
   modifyReminder,
+  getSendDate
 };
