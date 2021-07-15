@@ -44,6 +44,10 @@ export default {
 
       const userEmail = user.email;
       const userIdx = user.id;
+      const fcm = user.fcm;
+
+      // console.log(fcm);
+    
 
       if (!userEmail || !userIdx) {
         return res.status(401).json({
@@ -54,6 +58,7 @@ export default {
         req.email = userEmail;
         req._id = userIdx;
         req.decode = user;
+        req.fcm = fcm;
         next();
       }
     } catch (err) {

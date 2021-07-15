@@ -12,6 +12,7 @@ export interface reminderCreateInputWithDaysAgo {
   year: string;
   month: string;
   daysAgo: string;
+  fcm: string;
 }
 
 export interface reminderModifyInputWithDaysAgo {
@@ -45,6 +46,7 @@ export interface reminderCreateInput {
   userIdx: string;
   year: string;
   month: string;
+  fcm: string;
 }
 
 export interface reminderFindInput {

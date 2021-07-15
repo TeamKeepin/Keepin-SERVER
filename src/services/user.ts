@@ -37,7 +37,7 @@ const findUserbyIdx = (data: userIdxInput) => {
 };
 
 const findUserProfile = (data: userIdxInput) => {
-  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken');
+  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken -phoneToken');
   return user
 };
 

@@ -160,6 +160,7 @@ const signIn = async (req, res) => {
     const payload = {
       id: user._id,
       email: user.email,
+      fcm: user.phoneToken
     };
 
     const result = {
@@ -289,7 +290,6 @@ const emailCheck = async (req: Request, res: Response) => {
         "password": "$2a$10$9jnZL3niYDd5kk3TtoySBeA6dX7eKPv9CfcqViuYSU4ZmvxWJnpje",
         "name": "android",
         "birth": "1997.12.22",
-        "phoneToken": "cvkmjS2aTkrdqHrguqdlO4:APA91bG5SOTKPBc_Z_EL5_aQdKlXPF1Y5-Ujvo8gFYVn3i8Q--rlFfrruIoc41qqy7NZcXcPUSXo7oGbhA8HtOpaabI8ISbhmHkWX0btVJVhFAJkHrbObkcTWJ829rT8juvTvBD-izZC",
         "phone": "010-1234-5678"
     }
  * }
