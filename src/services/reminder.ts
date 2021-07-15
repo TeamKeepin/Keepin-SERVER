@@ -133,6 +133,8 @@ const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
       date: data.date,
       daysAgo: data.daysAgo,
       sendDate: data.sendDate,
+      year: data.year,
+      month: data.month
     },
     { new: true }
   );
@@ -149,6 +151,8 @@ const modifyReminder = (data: reminderModifyInput) => {
       title: data.title,
       date: data.date,
       sendDate: '0',
+      year: data.year,
+      month: data.month
     },
     { new: true }
   );
