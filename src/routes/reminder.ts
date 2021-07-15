@@ -27,7 +27,7 @@ router.post('/delete', auth.checkToken, reminderController.deleteReminder);
 // 리마인더 수정
 router.put('/modify/:reminderId', auth.checkToken, reminderController.modifyReminder);
 
-//sendDate가 오늘인 것 조회 
-router.get('/sendDate',auth.checkToken,reminderController.getSendDate);
+//sendDate가 오늘인 것 조회
+router.get('/sendDate', reminderController.getSendDate);
 
 export default router;
