@@ -1,9 +1,7 @@
 
-
 # 🎁 Keepin - 감사한 순간을 더 잘 기억하는 방법 🎁
 
-<img style="border: 1px solid black !important; border-radius:20px;" src="https://user-images.githubusercontent.com/37949197/124622652-46e8ad00-deb6-11eb-8cca-f9367559c2b6.png" width="250px" />
-
+<img style="border: 1px solid black !important; " src="https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png" width="600px" />
 
 ![node_badge](https://img.shields.io/badge/node-%3E%3D%2012.13.0-green)
 <br>
