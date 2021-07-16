@@ -81,7 +81,7 @@ import moment from 'moment';
  * 
  * @apiHeaderExample {json} Header-Example:
  * {
-    "Content-Type": "multipart/json"
+    "Content-Type": "application/json"
     "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
@@ -163,7 +163,7 @@ import moment from 'moment';
   };
 
 /**
- * @api {post} /keepin:keepinIdx 키핀하기 이미지 생성
+ * @api {post}  /keepin/photo/:keepinIdx 키핀하기 이미지 생성
  * 
  * @apiVersion 1.0.0
  * @apiName createKeepinPhoto

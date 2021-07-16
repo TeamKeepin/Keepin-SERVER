@@ -12,9 +12,7 @@ const router = express();
 //키핀하기 생성 
 router.post('/', auth.checkToken, keepinController.createKeepinText);
 //키핀하기 이미지생성
-router.post('/:keepinIdx',auth.checkToken, upload.array('photo',3), keepinController.createKeepinPhoto); 
-
-
+router.post('/photo/:keepinIdx',auth.checkToken, upload.array('photo',3), keepinController.createKeepinPhoto); 
 // 모아보기 받은/준 필터링
 router.get('/', auth.checkToken, keepinController.getTakenKeepin);
 // 모아보기 전체 검색
