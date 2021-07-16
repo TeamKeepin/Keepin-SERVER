@@ -333,25 +333,16 @@
   },
   {
     "type": "post",
-    "url": "/keepin",
-    "title": "키핀하기 생성",
+    "url": "/keepin:keepinIdx",
+    "title": "키핀하기 이미지 생성",
     "version": "1.0.0",
-    "name": "createKeepin",
+    "name": "createKeepinPhoto",
     "group": "Keepin",
     "header": {
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"multipart/form-data\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "parameter": {
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "* taken: 준/받은 여부 -> taken: true이면 받은\n* friendIdx: friend name을 표시하기 위함\n\n{\n    \"title\": \"가장 달콤했던 생일 선물\",\n    \"photo\": [\"KakaoTalk_20210109_164556314_01.jpg\"],  (file로 올려주세요)\n    \"taken\": true,\n    \"date\": \"2021-06-07\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!\",\n    \"friendIdx\":[\"60ed9e98e51ad110481cd9d7\"]\n}",
+          "content": "{\n    \"Content-Type\": \"multipart/form-data\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}\n\n{\n    \"photo\":[\".jpg\"] *file로 보내주세요\n}",
           "type": "json"
         }
       ]
@@ -360,7 +351,53 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀하기 생성 성공\",\n    \"keepin\": {\n        \"photo\": [\n            \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234438.png\",\n            \"https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234680.png\"\n        ],\n        \"taken\": true,\n        \"category\": [\n            \"생일\",\n            \"축하\"\n        ],\n        \"friendIdx\": [\n            \"60ed9e98e51ad110481cd9d7\"\n        ],\n        \"_id\": \"60eda9cd36d5ca07e047a980\",\n        \"title\": \"가장 달콤했던 생일 선물\",\n        \"date\": \"2021-06-07\",\n        \"record\": \"뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!\",\n        \"userIdx\": \"60ed9c404b360576d0805b7c\",\n        \"__v\": 0\n    }\n}",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀하기 생성 완전 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"필수 정보를 입력하세요.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/keepin.ts",
+    "groupTitle": "Keepin"
+  },
+  {
+    "type": "post",
+    "url": "/keepin",
+    "title": "키핀하기 생성",
+    "version": "1.0.0",
+    "name": "createKeepinText",
+    "group": "Keepin",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"multipart/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"title\": \"가장 달콤했던 생일 선물\",\n    \"taken\": true,\n    \"date\": \"2021-06-07\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!\",\n    \"friendIdx\":[\"60ed9e98e51ad110481cd9d7\"]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀하기 생성 성공\",\n    \"data\": {\n        \"keepinIdx\": \"60eda9cd36d5ca07e047a980\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -853,7 +890,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "-200 OK\n{\n    \"status\": 200,\n    \"message\": \"프로필 조회 성공\",\n    \"data\": {\n        \"email\": \"android@naver.com\",\n        \"password\": \"$2a$10$9jnZL3niYDd5kk3TtoySBeA6dX7eKPv9CfcqViuYSU4ZmvxWJnpje\",\n        \"name\": \"android\",\n        \"birth\": \"1997.12.22\",\n        \"phoneToken\": \"cvkmjS2aTkrdqHrguqdlO4:APA91bG5SOTKPBc_Z_EL5_aQdKlXPF1Y5-Ujvo8gFYVn3i8Q--rlFfrruIoc41qqy7NZcXcPUSXo7oGbhA8HtOpaabI8ISbhmHkWX0btVJVhFAJkHrbObkcTWJ829rT8juvTvBD-izZC\",\n        \"phone\": \"010-1234-5678\"\n    }\n}",
+          "content": "-200 OK\n{\n    \"status\": 200,\n    \"message\": \"프로필 조회 성공\",\n    \"data\": {\n        \"email\": \"android@naver.com\",\n        \"password\": \"$2a$10$9jnZL3niYDd5kk3TtoySBeA6dX7eKPv9CfcqViuYSU4ZmvxWJnpje\",\n        \"name\": \"android\",\n        \"birth\": \"1997.12.22\",\n        \"phone\": \"010-1234-5678\"\n    }\n}",
           "type": "json"
         }
       ]

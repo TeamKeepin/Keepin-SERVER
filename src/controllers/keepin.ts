@@ -4,64 +4,6 @@ import returnCode from '../library/returnCode';
 import mongoose from 'mongoose';
 import moment from 'moment';
 
-// /**
-//  * @api {post} /keepin 키핀하기 생성
-//  * 
-//  * @apiVersion 1.0.0
-//  * @apiName createKeepin
-//  * @apiGroup Keepin
-//  * 
-//  * @apiHeaderExample {json} Header-Example:
-//  * {
-//     "Content-Type": "multipart/form-data"
-//     "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
-//  * }
-//  * 
-//  * {
-//     "title": "가장 달콤했던 생일 선물",
-//     "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
-//     "taken": true,
-//     "date": "2021-06-07",
-//     "category": ["생일", "축하"],
-//     "record": "뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!",
-//     "friendIdx":["60ed9e98e51ad110481cd9d7"]
-//  * }
-//  * 
-//  * @apiSuccessExample {json} Success-Response:
-//  * - 200 OK
-//  * {
-//     "status": 200,
-//     "message": "키핀하기 생성 성공",
-//     "keepin": {
-//         "photo": [
-//             "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234438.png",
-//             "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234680.png"
-//         ],
-//         "taken": true,
-//         "category": [
-//             "생일",
-//             "축하"
-//         ],
-//         "friendIdx": [
-//             "60ed9e98e51ad110481cd9d7"
-//         ],
-//         "_id": "60eda9cd36d5ca07e047a980",
-//         "title": "가장 달콤했던 생일 선물",
-//         "date": "2021-06-07",
-//         "record": "뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!",
-//         "userIdx": "60ed9c404b360576d0805b7c",
-//         "__v": 0
-//     }
-// }
-//  * 
-//  * @apiErrorExample Error-Response:
-//  * - 400 요청바디가 없음
-//  * {
-//     "status": 400,
-//     "message": "필수 정보를 입력하세요."
-//  * }
-//  * 
-//  */
 
 // const createKeepin = async (req, res) => {
 //   const userIdx = req._id;
@@ -259,7 +201,7 @@ const createKeepinPhoto = async (req, res) => {
   const keepinIdx = req.params.keepinIdx;
   const errors = validationResult(req);
   console.log(req.files);
-  
+
   var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
   if (req.files !== undefined) {
     locationArray = req.files.map((img) => img.location);
