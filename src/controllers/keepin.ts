@@ -174,7 +174,7 @@ import moment from 'moment';
     "Content-Type": "multipart/form-data"
     "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
- * 
+ * @apiParamExample {json} Request-Example:
  * {
     "photo":[".jpg"] *file로 보내주세요
  * }
