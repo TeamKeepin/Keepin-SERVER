@@ -1,9 +1,7 @@
 
 # 🎁 Keepin - 감사한 순간을 더 잘 기억하는 방법 🎁
 
-![KakaoTalk_20210713_144929497](https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png)
-
-
+<img style="border: 1px solid black !important; " src="https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png" width="250px" />
 
 ![node_badge](https://img.shields.io/badge/node-%3E%3D%2012.13.0-green)
 <br>
