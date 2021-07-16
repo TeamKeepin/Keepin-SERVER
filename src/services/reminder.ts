@@ -12,6 +12,29 @@ export interface reminderCreateInputWithDaysAgo {
   year: string;
   month: string;
   daysAgo: string;
+  fcm: string;
+}
+
+export interface reminderModifyInputWithDaysAgo {
+  reminderId: string;
+  title: string;
+  date: string;
+  sendDate: string;
+  isAlarm: boolean;
+  isImportant: boolean;
+  daysAgo: string;
+  year: string;
+  month: string;
+}
+
+export interface reminderModifyInput {
+  reminderId: string;
+  title: string;
+  date: string;
+  isAlarm: boolean;
+  isImportant: boolean;
+  year: string;
+  month: string;
 }
 
 export interface reminderCreateInput {
@@ -23,6 +46,7 @@ export interface reminderCreateInput {
   userIdx: string;
   year: string;
   month: string;
+  fcm: string;
 }
 
 export interface reminderFindInput {
@@ -41,6 +65,10 @@ export interface reminderMonthFindInput {
 }
 export interface reminderFindInputByReminderId {
   reminderIdx: string;
+}
+
+export interface reminderAlarmInput{
+  today: string;
 }
 
 const saveReminderWithDaysAgo = (data: reminderCreateInputWithDaysAgo) => {
@@ -100,9 +128,54 @@ const findReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.findOne({ _id: data.reminderIdx });
 };
 
+// 리마인더 수정 -> 알람이 true일 때, with daysago
+const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderId },
+    {
+      isAlarm: data.isAlarm,
+      isImportant: data.isImportant,
+      title: data.title,
+      date: data.date,
+      daysAgo: data.daysAgo,
+      sendDate: data.sendDate,
+      year: data.year,
+      month: data.month
+    },
+    { new: true }
+  );
+  return result;
+};
+
+// 리마인더 수정 -> 알람이 false일 때
+const modifyReminder = (data: reminderModifyInput) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderId },
+    {
+      isAlarm: data.isAlarm,
+      isImportant: data.isImportant,
+      title: data.title,
+      date: data.date,
+      sendDate: '0',
+      year: data.year,
+      month: data.month
+    },
+    { new: true }
+  );
+  return result;
+};
+
 const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.deleteOne({ _id: data.reminderIdx });
 };
+
+const deleteUserData = (data: reminderFindInput) => {
+  return Reminder.deleteMany({ userIdx: data.userIdx });
+};
+
+const findAlarmReminder = (data: reminderAlarmInput) => {
+  return Reminder.find({sendDate: data.today}, {title:1, daysAgo:1, fcm:1})
+}
 
 export default {
   saveReminder,
@@ -113,4 +186,8 @@ export default {
   findReminderOncoming,
   deleteReminderbyReminderId,
   saveReminderWithDaysAgo,
+  deleteUserData,
+  modifyReminder,
+  modifyReminderWithDaysAgo,
+  findAlarmReminder
 };

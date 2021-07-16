@@ -18,32 +18,32 @@ export interface userIdxInput {
 }
 
 export interface refreshTokenInput {
-  email: string,
+  id: string,
   refreshToken: string
 }
 
 const saveUser = (data: userCreateInput) => {
     return User.create( data );
-}
+};
 
 const findUser = (data: userFindInput) => {
   const user = User.findOne({email:data.email});
   return user
-}
+};
 
 const findUserbyIdx = (data: userIdxInput) => {
   const user = User.findOne({_id:data.userIdx});
-;  return user
-}
+  return user
+};
 
 const findUserProfile = (data: userIdxInput) => {
-  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken');
+  const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken -phoneToken');
   return user
-}
+};
 
 const saveRefreshToken = (data: refreshTokenInput) => {
   const filter = {
-    email: data.email,
+    _id: data.id,
   };
 
   const update = {
@@ -55,8 +55,11 @@ const saveRefreshToken = (data: refreshTokenInput) => {
   });
   
   return result;
-}
+};
 
+const deleteUser = (data: userIdxInput) => {
+  return User.deleteOne({_id: data.userIdx});
+}
 
 
 export default {
@@ -64,5 +67,6 @@ export default {
   findUser,
   findUserbyIdx,
   findUserProfile,
-  saveRefreshToken
+  saveRefreshToken,
+  deleteUser
 }

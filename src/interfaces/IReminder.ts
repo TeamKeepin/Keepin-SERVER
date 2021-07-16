@@ -7,4 +7,5 @@ export interface IReminder {
   important: boolean;
   daysAgo: string;
   userIdx: mongoose.Types.ObjectId;
+  fcm: string;
 }

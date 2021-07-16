@@ -38,6 +38,10 @@ const ReminderSchema = new mongoose.Schema({
   daysAgo: {
     type: String,
   },
+  fcm: {
+    type: String,
+    required: true
+  },
 });
 
 export default mongoose.model<IReminder & mongoose.Document>('Reminder', ReminderSchema);

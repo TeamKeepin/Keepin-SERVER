@@ -11,7 +11,7 @@ import returnCode from '../library/returnCode';
  * @apiHeaderExample {json} Header-Example:
  * {
  *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZTM0OTg5MzQ2MGVjMzk4ZWExZGM0NSIsImVtYWlsIjoiZmJkdWRkbjk3QG5hdmVyLmNvbSIsImlhdCI6MTYyNjA1OTA3OSwiZXhwIjoxNjI2NjYzODc5fQ.9Ieyu_3jj7T2zGwrOwcL5bqs7CmxO02sWyQO9ItrIiw"
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -27,6 +27,11 @@ import returnCode from '../library/returnCode';
  * }
  *
  * @apiErrorExample Error-Response:
+ * -400 유저 키핀 유뮤 확인
+ * {
+ *  "status": 400,
+ *  "message": "우선 키핀을 등록해주세요."
+ * }
  * -500 서버error
  * {
  *  "status": 500,
@@ -38,6 +43,14 @@ const getRandom = async (req, res) => {
   const userIdx = req._id;
   try {
     const randoms = await randomService.findRandoms({ userIdx });
+
+    if(randoms.length==0){
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '우선 키핀을 등록해주세요.',
+      });
+    }
+
     const randomNumber = Math.floor(Math.random() * randoms.length);
     const randomId = randoms[randomNumber]._id;
     const dataa = await randomService.findRandom({ randomId });

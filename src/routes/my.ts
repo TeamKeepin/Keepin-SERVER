@@ -20,4 +20,10 @@ router.put('/password',auth.checkToken,[
   ],userController.editPassword)
 
 router.get('/',auth.checkToken,userController.getKeepinCount)
+
+//전화번호 수정 
+router.put('/phone',auth.checkToken,[
+  check("phone", "Phone is required").not().isEmpty(),
+],userController.editPhone)
+
 export default router;
