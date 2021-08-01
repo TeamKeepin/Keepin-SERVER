@@ -488,9 +488,6 @@ const editPassword = async (req, res) => {
 
     await userService.editPassword({userIdx, password: hashPwd});
 
-    // user.password = hashPwd;
-    // await user.save();
-
     return res.status(200).json({
       status: returnCode.OK,
       msg: '비밀번호 수정 성공',
@@ -619,7 +616,7 @@ const getKeepinCount = async (req, res) => {
  const editPhone = async (req, res) => {
   const userIdx = req._id;
   const { phone } = req.body;
-  console.log(req.body.phone);
+
   try {
     const user = await userService.findUserbyIdx({ userIdx });
     if (!user) {
@@ -628,8 +625,8 @@ const getKeepinCount = async (req, res) => {
         message: '유저가 없습니다.',
       });
     }
-    user.phone = phone;
-    await user.save();
+
+    await userService.editPhone({userIdx, phone});
 
     return res.status(200).json({
       status: returnCode.OK,

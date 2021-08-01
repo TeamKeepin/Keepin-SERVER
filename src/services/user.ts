@@ -32,6 +32,11 @@ export interface userEditPasswordInput {
     password: string,
 }
 
+export interface userEditPhoneInput {
+  userIdx: string,
+  phone: string,
+}
+
 
 const saveUser = (data: userCreateInput) => {
     return User.create( data );
@@ -80,10 +85,15 @@ const editPassword = (data: userEditPasswordInput) => {
   })
 }
 
+const editPhone = (data: userEditPhoneInput) => {
+  return User.findOneAndUpdate({_id: data.userIdx},{phone: data.phone}, {
+    new: true,
+  })
+}
+
 const deleteUser = (data: userIdxInput) => {
   return User.deleteOne({_id: data.userIdx});
 };
-
 
 export default {
   saveUser,
@@ -93,5 +103,6 @@ export default {
   saveRefreshToken,
   editUser,
   editPassword,
+  editPhone,
   deleteUser
 }
