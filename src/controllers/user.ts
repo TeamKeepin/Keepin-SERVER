@@ -428,7 +428,7 @@ const editProfile = async (req, res) => {
  * @apiSuccessExample {json} Success-Response:
  * -201 OK
  *{
- *   "status": 201,
+ *   "status": 200,
  *   "message": "비밀번호 수정 성공",
  *}
  *
@@ -486,10 +486,12 @@ const editPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashPwd = await bcrypt.hash(newPassword, salt);
 
-    user.password = hashPwd;
-    await user.save();
+    await userService.editPassword({userIdx, password: hashPwd});
 
-    return res.status(201).json({
+    // user.password = hashPwd;
+    // await user.save();
+
+    return res.status(200).json({
       status: returnCode.OK,
       msg: '비밀번호 수정 성공',
     });
