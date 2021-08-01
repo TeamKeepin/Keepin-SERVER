@@ -333,7 +333,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/keepin:keepinIdx",
+    "url": "/keepin/photo/:keepinIdx",
     "title": "키핀하기 이미지 생성",
     "version": "1.0.0",
     "name": "createKeepinPhoto",
@@ -342,7 +342,16 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"multipart/form-data\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}\n\n{\n    \"photo\":[\".jpg\"] *file로 보내주세요\n}",
+          "content": "{\n    \"Content-Type\": \"multipart/form-data\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"photo\":[\".jpg\"] *file로 보내주세요\n}",
           "type": "json"
         }
       ]
@@ -379,7 +388,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"multipart/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
           "type": "json"
         }
       ]

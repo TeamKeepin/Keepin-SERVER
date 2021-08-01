@@ -212,7 +212,7 @@ const signIn = async (req, res) => {
  * 200 OK
  * {
  *  "status": 200,
- *  "message": "이메일이 중복되지 않음(회원가입 진행 가능)"
+ *  "message": "이메일이 중복되지 않음"
  * }
  * 
  * @apiErrorExample Error-Response:
@@ -222,7 +222,7 @@ const signIn = async (req, res) => {
  *  "message": "이미 사용 중인 이메일입니다."
  * }
  */
-const emailCheck = async (req: Request, res: Response) => {
+const emailCheck = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({
@@ -243,7 +243,7 @@ const emailCheck = async (req: Request, res: Response) => {
 
   try {
     // 1. 유저가 중복일 경우
-    let user = await userService.findUser({ email });
+    const user = await userService.findUser({ email });
     if (user) {
       res.status(400).json({
         status: returnCode.BAD_REQUEST,
@@ -382,14 +382,16 @@ const editProfile = async (req, res) => {
   try {
     const user = await userService.findUserbyIdx({ userIdx });
     if (!user) {
-      return res.status(returnCode.BAD_REQUEST).json({
+      return res.status(400).json({
         status: returnCode.BAD_REQUEST,
         message: '유저가 없습니다.',
       });
     }
-    user.name = name;
-    await user.save();
+    
+    await userService.editUser({userIdx, name});
 
+    // user.name = name;
+    // await user.save();
     return res.status(200).json({
       status: returnCode.OK,
       message: '프로필 수정 성공',
@@ -426,7 +428,7 @@ const editProfile = async (req, res) => {
  * @apiSuccessExample {json} Success-Response:
  * -201 OK
  *{
- *   "status": 201,
+ *   "status": 200,
  *   "message": "비밀번호 수정 성공",
  *}
  *
@@ -484,10 +486,12 @@ const editPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashPwd = await bcrypt.hash(newPassword, salt);
 
-    user.password = hashPwd;
-    await user.save();
+    await userService.editPassword({userIdx, password: hashPwd});
 
-    return res.status(201).json({
+    // user.password = hashPwd;
+    // await user.save();
+
+    return res.status(200).json({
       status: returnCode.OK,
       msg: '비밀번호 수정 성공',
     });

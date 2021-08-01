@@ -14,13 +14,24 @@ export interface userFindInput {
 }
 
 export interface userIdxInput {
-  userIdx: string
+    userIdx: string
 }
 
 export interface refreshTokenInput {
-  id: string,
-  refreshToken: string
+    id: string,
+    refreshToken: string
 }
+
+export interface userEditNameInput {
+    userIdx: string,
+    name: string,
+}
+
+export interface userEditPasswordInput {
+    userIdx: string,
+    password: string,
+}
+
 
 const saveUser = (data: userCreateInput) => {
     return User.create( data );
@@ -57,9 +68,21 @@ const saveRefreshToken = (data: refreshTokenInput) => {
   return result;
 };
 
+const editUser = (data: userEditNameInput) => {
+  return User.findOneAndUpdate({_id: data.userIdx},{name: data.name}, {
+    new: true,
+  })
+};
+
+const editPassword = (data: userEditPasswordInput) => {
+  return User.findOneAndUpdate({_id: data.userIdx},{password: data.password}, {
+    new: true,
+  })
+}
+
 const deleteUser = (data: userIdxInput) => {
   return User.deleteOne({_id: data.userIdx});
-}
+};
 
 
 export default {
@@ -68,5 +91,7 @@ export default {
   findUserbyIdx,
   findUserProfile,
   saveRefreshToken,
+  editUser,
+  editPassword,
   deleteUser
 }
