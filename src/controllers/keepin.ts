@@ -3,6 +3,7 @@ import { friendService, keepinService } from '../services';
 import returnCode from '../library/returnCode';
 import mongoose from 'mongoose';
 import moment from 'moment';
+import { LexRuntime } from 'aws-sdk';
 
 
 // const createKeepin = async (req, res) => {
@@ -202,7 +203,7 @@ const createKeepinPhoto = async (req, res) => {
   const errors = validationResult(req);
   console.log(req.files);
 
-  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+  let locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
   if (req.files !== undefined) {
     locationArray = req.files.map((img) => img.location);
   }
@@ -614,7 +615,6 @@ const getDetailKeepin = async (req, res) => {
 
   try {
     const detail = await keepinService.findDetailKeepin({ userIdx: userIdx, keepinIdx: keepinIdx });
-    console.log(detail.friendIdx);
 
     //friend의 이름 가져오기
     // var friendNames = [];

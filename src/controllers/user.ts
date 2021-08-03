@@ -43,7 +43,7 @@ import returnCode from '../library/returnCode';
 const signUp = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(400).json({
+    res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       errors: [{ msg: '요청바디가 없습니다.' }],
     });
@@ -52,7 +52,7 @@ const signUp = async (req: Request, res: Response) => {
 
   // 파라미터 확인
   if (!email || !password || !name || !birth || !phoneToken || !phone) {
-    res.status(400).json({
+    res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.',
     });
@@ -141,7 +141,7 @@ const signIn = async (req, res) => {
     const user = await userService.findUser({ email });
 
     if (!user) {
-      res.status(400).json({
+      res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: '이메일/비밀번호를 다시 확인해주세요.',
       });
@@ -150,7 +150,7 @@ const signIn = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      res.status(400).json({
+      res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: '이메일/비밀번호를 다시 확인해주세요.',
       });
@@ -234,7 +234,7 @@ const emailCheck = async (req, res) => {
 
   // 파라미터 확인
   if (!email) {
-    res.status(400).json({
+    res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '필수 정보를 입력하세요.',
     });
@@ -245,7 +245,7 @@ const emailCheck = async (req, res) => {
     // 1. 유저가 중복일 경우
     const user = await userService.findUser({ email });
     if (user) {
-      res.status(400).json({
+      res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: '이미 사용 중인 이메일입니다.',
       });
@@ -312,8 +312,8 @@ const getProfile = async (req, res) => {
     const data = await userService.findUserProfile({ userIdx });
 
     if (!data) {
-      res.status(400).json({
-        status: 400,
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
         message: '유저가 없습니다.',
       });
     }
@@ -324,10 +324,10 @@ const getProfile = async (req, res) => {
     const tunedBirth = year + '.' + month + '.' + day;
     data.birth = tunedBirth;
 
-    return res.status(200).json({
+    return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '프로필 조회 성공',
-      data, //이름, 이메일, 비밀번호, 생일
+      data,
     });
   } catch (err) {
     console.error(err.message);
@@ -378,11 +378,10 @@ const getProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   const userIdx = req._id;
   const { name } = req.body;
-  // console.log(req.body.name);
   try {
     const user = await userService.findUserbyIdx({ userIdx });
     if (!user) {
-      return res.status(400).json({
+      return res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: '유저가 없습니다.',
       });
@@ -390,9 +389,7 @@ const editProfile = async (req, res) => {
     
     await userService.editUser({userIdx, name});
 
-    // user.name = name;
-    // await user.save();
-    return res.status(200).json({
+    return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '프로필 수정 성공',
     });
@@ -407,10 +404,10 @@ const editProfile = async (req, res) => {
 };
 
 /**
- * @api {put} /my/password 비밀번호 수정
+ * @api {put} /my/edit/password 비밀번호 수정
  *
  * @apiVersion 1.0.0
- * @apiName editProfile
+ * @apiName editPassword
  * @apiGroup My
  *
  * @apiHeaderExample {json} Header-Example:
@@ -461,8 +458,8 @@ const editPassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
 
     if (!user) {
-      return res.status(400).json({
-        status: 400,
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
         message: '유저가 없습니다.',
       });
     }
@@ -478,8 +475,8 @@ const editPassword = async (req, res) => {
     }
 
     if (newPassword.length < 6) {
-      return res.status(400).json({
-        status: 400,
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
         message: '6자리 이상의 비밀번호로 설정해 주세요.',
       });
     }
@@ -488,7 +485,7 @@ const editPassword = async (req, res) => {
 
     await userService.editPassword({userIdx, password: hashPwd});
 
-    return res.status(200).json({
+    return res.status(returnCode.OK).json({
       status: returnCode.OK,
       msg: '비밀번호 수정 성공',
     });
@@ -501,6 +498,63 @@ const editPassword = async (req, res) => {
     return;
   }
 };
+/**
+ * @api {get} /my/find/password 비밀번호 찾기
+ *
+ * @apiVersion 1.0.0
+ * @apiName findPassword
+ * @apiGroup My
+ *
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json",
+ *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ *
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *   "status": 200,
+ *   "message": "비밀번호 찾기 성공",
+ *}
+ *
+ * @apiErrorExample Error-Response:
+ * -400 유저 유무 확인
+ * {
+ *  "status": 400,
+ *  "message": "유저가 없습니다."
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
+const findPassword = async (req, res) => {
+  const userIdx = req._id;
+  try {
+    const user = await userService.findUserbyIdx({ userIdx });
+
+    if (!user) {
+      return res.status(400).json({
+        status: 400,
+        message: '유저가 없습니다.',
+      });
+    }
+
+    
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+
 
 /**
  * @api {get} /my 유저별 keepin 수 조회
@@ -563,7 +617,7 @@ const getKeepinCount = async (req, res) => {
       }
     }
     const data = { name, total, taken, given };
-    return res.status(200).json({
+    return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: 'keepin 수 조회 성공',
       data,
@@ -628,7 +682,7 @@ const getKeepinCount = async (req, res) => {
 
     await userService.editPhone({userIdx, phone});
 
-    return res.status(200).json({
+    return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '전화번호 수정 성공',
     });
@@ -648,6 +702,7 @@ export default {
   getProfile,
   editProfile,
   editPassword,
+  findPassword,
   getKeepinCount,
   emailCheck,
   editPhone
