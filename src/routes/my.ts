@@ -13,11 +13,14 @@ router.put('/profile',auth.checkToken,[
     check("name", "Name is required").not().isEmpty(),
   ],userController.editProfile)
 
-  //비밀번호 수정 
-router.put('/password',auth.checkToken,[
+//비밀번호 수정 
+router.put('/edit/password',auth.checkToken,[
     check("currentPassword", "currentPassword is required").not().isEmpty(),
     check("newPassword", "newPassword is required").not().isEmpty(),
   ],userController.editPassword)
+
+//비밀번호 찾기 
+router.get('/find/password',auth.checkToken,userController.findPassword)
 
 router.get('/',auth.checkToken,userController.getKeepinCount)
 
