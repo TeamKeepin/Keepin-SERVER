@@ -120,7 +120,8 @@ const findKeepin = (data: keepinFindInput) => {
   const result = Keepin.find({ taken: data.taken }, { title: 1, photo: 1, taken: 1, date: 1 })
     .where('userIdx')
     .equals(data.userIdx)
-    .sort({ date: convertDate });
+    .sort({ date: convertDate, 
+      createdAt: -1});
   return result;
 };
 
@@ -129,7 +130,8 @@ const searchKeepinByKeyword = (data: keepinSearchInput) => {
   const result = Keepin.find({ title: { $regex: data.title } }, { title: 1, photo: 1, taken: 1, date: 1 })
     .where('userIdx')
     .equals(data.userIdx)
-    .sort({ date: -1 });
+    .sort({ date: -1,
+      createdAt: -1});
   return result;
 };
 
@@ -137,6 +139,7 @@ const searchKeepinByKeyword = (data: keepinSearchInput) => {
 const findkeepinByUserIdxAndCategory = (data: keepinFindByUserIdxAndCategory) => {
   const result = Keepin.find({ category: { $in: [data.category] }, userIdx: data.userIdx }, { title: 1, photo: 1, date: 1 }).sort({
     date: -1,
+    createdAt: -1
   });
   return result;
 };
@@ -146,7 +149,8 @@ const findDetailKeepin = (data: keepinDetailInput) => {
     .where('userIdx')
     .equals(data.userIdx)
     .populate('friendIdx', ['name'])
-    .sort({ date: -1 });
+    .sort({ date: -1,
+      createdAt: -1 });
   return result;
 };
 
@@ -172,7 +176,8 @@ const findKeepinForTaken = (data: keepinFindByKeepinIdxAndTakenInput) => {
 const findKeepinsByFriendIdxAndTaken = (data: keepinFindByFriendIdxAndTakenInput) => {
   return Keepin.find({ friendIdx: { $in: [mongoose.Types.ObjectId(data.friendIdx)] } },{title:1, photo:1, date:1, taken:1})
       .where('taken').equals(data.taken)
-      .sort({ date: -1 });
+      .sort({ date: -1,
+        createdAt: -1 });
 };
 
 // 키핀 수정

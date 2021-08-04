@@ -32,9 +32,12 @@ const KeepinSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId, 
     ref: "Friend", 
   }]
-
-
+},{
+  timestamps: {
+    createdAt: 'createdAt'
+  }
 });
+
 
 export default mongoose.model<IKeepin & mongoose.Document>(
   "Keepin",
