@@ -19,8 +19,10 @@ router.put('/edit/password',auth.checkToken,[
     check("newPassword", "newPassword is required").not().isEmpty(),
   ],userController.editPassword)
 
+//이메일 찾기
+
 //비밀번호 찾기 
-router.get('/find/password',auth.checkToken,userController.findPassword)
+router.post('/find/password',userController.findPassword)
 
 router.get('/',auth.checkToken,userController.getKeepinCount)
 
