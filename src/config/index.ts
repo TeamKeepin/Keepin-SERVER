@@ -28,6 +28,5 @@ export default {
   jwtSecret: process.env.JWT_SECRET,
   jwtAlgorithm: process.env.JWT_ALGO,
 
-  githubClientId: process.env.GITHUB_CLIENT_ID,
-  githubSecret: process.env.GITHUB_SECRET,
+  keepinPassword: process.env.Keepin_Password,
 };

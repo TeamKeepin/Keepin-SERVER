@@ -1,9 +1,7 @@
 
-
 # 🎁 Keepin - 감사한 순간을 더 잘 기억하는 방법 🎁
 
-<img style="border: 1px solid black !important; border-radius:20px;" src="https://user-images.githubusercontent.com/37949197/124622652-46e8ad00-deb6-11eb-8cca-f9367559c2b6.png" width="250px" />
-
+<img style="border: 1px solid black !important; " src="https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png" width="600px" />
 
 ![node_badge](https://img.shields.io/badge/node-%3E%3D%2012.13.0-green)
 <br>
@@ -41,22 +39,26 @@
 
 - DB 설계 및 구축
 - 프로필 기능 구현
-- 친구 모아보기, 조회, 메모 구현
+- 친구 CRUD 구현
 - 키워드 별 검색 구현
+- FCM 알람 기능 구현
 
 #### 🏋 박윤경
 
 - DB 설계 및 구축
 - 로그인, 회원가입 기능 구현
-- 키핀하기 구현
+- 키핀하기 CRUD 구현
 - 타이틀(카테고리), 친구 검색 구현
+- multer모듈 구현
 
 #### 🏋 김민지
 
 - DB 설계 및 구축
 - 토큰 미들웨어 구현
-- 리마인더 생성/조회/삭제 구현
-- 테스팅 자동화 환경 구축, 배포
+- 리마인더 CRUD 구현
+- multer모듈 구현
+- FCM 알람 기능 구현
+- AWS 테스팅 자동화 환경 구축, 배포
 
 
 <br>
@@ -72,19 +74,25 @@
 - **multer-s3** - 이미지 S3에 업로드
 - **moment** - 날짜 포맷
 - **connect** - RESTful Web Services를 쉽게 사용
+- **dotenv** - .env config값 설정 시 참조
+- **bcryptjs** - password 암호화 모듈
 
 ```json
 "dependencies": {
     "apidoc": "^0.28.1",
+    "aws-sdk": "^2.943.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.10.0",
+    "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.12.12",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "request": "^2.88.2"
-  },
+  }
   ```
 
 <br>

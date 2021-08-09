@@ -46,7 +46,7 @@ const withdraw = async (req, res) => {
     // 유저에서 유저 지우기
     const user = await userService.deleteUser({ userIdx });
     if (!user) {
-      res.status(400).json({
+      res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
         message: '유저가 없습니다',
       });
@@ -58,12 +58,12 @@ const withdraw = async (req, res) => {
     // 친구 지우기
     await friendService.deleteUserData({ userIdx });
 
-    res.status(200).json({
+    res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '회원탈퇴 성공',
     });
   } catch (err) {
-    res.status(500).json({
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
       status: returnCode.INTERNAL_SERVER_ERROR,
       message: err.message,
     });

@@ -54,7 +54,7 @@ const reToken = async (req, res) => {
     const refreshToken = req.header('refreshToken');
 
     if (!refreshToken) {
-      return res.status(401).json({
+      return res.status(returnCode.UNAUTHORIZED).json({
         status: returnCode.UNAUTHORIZED,
         message: 'refreshToken header 값이 없습니다.',
       });
@@ -63,13 +63,13 @@ const reToken = async (req, res) => {
     const newToken = await auth.refresh(refreshToken);
 
     if (newToken == TOKEN_EXPIRED) {
-      return res.status(401).json({
+      return res.status(returnCode.UNAUTHORIZED).json({
         status: returnCode.UNAUTHORIZED,
         message: '만료된 토큰입니다.',
       });
     }
     if (newToken == TOKEN_INVALID) {
-      return res.status(401).json({
+      return res.status(returnCode.UNAUTHORIZED).json({
         status: returnCode.UNAUTHORIZED,
         message: '유효하지 않은 토큰입니다.',
       });
