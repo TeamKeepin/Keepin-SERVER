@@ -116,7 +116,7 @@ const createKeepin = async (req, res) => {
 
 
 /**
- * @api {post} /keepin 키핀하기 생성
+ * @api {post} /keepin 키핀하기 텍스트 생성
  * 
  * @apiVersion 1.0.0
  * @apiName createKeepinText
