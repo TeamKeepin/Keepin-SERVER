@@ -7,6 +7,8 @@ import { check, validationResult } from 'express-validator';
 import { userService } from '../services';
 import { keepinService } from '../services';
 import returnCode from '../library/returnCode';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 /**
  * @api {post} /user/signup 회원가입
@@ -487,7 +489,7 @@ const editPassword = async (req, res) => {
 
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
-      msg: '비밀번호 수정 성공',
+      message: '비밀번호 수정 성공',
     });
   } catch (err) {
     console.error(err.message);
@@ -499,7 +501,7 @@ const editPassword = async (req, res) => {
   }
 };
 /**
- * @api {get} /my/find/password 비밀번호 찾기
+ * @api {post} /my/find/password 비밀번호 찾기
  *
  * @apiVersion 1.0.0
  * @apiName findPassword
@@ -507,16 +509,18 @@ const editPassword = async (req, res) => {
  *
  * @apiHeaderExample {json} Header-Example:
  * {
- *  "Content-Type": "application/json",
- *  "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ *  "Content-Type": "application/json"
  * }
- *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "email": "fuckOff@naver.com"
+ * }
  *
  * @apiSuccessExample {json} Success-Response:
  * -200 OK
  *{
  *   "status": 200,
- *   "message": "비밀번호 찾기 성공",
+ *   "message": "임시 비밀번호 전송 성공",
  *}
  *
  * @apiErrorExample Error-Response:
@@ -532,9 +536,9 @@ const editPassword = async (req, res) => {
  * }
  */
 const findPassword = async (req, res) => {
-  const userIdx = req._id;
+  const email  = req.body.email;
   try {
-    const user = await userService.findUserbyIdx({ userIdx });
+    const user = await userService.findUserbyEmail({ email });
 
     if (!user) {
       return res.status(400).json({
@@ -543,6 +547,38 @@ const findPassword = async (req, res) => {
       });
     }
 
+    const tempPassword = crypto.randomBytes(20).toString('hex');
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      port: 465,
+      secure: true, // true for 465, false for other ports
+      auth: { // 이메일을 보낼 계정 데이터 입력
+        user:  'officialkeepin@gmail.com',
+        pass:  config.keepinPassword,
+      },
+    })
+
+    const emailOptions = {
+      from: 'officialkeepin@gmail.com',
+      to: email,
+      subject: '임시 비밀번호 관련 이메일입니다.',
+      html: 
+              "<h1 >Keepin에서 임시 비밀번호를 알려드립니다.</h1> <h2> password : " + tempPassword + "</h2>"
+              +'<img style="border: 1px solid black !important; " src="https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png" width="600px" />'		
+              ,
+    };
+    transporter.sendMail(emailOptions, res);
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPwd = await bcrypt.hash(tempPassword, salt);
+    user.password = hashPwd;
+    user.save();
+
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: '임시 비밀번호 전송 성공',
+    });
     
   } catch (err) {
     console.error(err.message);
