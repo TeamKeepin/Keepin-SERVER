@@ -547,7 +547,7 @@ const findPassword = async (req, res) => {
       });
     }
 
-    const tempPassword = crypto.randomBytes(20).toString('hex');
+    const tempPassword = crypto.randomBytes(10).toString('hex');
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -562,7 +562,7 @@ const findPassword = async (req, res) => {
     const emailOptions = {
       from: 'officialkeepin@gmail.com',
       to: email,
-      subject: '임시 비밀번호 관련 이메일입니다.',
+      subject: '[Keepin]임시 비밀번호 관련 이메일입니다.',
       html: 
               "<h1 >Keepin에서 임시 비밀번호를 알려드립니다.</h1> <h2> password : " + tempPassword + "</h2>"
               +'<img style="border: 1px solid black !important; " src="https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png" width="600px" />'		
