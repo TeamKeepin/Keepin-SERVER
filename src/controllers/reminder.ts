@@ -430,22 +430,74 @@ const getDetailReminder = async (req, res) => {
     "status": 200,
     "message": "연도별 목록 조회 성공",
     "data": {
-        "reminders": [
-            {
-                "isAlarm": true,
-                "isImportant": false,
-                "_id": "60edbaa0ce001e7a245596b7",
-                "title": "오랜만에 챈니🧡 보는 날",
-                "date": "05.02"
-            },
-            {
-                "isAlarm": false,
-                "isImportant": false,
-                "_id": "60edbdf27cd20b065409868f",
-                "title": "스승의날 (이채은교수님)",
-                "date": "05.15"
-            }
-        ]
+        "reminders": {
+            "1": [],
+            "2": [
+                {
+                    "isAlarm": true,
+                    "isImportant": true,
+                    "_id": "60ede8fd27530d5c8a55fb99",
+                    "title": "리리 생일",
+                    "date": "02.15",
+                    "month": "02"
+                }
+            ],
+            "3": [
+                {
+                    "isAlarm": false,
+                    "isImportant": false,
+                    "_id": "60eeb5ce232e796c54e67a4b",
+                    "title": "ㅁㄴㅇ",
+                    "date": "03.14",
+                    "month": "03"
+                }
+            ],
+            "4": [],
+            "5": [],
+            "6": [
+                {
+                    "isAlarm": false,
+                    "isImportant": false,
+                    "_id": "610f92d3c53a026fb1e8156f",
+                    "title": "연주 생일",
+                    "date": "06.13",
+                    "month": "06"
+                }
+            ],
+            "7": [],
+            "8": [
+                {
+                    "isAlarm": false,
+                    "isImportant": true,
+                    "_id": "610f923dc53a026fb1e814df",
+                    "title": "영민 생일:파티하는_얼굴:",
+                    "date": "08.11",
+                    "month": "08"
+                }
+            ],
+            "9": [],
+            "10": [
+                {
+                    "isAlarm": false,
+                    "isImportant": false,
+                    "_id": "60ee9597a5263669813fc658",
+                    "title": "티티생일",
+                    "date": "10.14",
+                    "month": "10"
+                }
+            ],
+            "11": [],
+            "12": [
+                {
+                    "isAlarm": true,
+                    "isImportant": true,
+                    "_id": "60f01d6212ed138a3a50ff3e",
+                    "title": "크리스마스:하트1::하트1::케이크:",
+                    "date": "12.25",
+                    "month": "12"
+                }
+            ]
+        }
     }
  * }
  * 
