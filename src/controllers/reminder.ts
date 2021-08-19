@@ -492,18 +492,93 @@ const getYearReminder = async (req, res) => {
   try {
     const resultArray = await reminderService.findYearReminder({ userIdx: userId, year: year });
 
-    var dataArray = [];
+    var reminders = {};
 
-    // 배열의 원소를 하나씩 접근하는 반복문을 이용해 삭제 프로세스를 진행
+    var janArray = [];
+    var febArray = [];
+    var marArray = [];
+    var aprArray = [];
+    var mayArray = [];
+    var junArray = [];
+    var julArray = [];
+    var augArray = [];
+    var sepArray = [];
+    var octArray = [];
+    var novArray = [];
+    var decArray = [];
+
+    // date 형식 예쁘게 만들기
     for (var result of resultArray) {
       const month = result.date.substring(5, 7);
       const day = result.date.substring(8, 10);
       const date_day = month + '.' + day;
       result.date = date_day;
-      dataArray.push(result);
+
+      switch (month) {
+        case '01':
+          janArray.push(result);
+          break;
+        case '02':
+          febArray.push(result);
+          break;
+        case '03':
+          marArray.push(result);
+          break;
+        case '04':
+          aprArray.push(result);
+          break;
+        case '05':
+          mayArray.push(result);
+          break;
+        case '06':
+          junArray.push(result);
+          break;
+        case '07':
+          julArray.push(result);
+          break;
+        case '08':
+          augArray.push(result);
+          break;
+        case '09':
+          sepArray.push(result);
+          break;
+        case '10':
+          octArray.push(result);
+          break;
+        case '11':
+          novArray.push(result);
+          break;
+        case '12':
+          decArray.push(result);
+          break;
+        default:
+          break;
+      }
     }
 
-    const data = { reminders: dataArray };
+    reminders['1'] = janArray;
+    reminders['2'] = febArray;
+    reminders['3'] = marArray;
+    reminders['4'] = aprArray;
+    reminders['5'] = mayArray;
+    reminders['6'] = junArray;
+    reminders['7'] = julArray;
+    reminders['8'] = augArray;
+    reminders['9'] = sepArray;
+    reminders['10'] = octArray;
+    reminders['11'] = novArray;
+    reminders['12'] = decArray;
+
+    /*
+    const reminders = {};
+    Object.keys(unordered)
+      .sort()
+      .forEach(function (key) {
+        reminders[key] = unordered[key];
+      });
+    */
+
+    const data = { reminders };
 
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '연도별 목록 조회 성공', data });
   } catch (err) {

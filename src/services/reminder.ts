@@ -121,9 +121,8 @@ const findYearReminder = (data: reminderYearFindInput) => {
     {
       userIdx: data.userIdx,
       year: data.year,
-      month: data.month,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1 }
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, month: 1 }
   ).sort({ date: 1 }); //가까운 순으로 정렬
   return result;
 };
