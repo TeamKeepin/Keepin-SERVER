@@ -63,11 +63,17 @@ export interface reminderMonthFindInput {
   year: string;
   month: string;
 }
+
+export interface reminderYearFindInput {
+  userIdx: string;
+  year: string;
+}
+
 export interface reminderFindInputByReminderId {
   reminderIdx: string;
 }
 
-export interface reminderAlarmInput{
+export interface reminderAlarmInput {
   today: string;
 }
 
@@ -110,6 +116,18 @@ const findMonthReminder = (data: reminderMonthFindInput) => {
   return result;
 };
 
+const findYearReminder = (data: reminderYearFindInput) => {
+  const result = Reminder.find(
+    {
+      userIdx: data.userIdx,
+      year: data.year,
+      month: data.month,
+    },
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1 }
+  ).sort({ date: 1 }); //가까운 순으로 정렬
+  return result;
+};
+
 // 다가오는 리마인더 조회
 const findReminderOncoming = (data: reminderOncomingFindInput) => {
   const result = Reminder.find(
@@ -140,7 +158,7 @@ const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
       daysAgo: data.daysAgo,
       sendDate: data.sendDate,
       year: data.year,
-      month: data.month
+      month: data.month,
     },
     { new: true }
   );
@@ -158,7 +176,7 @@ const modifyReminder = (data: reminderModifyInput) => {
       date: data.date,
       sendDate: '0',
       year: data.year,
-      month: data.month
+      month: data.month,
     },
     { new: true }
   );
@@ -174,14 +192,15 @@ const deleteUserData = (data: reminderFindInput) => {
 };
 
 const findAlarmReminder = (data: reminderAlarmInput) => {
-  return Reminder.find({sendDate: data.today}, {title:1, daysAgo:1, fcm:1})
-}
+  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1 });
+};
 
 export default {
   saveReminder,
   findReminder,
   findDetailReminder,
   findMonthReminder,
+  findYearReminder,
   findReminderbyReminderId,
   findReminderOncoming,
   deleteReminderbyReminderId,
@@ -189,5 +208,5 @@ export default {
   deleteUserData,
   modifyReminder,
   modifyReminderWithDaysAgo,
-  findAlarmReminder
+  findAlarmReminder,
 };
