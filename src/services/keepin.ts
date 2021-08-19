@@ -13,6 +13,21 @@ export interface keepinCreateInput {
   friendIdx: [string];
 }
 
+export interface keepinCreateTextInput{
+  title: string;
+  taken: boolean;
+  date: string;
+  category: [string];
+  record: string;
+  userIdx: string;
+  friendIdx: [string];
+}
+
+export interface keepinCreatePhotoInput{
+  photo: string[];
+  keepinIdx: string;
+}
+
 export interface keepinModifyInput {
   title: string;
   photo: string[];
@@ -76,6 +91,21 @@ export interface keepinFindByKeepinIdxAndRevFriendIdx {
 const saveKeepin = (data: keepinCreateInput) => {
   const keepin = Keepin.create(data);
   return keepin;
+};
+
+//키핀생성 1 
+const saveKeepinText = (data: keepinCreateTextInput) => {
+  const keepin = Keepin.create(data);
+  return keepin;
+};
+
+//키핀생성 2 
+const saveKeepinPhoto = (data: keepinCreatePhotoInput) => {
+  return Keepin.findOneAndUpdate(
+    { _id: data.keepinIdx },
+      {photo: data.photo},
+      { new: true }
+    );
 };
 
 //모아보기 받은/준
@@ -197,4 +227,6 @@ export default {
   findKeepinFriend,
   deleteFriend,
   deleteUserData,
+  saveKeepinText,
+  saveKeepinPhoto
 };

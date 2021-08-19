@@ -58,7 +58,6 @@ const createFriend = async (req, res) => {
   }
 
   try {
-    //중복 check   //이거 name 하고 userIdx로 해야 함 !
     const alFriend = await friendService.findFriendByNameAnduserIdx({ name, userIdx });
     if (alFriend.length > 0) {
       return res.status(returnCode.BAD_REQUEST).json({
@@ -139,13 +138,6 @@ const getFriends = async (req, res) => {
   const userIdx = req._id;
   try {
     const friends = await friendService.findFriendsByUserIdx({ userIdx });
-    // console.log(friends);
-    // if(friends.length==0){
-    //     return res.status(returnCode.BAD_REQUEST).json({
-    //         status:returnCode.BAD_REQUEST,
-    //         message:"등록된 친구들이 없습니다."
-    //     });
-    // }
 
     const data = { friends };
 
@@ -207,22 +199,11 @@ const getFriendDetail = async (req, res) => {
   const friendIdx = req.params.friendId;
   try {
     const friend = await friendService.findFriendByFriendIdx({ friendIdx });
-
-    // if(!friend){
-    //         const data= friend;
-    //         return res.status(returnCode.OK).json({
-    //         status:returnCode.OK,
-    //         message:"친구 상세 조회 성공",
-    //         data
-    //     });
-    // }
-
     const { name, memo } = friend;
     const keepins = friend.keepinIdx;
-    console.log(keepins);
     const total = keepins.length;
-    var taken = 0;
-    var given = 0;
+    let taken = 0;
+    let given = 0;
     for (const keepinId of keepins) {
       const keepinIdx = keepinId.toString();
       const keepin = await keepinService.findKeepinByKeepinIdx({ keepinIdx });
@@ -331,7 +312,6 @@ const getTakenGivenList = async (req, res) => {
       const month = keepin.date.substring(5, 7);
       const day = keepin.date.substring(8, 10);
       const tunedDate = year + '.' + month + '.' + day;
-      keepin.date = tunedDate;
       const pKeepin = { _id: _id, title: title, photo: photo[0], date: tunedDate, taken: keepin.taken };
       keepins.push(pKeepin);
     }
@@ -549,7 +529,7 @@ const editFriendName = async (req, res) => {
 const deleteFriend = async (req, res) => {
   const friendIdx = req.params.friendId;
   try {
-    //1. 친구 찾고 2. 친구 삭제  3. 찾은 친구의 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull
+    //1. 친구 찾고 2. 친구 삭제  3. 찾은 친구를 for문으로 keepinIdx의 keepin들 확인하면서 배열 길이가 1이면 삭제 2 이상이면 pull
 
     await friendService.deleteFriendByFriendIdx({ friendIdx });
     const keepins = await keepinService.findKeepinFriend({ friendIdx });

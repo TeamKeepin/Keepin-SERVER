@@ -3,11 +3,10 @@ import { friendService, keepinService } from '../services';
 import returnCode from '../library/returnCode';
 import mongoose from 'mongoose';
 import moment from 'moment';
-// const returnCode = require('../library/returnCode')
-// const moment = require('moment');
+import { LexRuntime } from 'aws-sdk';
 
 /**
- * @api {post} /keepin 키핀하기 생성
+ * @api {post} /keepin/all 키핀하기 생성
  * 
  * @apiVersion 1.0.0
  * @apiName createKeepin
@@ -15,17 +14,14 @@ import moment from 'moment';
  * 
  * @apiHeaderExample {json} Header-Example:
  * {
-    "Content-Type": "multipart/form-data"
+    "Content-Type": "application/json"
     "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
  * }
  * 
  * @apiParamExample {json} Request-Example:
- * * taken: 준/받은 여부 -> taken: true이면 받은
- * * friendIdx: friend name을 표시하기 위함
  * 
  * {
     "title": "가장 달콤했던 생일 선물",
-    "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
     "taken": true,
     "date": "2021-06-07",
     "category": ["생일", "축하"],
@@ -38,27 +34,7 @@ import moment from 'moment';
  * {
     "status": 200,
     "message": "키핀하기 생성 성공",
-    "keepin": {
-        "photo": [
-            "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234438.png",
-            "https://keepin-bucket.s3.ap-northeast-2.amazonaws.com/1626188234680.png"
-        ],
-        "taken": true,
-        "category": [
-            "생일",
-            "축하"
-        ],
-        "friendIdx": [
-            "60ed9e98e51ad110481cd9d7"
-        ],
-        "_id": "60eda9cd36d5ca07e047a980",
-        "title": "가장 달콤했던 생일 선물",
-        "date": "2021-06-07",
-        "record": "뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!",
-        "userIdx": "60ed9c404b360576d0805b7c",
-        "__v": 0
     }
-}
  * 
  * @apiErrorExample Error-Response:
  * - 400 요청바디가 없음
@@ -74,6 +50,8 @@ const createKeepin = async (req, res) => {
   const errors = validationResult(req);
 
   let { title, taken, date, category, record, friendIdx } = req.body;
+
+  console.log(req.files);
 
   if (!title || taken == undefined || !date || !friendIdx) {
     res.status(returnCode.BAD_REQUEST).json({
@@ -121,7 +99,6 @@ const createKeepin = async (req, res) => {
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀하기 생성 성공',
-      keepin,
     });
   } catch (err) {
     console.error(err.message);
@@ -132,6 +109,164 @@ const createKeepin = async (req, res) => {
     return;
   }
 };
+
+
+/**
+ * @api {post} /keepin 키핀하기 텍스트 생성
+ * 
+ * @apiVersion 1.0.0
+ * @apiName createKeepinText
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * 
+ * {
+    "title": "가장 달콤했던 생일 선물",
+    "taken": true,
+    "date": "2021-06-07",
+    "category": ["생일", "축하"],
+    "record": "뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!",
+    "friendIdx":["60ed9e98e51ad110481cd9d7"]
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "키핀하기 생성 성공",
+    "data": {
+        "keepinIdx": "60eda9cd36d5ca07e047a980"
+    }
+}
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "필수 정보를 입력하세요."
+ * }
+ * 
+ */
+
+//키핀 등록하기 
+ const createKeepinText = async (req, res) => {
+    const userIdx = req._id;
+    const errors = validationResult(req);
+    console.log(req.body);
+    let { title, taken, date, category, record, friendIdx } = req.body;
+  
+    if (!title || taken == undefined || !date || !friendIdx) {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '필수 정보를 입력하세요.',
+      });
+      return;
+    }
+
+    try {
+      const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx });
+  
+      const friends = keepin.friendIdx;
+      const keepinIdx = keepin._id;
+  
+      for (const friendId of friends) {
+        const friendIdx = friendId.toString();
+        const friend = await friendService.findFriendByFriendIdx({ friendIdx });
+        const keepins = friend.keepinIdx;
+        keepins.push(keepinIdx);
+        await friend.save();
+      }
+  
+      // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
+      // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
+      const data = {keepinIdx};
+      return res.status(returnCode.OK).json({
+        status: returnCode.OK,
+        message: '키핀하기 생성 반 성공',
+        data,
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+        status: returnCode.INTERNAL_SERVER_ERROR,
+        message: err.message,
+      });
+      return;
+    }
+  };
+
+/**
+ * @api {post}  /keepin/photo/:keepinIdx 키핀하기 이미지 생성
+ * 
+ * @apiVersion 1.0.0
+ * @apiName createKeepinPhoto
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "multipart/form-data"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * @apiParamExample {json} Request-Example:
+ * {
+    "photo":[".jpg"] *file로 보내주세요
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "키핀하기 생성 완전 성공",
+}
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "필수 정보를 입력하세요."
+ * }
+ * 
+ */
+
+//키핀 사진 올리기 
+const createKeepinPhoto = async (req, res) => {
+  const userIdx = req._id;
+  const keepinIdx = req.params.keepinIdx;
+  const errors = validationResult(req);
+  console.log(req.files);
+
+  let locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+  if (req.files !== undefined) {
+    locationArray = req.files.map((img) => img.location);
+  }
+
+  try {
+    const keepin = await keepinService.saveKeepinPhoto({photo:locationArray, keepinIdx:keepinIdx });
+
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: '키핀하기 생성 완전 성공'
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+
+
+
+
 
 /**
  * @api {get} /keepin?taken=true&recent=true 모아보기 준/받은 및 최신순/오래된순 조회
@@ -518,7 +653,6 @@ const getDetailKeepin = async (req, res) => {
 
   try {
     const detail = await keepinService.findDetailKeepin({ userIdx: userIdx, keepinIdx: keepinIdx });
-    console.log(detail.friendIdx);
 
     //friend의 이름 가져오기
     // var friendNames = [];
@@ -734,6 +868,8 @@ const deleteKeepin = async (req, res) => {
 
 export default {
   createKeepin,
+  createKeepinText,
+  createKeepinPhoto,
   getTakenKeepin,
   searchKeepin,
   getKeepinByCategory,
