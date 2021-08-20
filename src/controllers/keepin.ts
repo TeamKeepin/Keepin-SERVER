@@ -143,7 +143,7 @@ const createKeepin = async (req, res) => {
     "data": {
         "keepinIdx": "60eda9cd36d5ca07e047a980"
     }
-}
+}ya
  * 
  * @apiErrorExample Error-Response:
  * - 400 요청바디가 없음
@@ -170,11 +170,9 @@ const createKeepin = async (req, res) => {
     }
 
     try {
-      const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx });
-  
+      const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx});
       const friends = keepin.friendIdx;
       const keepinIdx = keepin._id;
-  
       for (const friendId of friends) {
         const friendIdx = friendId.toString();
         const friend = await friendService.findFriendByFriendIdx({ friendIdx });

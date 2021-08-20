@@ -306,7 +306,6 @@ const getAllReminder = async (req, res) => {
     const resultArray = await reminderService.findReminder({ userIdx: userId });
 
     const data = { reminders: resultArray };
-
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 목록 조회 성공', data });
   } catch (err) {
     console.error(err.message);

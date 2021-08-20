@@ -41,7 +41,12 @@ const ReminderSchema = new mongoose.Schema({
   fcm: {
     type: String,
     required: true
-  },
+  }
+},{
+  timestamps: {
+    createdAt: 'createdAt'
+  }
 });
+
 
 export default mongoose.model<IReminder & mongoose.Document>('Reminder', ReminderSchema);
