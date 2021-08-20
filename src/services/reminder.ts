@@ -94,9 +94,8 @@ const findDetailReminder = (data: reminderFindInputByReminderId) => {
     {
       _id: data.reminderIdx,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1 }
-  ).sort({ date: -1,
-    createdAt: -1}); //가까운 순으로 정렬
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1}
+  ).sort({ date: -1, createdAt: -1}); //가까운 순으로 정렬
   return result;
 };
 
@@ -108,8 +107,7 @@ const findMonthReminder = (data: reminderMonthFindInput) => {
       month: data.month,
     },
     { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1 }
-  ).sort({ date: -1,
-    createdAt: -1}); //가까운 순으로 정렬
+  ).sort({ date: -1, createdAt: -1 }); //가까운 순으로 정렬
   return result;
 };
 
