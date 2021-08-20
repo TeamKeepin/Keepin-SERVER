@@ -122,7 +122,8 @@ const findReminderOncoming = (data: reminderOncomingFindInput) => {
     },
     { _id: 1, title: 1, date: 1, isImportant: 1 }
   )
-    .sort({ date: 1 })
+  .sort({ date: -1, 
+    createdAt: -1})
     .limit(2); //가까운 순으로 정렬, 2개만 나오게
   return result;
 };
