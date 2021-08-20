@@ -121,7 +121,7 @@ const findKeepin = (data: keepinFindInput) => {
     .where('userIdx')
     .equals(data.userIdx)
     .sort({ date: convertDate, 
-      createdAt: -1});
+      createdAt: convertDate});
   return result;
 };
 
