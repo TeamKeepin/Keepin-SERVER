@@ -34,10 +34,7 @@ import { LexRuntime } from 'aws-sdk';
  * {
     "status": 200,
     "message": "키핀하기 생성 성공",
-    "data": {
-        "keepinIdx": "60eda9cd36d5ca07e047a980"
     }
-}
  * 
  * @apiErrorExample Error-Response:
  * - 400 요청바디가 없음
@@ -102,7 +99,6 @@ const createKeepin = async (req, res) => {
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '키핀하기 생성 성공',
-      keepin,
     });
   } catch (err) {
     console.error(err.message);
