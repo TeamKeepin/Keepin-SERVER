@@ -333,7 +333,53 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/keepin:keepinIdx",
+    "url": "/keepin/all",
+    "title": "키핀하기 생성",
+    "version": "1.0.0",
+    "name": "createKeepin",
+    "group": "Keepin",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "\n{\n    \"title\": \"가장 달콤했던 생일 선물\",\n    \"taken\": true,\n    \"date\": \"2021-06-07\",\n    \"category\": [\"생일\", \"축하\"],\n    \"record\": \"뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!\",\n    \"friendIdx\":[\"60ed9e98e51ad110481cd9d7\"]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"키핀하기 생성 성공\",\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"필수 정보를 입력하세요.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/keepin.ts",
+    "groupTitle": "Keepin"
+  },
+  {
+    "type": "post",
+    "url": "/keepin/photo/:keepinIdx",
     "title": "키핀하기 이미지 생성",
     "version": "1.0.0",
     "name": "createKeepinPhoto",
@@ -342,7 +388,16 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"multipart/form-data\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}\n\n{\n    \"photo\":[\".jpg\"] *file로 보내주세요\n}",
+          "content": "{\n    \"Content-Type\": \"multipart/form-data\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n    \"photo\":[\".jpg\"] *file로 보내주세요\n}",
           "type": "json"
         }
       ]
@@ -371,7 +426,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/keepin",
-    "title": "키핀하기 생성",
+    "title": "키핀하기 텍스트 생성",
     "version": "1.0.0",
     "name": "createKeepinText",
     "group": "Keepin",
@@ -379,7 +434,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n    \"Content-Type\": \"multipart/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
           "type": "json"
         }
       ]
@@ -697,6 +752,52 @@ define({ "api": [
   },
   {
     "type": "put",
+    "url": "/my/edit/password",
+    "title": "비밀번호 수정",
+    "version": "1.0.0",
+    "name": "editPassword",
+    "group": "My",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n \"currentPassword\": \"1234567\",\n \"newPassword\": \"123456\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-201 OK\n{\n  \"status\": 200,\n  \"message\": \"비밀번호 수정 성공\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 유저 유무 확인\n{\n \"status\": 400,\n \"message\": \"유저가 없습니다.\"\n}\n-400 비밀번호 확인\n{\n \"status\": 400,\n \"message\": \"기존 비밀번호 일치하지 않습니다.\"\n}\n-400 변경할 비밀번호 자리수 확인\n{\n \"status\": 400,\n \"message\": \"6자리 이상의 비밀번호로 설정해 주세요.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/user.ts",
+    "groupTitle": "My"
+  },
+  {
+    "type": "put",
     "url": "/my/phone",
     "title": "전화번호 수정 *",
     "version": "1.0.0",
@@ -788,52 +889,6 @@ define({ "api": [
     "groupTitle": "My"
   },
   {
-    "type": "put",
-    "url": "/my/password",
-    "title": "비밀번호 수정",
-    "version": "1.0.0",
-    "name": "editProfile",
-    "group": "My",
-    "header": {
-      "examples": [
-        {
-          "title": "Header-Example:",
-          "content": "{\n \"Content-Type\": \"application/json\",\n \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "parameter": {
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n \"currentPassword\": \"1234567\",\n \"newPassword\": \"123456\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "-201 OK\n{\n  \"status\": 201,\n  \"message\": \"비밀번호 수정 성공\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "-400 유저 유무 확인\n{\n \"status\": 400,\n \"message\": \"유저가 없습니다.\"\n}\n-400 비밀번호 확인\n{\n \"status\": 400,\n \"message\": \"기존 비밀번호 일치하지 않습니다.\"\n}\n-400 변경할 비밀번호 자리수 확인\n{\n \"status\": 400,\n \"message\": \"6자리 이상의 비밀번호로 설정해 주세요.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "src/controllers/user.ts",
-    "groupTitle": "My"
-  },
-  {
     "type": "get",
     "url": "/my",
     "title": "유저별 keepin 수 조회",
@@ -854,6 +909,52 @@ define({ "api": [
         {
           "title": "Success-Response:",
           "content": "-200 OK\n{\n  \"status\": 200,\n  \"msg\": \"키핀 수 조회 성공\",\n  \"data\": {\n      \"name\": \"유키핀\",\n      \"total\": 17,\n      \"taken\": 16,\n      \"given\": 1\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "-400 유저 유무 확인\n{\n \"status\": 400,\n \"message\": \"유저가 없습니다.\"\n}\n-500 서버error\n{\n \"status\": 500,\n \"message\": \"INTERNAL_SERVER_ERROR\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/user.ts",
+    "groupTitle": "My"
+  },
+  {
+    "type": "post",
+    "url": "/my/find/password",
+    "title": "비밀번호 찾기",
+    "version": "1.0.0",
+    "name": "findPassword",
+    "group": "My",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n \"Content-Type\": \"application/json\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n \"email\": \"fuckOff@naver.com\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "-200 OK\n{\n  \"status\": 200,\n  \"message\": \"임시 비밀번호 전송 성공\",\n}",
           "type": "json"
         }
       ]
@@ -982,7 +1083,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"필수 정보(title, date, isAlarm, isImportant)를 입력하세요.\"\n}\n\n- 400 daysAgo이 없거나, 유효하지 않은 값 \n{\n    \"status\": 400,\n   \"message\": \"daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.\"\n}",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"필수 정보(title, date, isAlarm, isImportant)를 입력하세요.\"\n}\n\n- 400 daysAgo이 없거나, 유효하지 않은 값 \n{\n    \"status\": 400,\n    \"message\": \"daysAgo 값(0,1,2,3,7)이 유효하지 않습니다.\"\n}",
           "type": "json"
         }
       ]
@@ -1185,6 +1286,52 @@ define({ "api": [
     "groupTitle": "Reminder"
   },
   {
+    "type": "get",
+    "url": "/reminder/year?year=2021",
+    "title": "리마인더 연도별 목록 조회",
+    "version": "1.0.0",
+    "name": "getYearReminder",
+    "group": "Reminder",
+    "header": {
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n    \"Content-Type\": \"application/json\"\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "* url: /reminder/year?year=2021\n* year : 조회 연도",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "- 200 OK\n{\n    \"status\": 200,\n    \"message\": \"연도별 목록 조회 성공\",\n    \"data\": {\n        \"reminders\": [\n            {\n                \"isAlarm\": true,\n                \"isImportant\": false,\n                \"_id\": \"60edbaa0ce001e7a245596b7\",\n                \"title\": \"오랜만에 챈니🧡 보는 날\",\n                \"date\": \"05.02\"\n            },\n            {\n                \"isAlarm\": false,\n                \"isImportant\": false,\n                \"_id\": \"60edbdf27cd20b065409868f\",\n                \"title\": \"스승의날 (이채은교수님)\",\n                \"date\": \"05.15\"\n            }\n        ]\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "- 400 요청바디가 없음\n{\n    \"status\": 400,\n    \"message\": \"쿼리(year)를 입력하세요.\"\n}\n\n- 400 QUERY 형식이 맞지 않음\n{\n    \"status\": 400,\n    \"message\": \"쿼리(year) 형식을 맞춰주세요.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "src/controllers/reminder.ts",
+    "groupTitle": "Reminder"
+  },
+  {
     "type": "put",
     "url": "/reminder/modify/:reminderId",
     "title": "리마인더 수정",
@@ -1318,7 +1465,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "200 OK\n{\n \"status\": 200,\n \"message\": \"이메일이 중복되지 않음(회원가입 진행 가능)\"\n}",
+          "content": "200 OK\n{\n \"status\": 200,\n \"message\": \"이메일이 중복되지 않음\"\n}",
           "type": "json"
         }
       ]

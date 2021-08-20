@@ -63,11 +63,17 @@ export interface reminderMonthFindInput {
   year: string;
   month: string;
 }
+
+export interface reminderYearFindInput {
+  userIdx: string;
+  year: string;
+}
+
 export interface reminderFindInputByReminderId {
   reminderIdx: string;
 }
 
-export interface reminderAlarmInput{
+export interface reminderAlarmInput {
   today: string;
 }
 
@@ -84,7 +90,8 @@ const saveReminder = (data: reminderCreateInput) => {
 const findReminder = (data: reminderFindInput) => {
   const result = Reminder.find({
     userIdx: data.userIdx,
-  }).sort({ date: 1 }); //가까운 순으로 정렬
+  }).sort({ date: -1,
+    createdAt: -1}); //가까운 순으로 정렬
   return result;
 };
 
@@ -93,8 +100,8 @@ const findDetailReminder = (data: reminderFindInputByReminderId) => {
     {
       _id: data.reminderIdx,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1 }
-  ).sort({ date: 1 }); //가까운 순으로 정렬
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1}
+  ).sort({ date: -1, createdAt: -1}); //가까운 순으로 정렬
   return result;
 };
 
@@ -106,6 +113,17 @@ const findMonthReminder = (data: reminderMonthFindInput) => {
       month: data.month,
     },
     { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1 }
+  ).sort({ date: -1, createdAt: -1 }); //가까운 순으로 정렬
+  return result;
+};
+
+const findYearReminder = (data: reminderYearFindInput) => {
+  const result = Reminder.find(
+    {
+      userIdx: data.userIdx,
+      year: data.year,
+    },
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, month: 1 }
   ).sort({ date: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -119,7 +137,8 @@ const findReminderOncoming = (data: reminderOncomingFindInput) => {
     },
     { _id: 1, title: 1, date: 1, isImportant: 1 }
   )
-    .sort({ date: 1 })
+  .sort({ date: -1, 
+    createdAt: -1})
     .limit(2); //가까운 순으로 정렬, 2개만 나오게
   return result;
 };
@@ -140,7 +159,7 @@ const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
       daysAgo: data.daysAgo,
       sendDate: data.sendDate,
       year: data.year,
-      month: data.month
+      month: data.month,
     },
     { new: true }
   );
@@ -158,7 +177,7 @@ const modifyReminder = (data: reminderModifyInput) => {
       date: data.date,
       sendDate: '0',
       year: data.year,
-      month: data.month
+      month: data.month,
     },
     { new: true }
   );
@@ -174,14 +193,15 @@ const deleteUserData = (data: reminderFindInput) => {
 };
 
 const findAlarmReminder = (data: reminderAlarmInput) => {
-  return Reminder.find({sendDate: data.today}, {title:1, daysAgo:1, fcm:1})
-}
+  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1 });
+};
 
 export default {
   saveReminder,
   findReminder,
   findDetailReminder,
   findMonthReminder,
+  findYearReminder,
   findReminderbyReminderId,
   findReminderOncoming,
   deleteReminderbyReminderId,
@@ -189,5 +209,5 @@ export default {
   deleteUserData,
   modifyReminder,
   modifyReminderWithDaysAgo,
-  findAlarmReminder
+  findAlarmReminder,
 };

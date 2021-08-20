@@ -70,7 +70,7 @@ import returnCode from '../library/returnCode';
  * - 400 daysAgo이 없거나, 유효하지 않은 값 
  * {
     "status": 400,
-   "message": "daysAgo 값(0,1,2,3,7)이 유효하지 않습니다."
+    "message": "daysAgo 값(0,1,2,3,7)이 유효하지 않습니다."
  * }
  */
 const createReminder = async (req, res) => {
@@ -306,7 +306,6 @@ const getAllReminder = async (req, res) => {
     const resultArray = await reminderService.findReminder({ userIdx: userId });
 
     const data = { reminders: resultArray };
-
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 목록 조회 성공', data });
   } catch (err) {
     console.error(err.message);
@@ -397,6 +396,242 @@ const getDetailReminder = async (req, res) => {
     const data = result[0];
 
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 상세 조회 성공', data });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+/**
+ * @api {get} /reminder/year?year=2021 리마인더 연도별 목록 조회
+ * 
+ * @apiVersion 1.0.0
+ * @apiName getYearReminder
+ * @apiGroup Reminder
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * * url: /reminder/year?year=2021
+ * * year : 조회 연도
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "연도별 목록 조회 성공",
+    "data": {
+        "reminders": {
+            "1": [],
+            "2": [
+                {
+                    "isAlarm": true,
+                    "isImportant": true,
+                    "_id": "60ede8fd27530d5c8a55fb99",
+                    "title": "리리 생일",
+                    "date": "02.15",
+                    "month": "02"
+                }
+            ],
+            "3": [
+                {
+                    "isAlarm": false,
+                    "isImportant": false,
+                    "_id": "60eeb5ce232e796c54e67a4b",
+                    "title": "ㅁㄴㅇ",
+                    "date": "03.14",
+                    "month": "03"
+                }
+            ],
+            "4": [],
+            "5": [],
+            "6": [
+                {
+                    "isAlarm": false,
+                    "isImportant": false,
+                    "_id": "610f92d3c53a026fb1e8156f",
+                    "title": "연주 생일",
+                    "date": "06.13",
+                    "month": "06"
+                }
+            ],
+            "7": [],
+            "8": [
+                {
+                    "isAlarm": false,
+                    "isImportant": true,
+                    "_id": "610f923dc53a026fb1e814df",
+                    "title": "영민 생일:파티하는_얼굴:",
+                    "date": "08.11",
+                    "month": "08"
+                }
+            ],
+            "9": [],
+            "10": [
+                {
+                    "isAlarm": false,
+                    "isImportant": false,
+                    "_id": "60ee9597a5263669813fc658",
+                    "title": "티티생일",
+                    "date": "10.14",
+                    "month": "10"
+                }
+            ],
+            "11": [],
+            "12": [
+                {
+                    "isAlarm": true,
+                    "isImportant": true,
+                    "_id": "60f01d6212ed138a3a50ff3e",
+                    "title": "크리스마스:하트1::하트1::케이크:",
+                    "date": "12.25",
+                    "month": "12"
+                }
+            ]
+        }
+    }
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "쿼리(year)를 입력하세요."
+ * }
+ *
+ * - 400 QUERY 형식이 맞지 않음
+ * {
+    "status": 400,
+    "message": "쿼리(year) 형식을 맞춰주세요."
+ * }
+ */
+// 리마인더 연도별 목록 조회
+const getYearReminder = async (req, res) => {
+  const userId = req._id;
+  const year = req.query.year;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  if (year.length != 4) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '쿼리(year) 형식을 맞춰주세요.',
+    });
+  }
+
+  if (!year) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '쿼리(year)를 입력하세요.',
+    });
+  }
+
+  try {
+    const resultArray = await reminderService.findYearReminder({ userIdx: userId, year: year });
+
+    var reminders = {};
+
+    var janArray = [];
+    var febArray = [];
+    var marArray = [];
+    var aprArray = [];
+    var mayArray = [];
+    var junArray = [];
+    var julArray = [];
+    var augArray = [];
+    var sepArray = [];
+    var octArray = [];
+    var novArray = [];
+    var decArray = [];
+
+    // date 형식 예쁘게 만들기
+    for (var result of resultArray) {
+      const month = result.date.substring(5, 7);
+      const day = result.date.substring(8, 10);
+      const date_day = month + '.' + day;
+      result.date = date_day;
+
+      switch (month) {
+        case '01':
+          janArray.push(result);
+          break;
+        case '02':
+          febArray.push(result);
+          break;
+        case '03':
+          marArray.push(result);
+          break;
+        case '04':
+          aprArray.push(result);
+          break;
+        case '05':
+          mayArray.push(result);
+          break;
+        case '06':
+          junArray.push(result);
+          break;
+        case '07':
+          julArray.push(result);
+          break;
+        case '08':
+          augArray.push(result);
+          break;
+        case '09':
+          sepArray.push(result);
+          break;
+        case '10':
+          octArray.push(result);
+          break;
+        case '11':
+          novArray.push(result);
+          break;
+        case '12':
+          decArray.push(result);
+          break;
+        default:
+          break;
+      }
+    }
+
+    reminders['1'] = janArray;
+    reminders['2'] = febArray;
+    reminders['3'] = marArray;
+    reminders['4'] = aprArray;
+    reminders['5'] = mayArray;
+    reminders['6'] = junArray;
+    reminders['7'] = julArray;
+    reminders['8'] = augArray;
+    reminders['9'] = sepArray;
+    reminders['10'] = octArray;
+    reminders['11'] = novArray;
+    reminders['12'] = decArray;
+
+    /*
+    const reminders = {};
+    Object.keys(unordered)
+      .sort()
+      .forEach(function (key) {
+        reminders[key] = unordered[key];
+      });
+    */
+
+    const data = { reminders };
+
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '연도별 목록 조회 성공', data });
   } catch (err) {
     console.error(err.message);
     res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -859,6 +1094,7 @@ export default {
   createReminder,
   getAllReminder,
   getDetailReminder,
+  getYearReminder,
   getMonthReminder,
   getOncomingReminder,
   deleteReminder,

@@ -3,77 +3,116 @@ import { friendService, keepinService } from '../services';
 import returnCode from '../library/returnCode';
 import mongoose from 'mongoose';
 import moment from 'moment';
+import { LexRuntime } from 'aws-sdk';
 
+/**
+ * @api {post} /keepin/all 키핀하기 생성
+ * 
+ * @apiVersion 1.0.0
+ * @apiName createKeepin
+ * @apiGroup Keepin
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * 
+ * {
+    "title": "가장 달콤했던 생일 선물",
+    "taken": true,
+    "date": "2021-06-07",
+    "category": ["생일", "축하"],
+    "record": "뽀민이 정말 앙큼하다. 나 몰래 케이크 주문해놓고 얼레벌레 들고 등장했다 >,< 귀여워!! 꽃 너무 예뻐서 드라이플라워로 간직할 거당. 케이크 너무 맛있었다. 보민이 생일날엔 더 맛있는 거 사줘야지!!",
+    "friendIdx":["60ed9e98e51ad110481cd9d7"]
+ * }
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "키핀하기 생성 성공",
+    }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "필수 정보를 입력하세요."
+ * }
+ * 
+ */
 
-// const createKeepin = async (req, res) => {
-//   const userIdx = req._id;
-//   const errors = validationResult(req);
+const createKeepin = async (req, res) => {
+  const userIdx = req._id;
+  const errors = validationResult(req);
 
-//   let { title, taken, date, category, record, friendIdx } = req.body;
+  let { title, taken, date, category, record, friendIdx } = req.body;
 
-//   console.log(req.files);
+  console.log(req.files);
 
-//   if (!title || taken == undefined || !date || !friendIdx) {
-//     res.status(returnCode.BAD_REQUEST).json({
-//       status: returnCode.BAD_REQUEST,
-//       message: '필수 정보를 입력하세요.',
-//     });
-//     return;
-//   }
+  if (!title || taken == undefined || !date || !friendIdx) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보를 입력하세요.',
+    });
+    return;
+  }
 
-//   //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
-//   // let photo = null;
+  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  // let photo = null;
 
-//   var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
-//   if (req.files !== undefined) {
-//     locationArray = req.files.map((img) => img.location);
+  if (req.files !== undefined) {
+    locationArray = req.files.map((img) => img.location);
 
-//     //형식은 고려해보자
-//     // const type = req.files.mimetype.split('/')[1];
-//     // if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
-//     //   return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
-//     // }
-//   }
+    //형식은 고려해보자
+    // const type = req.files.mimetype.split('/')[1];
+    // if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+    //   return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+    // }
+  }
 
-//   //photo: locationArray
-//   //var locationArray = ["abc","def"];
+  //photo: locationArray
+  //var locationArray = ["abc","def"];
 
-//   try {
-//     const keepin = await keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx });
+  try {
+    const keepin = await keepinService.saveKeepin({ title, photo: locationArray, taken, date, category, record, userIdx, friendIdx });
 
-//     const friends = keepin.friendIdx;
-//     const keepinIdx = keepin._id;
+    const friends = keepin.friendIdx;
+    const keepinIdx = keepin._id;
 
-//     for (const friendId of friends) {
-//       const friendIdx = friendId.toString();
-//       const friend = await friendService.findFriendByFriendIdx({ friendIdx });
-//       const keepins = friend.keepinIdx;
-//       keepins.push(keepinIdx);
-//       await friend.save();
-//     }
+    for (const friendId of friends) {
+      const friendIdx = friendId.toString();
+      const friend = await friendService.findFriendByFriendIdx({ friendIdx });
+      const keepins = friend.keepinIdx;
+      keepins.push(keepinIdx);
+      await friend.save();
+    }
 
-//     // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
-//     // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
+    // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
+    // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
 
-//     return res.status(returnCode.OK).json({
-//       status: returnCode.OK,
-//       message: '키핀하기 생성 성공',
-//       keepin,
-//     });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-//       status: returnCode.INTERNAL_SERVER_ERROR,
-//       message: err.message,
-//     });
-//     return;
-//   }
-// };
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: '키핀하기 생성 성공',
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 
 /**
- * @api {post} /keepin 키핀하기 생성
+ * @api {post} /keepin 키핀하기 텍스트 생성
  * 
  * @apiVersion 1.0.0
  * @apiName createKeepinText
@@ -104,7 +143,7 @@ import moment from 'moment';
     "data": {
         "keepinIdx": "60eda9cd36d5ca07e047a980"
     }
-}
+}ya
  * 
  * @apiErrorExample Error-Response:
  * - 400 요청바디가 없음
@@ -131,11 +170,9 @@ import moment from 'moment';
     }
 
     try {
-      const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx });
-  
+      const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx});
       const friends = keepin.friendIdx;
       const keepinIdx = keepin._id;
-  
       for (const friendId of friends) {
         const friendIdx = friendId.toString();
         const friend = await friendService.findFriendByFriendIdx({ friendIdx });
@@ -202,7 +239,7 @@ const createKeepinPhoto = async (req, res) => {
   const errors = validationResult(req);
   console.log(req.files);
 
-  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+  let locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
   if (req.files !== undefined) {
     locationArray = req.files.map((img) => img.location);
   }
@@ -614,7 +651,6 @@ const getDetailKeepin = async (req, res) => {
 
   try {
     const detail = await keepinService.findDetailKeepin({ userIdx: userIdx, keepinIdx: keepinIdx });
-    console.log(detail.friendIdx);
 
     //friend의 이름 가져오기
     // var friendNames = [];
@@ -829,7 +865,7 @@ const deleteKeepin = async (req, res) => {
 };
 
 export default {
-  // createKeepin,
+  createKeepin,
   createKeepinText,
   createKeepinPhoto,
   getTakenKeepin,

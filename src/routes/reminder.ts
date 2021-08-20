@@ -12,6 +12,9 @@ router.post('/', auth.checkToken, reminderController.createReminder);
 //리마인더 전체 목록 조회
 router.get('/', auth.checkToken, reminderController.getAllReminder);
 
+// 연도별 목록 조회
+router.get('/year', auth.checkToken, reminderController.getYearReminder);
+
 // 월별 목록 조회
 router.get('/date', auth.checkToken, reminderController.getMonthReminder);
 

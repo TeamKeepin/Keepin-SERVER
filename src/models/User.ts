@@ -29,7 +29,10 @@ const UserSchema = new mongoose.Schema({
     },
     refreshToken: {
       type: String,
-    }
+    },
+    // passwordToken: {
+    //   type: String,
+    // }
   });
   
   export default mongoose.model<IUser & mongoose.Document>("User", UserSchema);
