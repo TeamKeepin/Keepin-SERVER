@@ -759,7 +759,7 @@ const getKeepinCount = async (req, res) => {
 };
 
 /**
- * @api {put} /my/phone 전화번호 수정 *
+ * @api {put} /my/phone 전화번호 수정 
  * @apiVersion 1.0.0
  * @apiName editPhone
  * @apiGroup My
