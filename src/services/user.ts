@@ -21,6 +21,12 @@ export interface userEmailInput {
     email: string
 }
 
+export interface userFindEmailInput{
+  name: string,
+  birth: string,
+  phone: string
+}
+
 export interface refreshTokenInput {
     id: string,
     refreshToken: string
@@ -64,6 +70,11 @@ const findUserbyEmail = (data: userEmailInput) => {
 
 const findUserProfile = (data: userIdxInput) => {
   const user = User.findOne({_id:data.userIdx}).select('-__v -token -_id -refreshToken -phoneToken');
+  return user
+};
+
+const findUserEmail = (data: userFindEmailInput) => {
+  const user = User.findOne({name: data.name, birth: data.birth, phone: data.phone});
   return user
 };
 
@@ -120,5 +131,6 @@ export default {
   editPassword,
   editPhone,
   deleteUser,
+  findUserEmail
   // savePasswordToken
 }

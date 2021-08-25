@@ -500,6 +500,97 @@ const editPassword = async (req, res) => {
     return;
   }
 };
+
+/**
+ * @api {post} /my/find/email 이메일 찾기
+ *
+ * @apiVersion 1.0.0
+ * @apiName findEmail
+ * @apiGroup My
+ *
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json"
+ * }
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "name": "iOS",
+ *  "birth": "1997-12-22",
+ *  "phone": "010-1234-5678"
+ * }
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * -200 OK
+ *{
+ *   "status": 200,
+ *   "email" : "iOS@naver.com"
+ *   "message": "이메일 찾기 성공"
+ *}
+ *
+ * @apiErrorExample Error-Response:
+ * -400 필수 정보 확인 
+ * {
+ *  "status": 400,
+ *  "message": "필수 정보를 입력하세요"
+ * }
+ * -400 이름 최대 5글자 확인 
+ * {
+ *  "status": 400,
+ *  "message": "이름은 최대 5자 까지 입력 가능합니다"
+ * }
+ * -400 이메일 유뮤 확인
+ * {
+ *  "status": 400,
+ *  "message": "일치하는 이메일이 없습니다"
+ * }
+ * -500 서버error
+ * {
+ *  "status": 500,
+ *  "message": "INTERNAL_SERVER_ERROR"
+ * }
+ */
+ const findEmail = async (req, res) => {
+  const { name,birth,phone } = req.body;
+  try {
+    if ( !name || !birth || !phone) {
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '필수 정보를 입력하세요'
+      });
+    }
+
+    if (name.length >5){
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '이름은 최대 5자 까지 입력 가능합니다'
+      });
+    }
+
+    // name, birth, Phone 일치 하는 것 찾고 email return  
+    const user = await userService.findUserEmail({ name,birth,phone });
+    if (!user) {
+      return res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '일치하는 이메일이 없습니다',
+      });
+    }
+
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      email: user.email,
+      message: '이메일 찾기 성공',
+    });
+    
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
 /**
  * @api {post} /my/find/password 비밀번호 찾기
  *
@@ -589,7 +680,6 @@ const findPassword = async (req, res) => {
     return;
   }
 };
-
 
 
 /**
@@ -738,8 +828,9 @@ export default {
   getProfile,
   editProfile,
   editPassword,
+  editPhone,
   findPassword,
+  findEmail,
   getKeepinCount,
-  emailCheck,
-  editPhone
+  emailCheck
 };
