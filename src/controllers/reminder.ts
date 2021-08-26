@@ -429,74 +429,96 @@ const getDetailReminder = async (req, res) => {
     "status": 200,
     "message": "연도별 목록 조회 성공",
     "data": {
-        "reminders": {
-            "1": [],
-            "2": [
+        "reminders": [
+            [],
+            [],
+            [],
+            [],
+            [
                 {
                     "isAlarm": true,
-                    "isImportant": true,
-                    "_id": "60ede8fd27530d5c8a55fb99",
-                    "title": "리리 생일",
-                    "date": "02.15",
-                    "month": "02"
-                }
-            ],
-            "3": [
+                    "isImportant": false,
+                    "_id": "60f186490c589a08c05865f2",
+                    "title": "챈니🧡 보는 날",
+                    "date": "05.02",
+                    "month": "05"
+                },
                 {
                     "isAlarm": false,
                     "isImportant": false,
-                    "_id": "60eeb5ce232e796c54e67a4b",
-                    "title": "ㅁㄴㅇ",
-                    "date": "03.14",
-                    "month": "03"
+                    "_id": "60f1867d0c589a08c05865f4",
+                    "title": "스승의 날 🎁",
+                    "date": "05.15",
+                    "month": "05"
                 }
             ],
-            "4": [],
-            "5": [],
-            "6": [
+            [
                 {
-                    "isAlarm": false,
+                    "isAlarm": true,
                     "isImportant": false,
-                    "_id": "610f92d3c53a026fb1e8156f",
-                    "title": "연주 생일",
-                    "date": "06.13",
+                    "_id": "60f186920c589a08c05865f6",
+                    "title": "유영우유 생일 🍰",
+                    "date": "06.27",
                     "month": "06"
                 }
             ],
-            "7": [],
-            "8": [
+            [
                 {
                     "isAlarm": false,
                     "isImportant": true,
-                    "_id": "610f923dc53a026fb1e814df",
-                    "title": "영민 생일:파티하는_얼굴:",
-                    "date": "08.11",
-                    "month": "08"
-                }
-            ],
-            "9": [],
-            "10": [
+                    "_id": "60f186b00c589a08c05865f8",
+                    "title": "아요 합숙 시작일🏠",
+                    "date": "07.07",
+                    "month": "07"
+                },
                 {
                     "isAlarm": false,
                     "isImportant": false,
-                    "_id": "60ee9597a5263669813fc658",
-                    "title": "티티생일",
-                    "date": "10.14",
-                    "month": "10"
-                }
-            ],
-            "11": [],
-            "12": [
+                    "_id": "60f186f70c589a08c05865fc",
+                    "title": "민지 결혼식👰🏻",
+                    "date": "07.17",
+                    "month": "07"
+                },
                 {
                     "isAlarm": true,
                     "isImportant": true,
-                    "_id": "60f01d6212ed138a3a50ff3e",
-                    "title": "크리스마스:하트1::하트1::케이크:",
-                    "date": "12.25",
-                    "month": "12"
+                    "_id": "60f1871e0c589a08c05865fe",
+                    "title": "서현 생일 🍰",
+                    "date": "07.17",
+                    "month": "07"
+                },
+                {
+                    "isAlarm": true,
+                    "isImportant": false,
+                    "_id": "60f25a066b1f1128386d77b4",
+                    "title": "데모데이",
+                    "date": "07.17",
+                    "month": "07"
                 }
-            ]
-        }
+            ],
+            [
+                {
+                    "isAlarm": false,
+                    "isImportant": true,
+                    "_id": "60f187550c589a08c0586601",
+                    "title": "영민쓰 생일 🍰",
+                    "date": "08.11",
+                    "month": "08"
+                },
+                {
+                    "isAlarm": true,
+                    "isImportant": true,
+                    "_id": "60f187710c589a08c0586603",
+                    "title": "아빠생일♥♥🍰",
+                    "date": "08.22",
+                    "month": "08"
+                }
+            ],
+            [],
+            [],
+            [],
+            []
+        ]
     }
  * }
  * 
@@ -543,7 +565,7 @@ const getYearReminder = async (req, res) => {
   try {
     const resultArray = await reminderService.findYearReminder({ userIdx: userId, year: year });
 
-    var reminders = {};
+    var reminders = [];
 
     var janArray = [];
     var febArray = [];
@@ -607,27 +629,18 @@ const getYearReminder = async (req, res) => {
       }
     }
 
-    reminders['1'] = janArray;
-    reminders['2'] = febArray;
-    reminders['3'] = marArray;
-    reminders['4'] = aprArray;
-    reminders['5'] = mayArray;
-    reminders['6'] = junArray;
-    reminders['7'] = julArray;
-    reminders['8'] = augArray;
-    reminders['9'] = sepArray;
-    reminders['10'] = octArray;
-    reminders['11'] = novArray;
-    reminders['12'] = decArray;
-
-    /*
-    const reminders = {};
-    Object.keys(unordered)
-      .sort()
-      .forEach(function (key) {
-        reminders[key] = unordered[key];
-      });
-    */
+    reminders.push(janArray);
+    reminders.push(febArray);
+    reminders.push(marArray);
+    reminders.push(aprArray);
+    reminders.push(mayArray);
+    reminders.push(junArray);
+    reminders.push(julArray);
+    reminders.push(augArray);
+    reminders.push(sepArray);
+    reminders.push(octArray);
+    reminders.push(novArray);
+    reminders.push(decArray);
 
     const data = { reminders };
 
