@@ -45,7 +45,7 @@ const ReminderSchema = new mongoose.Schema(
     },
     isPassed: {
       type: Boolean,
-      default: 1,
+      default: 0,
     },
   },
   {

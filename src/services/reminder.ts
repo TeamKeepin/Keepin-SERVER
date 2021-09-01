@@ -151,6 +151,11 @@ const findAllReminder = () => {
   return Reminder.find({}, { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 });
 };
 
+// 지나지 않은 리마인더들을 받을 수 있음.
+const findIsPassedReminder = () => {
+  return Reminder.find({ isPassed: 0 }, { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 });
+};
+
 // 리마인더 수정
 const modifyReminderChangeIsNotPassed = (data: reminderFindInputByReminderId) => {
   const result = Reminder.findOneAndUpdate(
@@ -239,4 +244,5 @@ export default {
   findAllReminder,
   modifyReminderChangeIsNotPassed,
   modifyReminderChangeIsPassed,
+  findIsPassedReminder,
 };
