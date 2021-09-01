@@ -117,6 +117,16 @@ const createReminder = async (req, res) => {
     }
   }
 
+  // 오늘 기준으로 지났는지 안지났는지, 체크하는 함수
+
+  var today = moment().format('YYYY-MM-DD');
+
+  if (date < today) {
+    var ispassed = true;
+  } else {
+    var ispassed = false;
+  }
+
   try {
     var result;
     if (isAlarm == false) {
@@ -131,6 +141,7 @@ const createReminder = async (req, res) => {
         year,
         month,
         fcm,
+        isPassed: ispassed,
       });
     } else {
       // alarm 받을 거면, daysAgo 값이 있음.
@@ -145,6 +156,7 @@ const createReminder = async (req, res) => {
         month,
         daysAgo,
         fcm,
+        isPassed: ispassed,
       });
     }
 
@@ -1038,6 +1050,14 @@ const modifyReminder = async (req, res) => {
     }
   }
 
+  var today = moment().format('YYYY-MM-DD');
+
+  if (date < today) {
+    var ispassed = true;
+  } else {
+    var ispassed = false;
+  }
+
   try {
     var result;
     if (isAlarm == false) {
@@ -1050,6 +1070,7 @@ const modifyReminder = async (req, res) => {
         isImportant,
         year,
         month,
+        isPassed: ispassed,
       });
     } else {
       // alarm 받을 거면, daysAgo 값이 있음.
@@ -1063,6 +1084,7 @@ const modifyReminder = async (req, res) => {
         daysAgo,
         year,
         month,
+        isPassed: ispassed,
       });
     }
 
