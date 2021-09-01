@@ -195,6 +195,7 @@ const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
       sendDate: data.sendDate,
       year: data.year,
       month: data.month,
+      isPassed: data.isPassed,
     },
     { new: true }
   );
@@ -213,6 +214,7 @@ const modifyReminder = (data: reminderModifyInput) => {
       sendDate: '0',
       year: data.year,
       month: data.month,
+      isPassed: data.isPassed,
     },
     { new: true }
   );
