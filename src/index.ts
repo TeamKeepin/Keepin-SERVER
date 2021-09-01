@@ -53,10 +53,10 @@ app
 const isDatePassed = async () => {
   try {
     // 리마인더의 모든 데이터 가져오기.
-    const resultArray = await reminderService.findAllReminder();
+    // const resultArray = await reminderService.findAllReminder();
 
-    // 추후에는 1로 되어있는 것들만 가져와서, 체크해주면 된다.
-    //
+    // 추후에는 1(과거, 지난것)로 되어있는 것들만 가져와서, 체크해주면 된다.
+    const resultArray = await reminderService.findAllReminder();
 
     // 오늘 기준으로 지났는지 안지났는지, 체크하는 함수
     const today = moment().format('YYYY-MM-DD');
