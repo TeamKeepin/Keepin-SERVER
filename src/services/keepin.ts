@@ -13,7 +13,7 @@ export interface keepinCreateInput {
   friendIdx: [string];
 }
 
-export interface keepinCreateTextInput{
+export interface keepinCreateTextInput {
   title: string;
   taken: boolean;
   date: string;
@@ -23,7 +23,7 @@ export interface keepinCreateTextInput{
   friendIdx: [string];
 }
 
-export interface keepinCreatePhotoInput{
+export interface keepinCreatePhotoInput {
   photo: string[];
   keepinIdx: string;
 }
@@ -45,12 +45,12 @@ export interface keepinFindInput {
   recent: boolean;
 }
 
-export interface keepinFindByKeepinIdxAndTakenInput{
+export interface keepinFindByKeepinIdxAndTakenInput {
   keepinIdx: string;
   taken: boolean;
 }
 
-export interface keepinFindByFriendIdxAndTakenInput{
+export interface keepinFindByFriendIdxAndTakenInput {
   friendIdx: string;
   taken: boolean;
 }
@@ -93,19 +93,15 @@ const saveKeepin = (data: keepinCreateInput) => {
   return keepin;
 };
 
-//키핀생성 1 
+//키핀생성 1
 const saveKeepinText = (data: keepinCreateTextInput) => {
   const keepin = Keepin.create(data);
   return keepin;
 };
 
-//키핀생성 2 
+//키핀생성 2
 const saveKeepinPhoto = (data: keepinCreatePhotoInput) => {
-  return Keepin.findOneAndUpdate(
-    { _id: data.keepinIdx },
-      {photo: data.photo},
-      { new: true }
-    );
+  return Keepin.findOneAndUpdate({ _id: data.keepinIdx }, { photo: data.photo }, { new: true });
 };
 
 //모아보기 받은/준
@@ -164,11 +160,11 @@ const findKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
   return keepin;
 };
 
-
 const findKeepinForTaken = (data: keepinFindByKeepinIdxAndTakenInput) => {
-  const keepin = Keepin.findOne({ _id: data.keepinIdx },{title:1, photo:1, date:1, taken:1})
-      .where('taken').equals(data.taken)
-      .sort({ date: -1 });
+  const keepin = Keepin.findOne({ _id: data.keepinIdx }, { title: 1, photo: 1, date: 1, taken: 1 })
+    .where('taken')
+    .equals(data.taken)
+    .sort({ date: -1 });
   return keepin;
 };
 
@@ -233,5 +229,5 @@ export default {
   deleteFriend,
   deleteUserData,
   saveKeepinText,
-  saveKeepinPhoto
+  saveKeepinPhoto,
 };
