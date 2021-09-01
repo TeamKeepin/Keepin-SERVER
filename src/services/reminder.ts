@@ -13,6 +13,7 @@ export interface reminderCreateInputWithDaysAgo {
   month: string;
   daysAgo: string;
   fcm: string;
+  isPassed: boolean;
 }
 
 export interface reminderModifyInputWithDaysAgo {
@@ -25,6 +26,7 @@ export interface reminderModifyInputWithDaysAgo {
   daysAgo: string;
   year: string;
   month: string;
+  isPassed: boolean;
 }
 
 export interface reminderModifyInput {
@@ -35,6 +37,7 @@ export interface reminderModifyInput {
   isImportant: boolean;
   year: string;
   month: string;
+  isPassed: boolean;
 }
 
 export interface reminderCreateInput {
@@ -47,6 +50,7 @@ export interface reminderCreateInput {
   year: string;
   month: string;
   fcm: string;
+  isPassed: boolean;
 }
 
 export interface reminderFindInput {
