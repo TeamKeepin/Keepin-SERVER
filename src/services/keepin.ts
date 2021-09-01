@@ -164,7 +164,7 @@ const findKeepinForTaken = (data: keepinFindByKeepinIdxAndTakenInput) => {
   const keepin = Keepin.findOne({ _id: data.keepinIdx }, { title: 1, photo: 1, date: 1, taken: 1 })
     .where('taken')
     .equals(data.taken)
-    .sort({ date: -1 });
+    .sort({ date: -1, createdAt: -1 });
   return keepin;
 };
 
