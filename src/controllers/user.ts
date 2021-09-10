@@ -612,6 +612,7 @@ const editPassword = async (req, res) => {
  *{
  *   "status": 200,
  *   "message": "임시 비밀번호 전송 성공",
+ *   "tempPassword": "a4059b8490eb3756f586" 
  *}
  *
  * @apiErrorExample Error-Response:
@@ -642,7 +643,7 @@ const findPassword = async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
-      port: 465,
+      port: 587,
       secure: true, // true for 465, false for other ports
       auth: { // 이메일을 보낼 계정 데이터 입력
         user:  'officialkeepin@gmail.com',
@@ -669,6 +670,7 @@ const findPassword = async (req, res) => {
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '임시 비밀번호 전송 성공',
+      tempPassword: tempPassword
     });
     
   } catch (err) {
