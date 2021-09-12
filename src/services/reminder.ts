@@ -40,6 +40,13 @@ export interface reminderModifyInput {
   isPassed: boolean;
 }
 
+export interface reminderModifyAlarmInput {
+  reminderId: string;
+  isAlarm: boolean;
+  sendDate: string;
+  daysAgo: string;
+}
+
 export interface reminderCreateInput {
   title: string;
   date: string;
@@ -103,7 +110,7 @@ const findDetailReminder = (data: reminderFindInputByReminderId) => {
     {
       _id: data.reminderIdx,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1 }
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1, isPassed: 1 }
   ).sort({ date: 1, createdAt: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -115,7 +122,7 @@ const findMonthReminder = (data: reminderMonthFindInput) => {
       year: data.year,
       month: data.month,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1 }
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, isPassed: 1 }
   ).sort({ date: 1, createdAt: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -126,7 +133,7 @@ const findYearReminder = (data: reminderYearFindInput) => {
       userIdx: data.userIdx,
       year: data.year,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, month: 1 }
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, month: 1, isPassed: 1 }
   ).sort({ date: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -138,7 +145,7 @@ const findReminderOncoming = (data: reminderOncomingFindInput) => {
       userIdx: data.userIdx,
       date: { $gte: data.start },
     },
-    { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 }
+    { _id: 1, title: 1, date: 1, year: 1, isImportant: 1, isPassed: 1 }
   )
     .sort({ date: 1, createdAt: 1 })
     .limit(2); //가까운 순으로 정렬, 2개만 나오게
@@ -221,6 +228,19 @@ const modifyReminder = (data: reminderModifyInput) => {
   return result;
 };
 
+// 리마인더 알람만 수정.
+const modifyReminderAlarm = (data: reminderModifyAlarmInput) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderId },
+    {
+      isAlarm: data.isAlarm,
+      sendDate: data.sendDate,
+    },
+    { new: true }
+  );
+  return result;
+};
+
 const deleteReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.deleteOne({ _id: data.reminderIdx });
 };
@@ -246,6 +266,7 @@ export default {
   deleteUserData,
   modifyReminder,
   modifyReminderWithDaysAgo,
+  modifyReminderAlarm,
   findAlarmReminder,
   findAllReminder,
   modifyReminderChangeIsNotPassed,

@@ -89,6 +89,23 @@ const reToken = async (req, res) => {
   }
 };
 
+const healthcheck = async (req, res) => {
+  try {
+    res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: 'health check',
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
 export default {
   reToken,
+  healthcheck,
 };
