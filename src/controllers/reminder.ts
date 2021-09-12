@@ -1060,35 +1060,151 @@ const modifyReminder = async (req, res) => {
 
   try {
     var result;
+
     if (isAlarm == false) {
-      // alarm 안받을 거면, daysAgo 값은 없음.
-      result = await reminderService.modifyReminder({
+      realDate = '0';
+      daysAgo = '0';
+    }
+
+    // alarm 받을 거면, daysAgo 값이 있음.
+    result = await reminderService.modifyReminderWithDaysAgo({
+      reminderId,
+      title,
+      date,
+      sendDate: realDate,
+      isAlarm,
+      isImportant,
+      daysAgo,
+      year,
+      month,
+      isPassed: ispassed,
+    });
+
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 수정 성공' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+/**
+ * @api {put} /reminder/modify/alarm/:reminderId 리마인더 알람 수정
+ * 
+ * @apiVersion 1.0.0
+ * @apiName modifyReminder
+ * @apiGroup Reminder
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+    "Content-Type": "application/json"
+    "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * * url: /reminder/modify/alarm/60e5bdc46c3cdb135f1da1dc
+ * * reminderId : 리마인더 Id
+ * 
+ * 
+ * * isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청
+ * * isImportant : 중요 여부(true/false)
+ * * daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전) -> String으로 요청
+ * 
+ * - 알람 받는 경우
+ * {
+    "isAlarm": true
+ * }
+
+ * - 알람 받지 않는 경우
+ * {
+    "isAlarm": false
+ * }
+ *
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * - 200 OK
+ * {
+    "status": 200,
+    "message": "리마인더 알람 수정 성공"
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * - 400 요청바디가 없음
+ * {
+    "status": 400,
+    "message": "필수 정보(isAlarm)를 입력하세요."
+ * }
+ * 
+ */
+const modifyReminderAlarm = async (req, res) => {
+  const userId = req._id;
+  const reminderId = req.params.reminderId;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '요청바디가 없습니다.',
+    });
+  }
+
+  let { isAlarm } = req.body;
+  let daysAgo, sendDate;
+
+  // 파라미터 확인
+  if (isAlarm == undefined) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보(isAlarm)를 입력하세요.',
+    });
+    return;
+  }
+
+  try {
+    let resultAlarm;
+    let reminderDetail;
+
+    if (isAlarm == true) {
+      // 알람 설정을 하지 않았다가, 알람 설정을 할 때
+      // ex) daysago 값을 0으로 맞춰놓고, senddate는 (리마인더의)당일 날짜로 변경할 것.
+      // 서비스에 요청 보낼 때, daysago, senddate를 같이 보내서 수정해야 함.
+
+      reminderDetail = await reminderService.findDetailReminder({
+        reminderIdx: reminderId,
+      });
+
+      // date는 2021-03-21
+      // realDate = date - daysAgo
+      var realDate = moment(reminderDetail.date).subtract(daysAgo, 'd').format('YYYY-MM-DD');
+
+      daysAgo = '0';
+
+      resultAlarm = await reminderService.modifyReminderAlarm({
         reminderId,
-        title,
-        date,
         isAlarm,
-        isImportant,
-        year,
-        month,
-        isPassed: ispassed,
+        sendDate: realDate,
+        daysAgo,
       });
     } else {
-      // alarm 받을 거면, daysAgo 값이 있음.
-      result = await reminderService.modifyReminderWithDaysAgo({
+      // 알람 설정을 했다가, 알람 설정을 끌 때.
+      // ex) 기존에 3일 전 알람 받기 설정을 해놨었을 것 -> daysago:3 , senddate: 3일전으로 설정되어 있음.
+      // daysago 값을 0으로 맞춰놓고, senddate는 0으로 변경할 것.
+      // 서비스에 요청 보낼 때, daysago, senddate를 같이 보내서 수정해야 함.
+      daysAgo = '0';
+      sendDate = '0';
+
+      resultAlarm = await reminderService.modifyReminderAlarm({
         reminderId,
-        title,
-        date,
-        sendDate: realDate,
         isAlarm,
-        isImportant,
+        sendDate,
         daysAgo,
-        year,
-        month,
-        isPassed: ispassed,
       });
     }
 
-    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 수정 성공' });
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 알람 수정 성공' });
   } catch (err) {
     console.error(err.message);
     res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -1134,5 +1250,6 @@ export default {
   getOncomingReminder,
   deleteReminder,
   modifyReminder,
+  modifyReminderAlarm,
   getSendDate,
 };
