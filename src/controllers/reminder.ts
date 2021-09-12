@@ -450,6 +450,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": true,
                     "isImportant": false,
+                    "isPassed": true,
                     "_id": "60f186490c589a08c05865f2",
                     "title": "챈니🧡 보는 날",
                     "date": "05.02",
@@ -458,6 +459,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": false,
                     "isImportant": false,
+                    "isPassed": true,
                     "_id": "60f1867d0c589a08c05865f4",
                     "title": "스승의 날 🎁",
                     "date": "05.15",
@@ -468,6 +470,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": true,
                     "isImportant": false,
+                    "isPassed": true,
                     "_id": "60f186920c589a08c05865f6",
                     "title": "유영우유 생일 🍰",
                     "date": "06.27",
@@ -478,6 +481,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": false,
                     "isImportant": true,
+                    "isPassed": true,
                     "_id": "60f186b00c589a08c05865f8",
                     "title": "아요 합숙 시작일🏠",
                     "date": "07.07",
@@ -486,6 +490,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": false,
                     "isImportant": false,
+                    "isPassed": true,
                     "_id": "60f186f70c589a08c05865fc",
                     "title": "민지 결혼식👰🏻",
                     "date": "07.17",
@@ -494,6 +499,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": true,
                     "isImportant": true,
+                    "isPassed": true,
                     "_id": "60f1871e0c589a08c05865fe",
                     "title": "서현 생일 🍰",
                     "date": "07.17",
@@ -502,6 +508,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": true,
                     "isImportant": false,
+                    "isPassed": true,
                     "_id": "60f25a066b1f1128386d77b4",
                     "title": "데모데이",
                     "date": "07.17",
@@ -512,6 +519,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": false,
                     "isImportant": true,
+                    "isPassed": true,
                     "_id": "60f187550c589a08c0586601",
                     "title": "영민쓰 생일 🍰",
                     "date": "08.11",
@@ -520,6 +528,7 @@ const getDetailReminder = async (req, res) => {
                 {
                     "isAlarm": true,
                     "isImportant": true,
+                    "isPassed": true,
                     "_id": "60f187710c589a08c0586603",
                     "title": "아빠생일♥♥🍰",
                     "date": "08.22",
@@ -693,18 +702,36 @@ const getYearReminder = async (req, res) => {
     "data": {
         "reminders": [
             {
-                "isAlarm": true,
-                "isImportant": false,
-                "_id": "60edbaa0ce001e7a245596b7",
-                "title": "오랜만에 챈니🧡 보는 날",
-                "date": "05.02"
+                "isAlarm": false,
+                "isImportant": true,
+                "isPassed": true,
+                "_id": "60f186b00c589a08c05865f8",
+                "title": "아요 합숙 시작일🏠",
+                "date": "07.07"
             },
             {
                 "isAlarm": false,
                 "isImportant": false,
-                "_id": "60edbdf27cd20b065409868f",
-                "title": "스승의날 (이채은교수님)",
-                "date": "05.15"
+                "isPassed": true,
+                "_id": "60f186f70c589a08c05865fc",
+                "title": "민지 결혼식👰🏻",
+                "date": "07.17"
+            },
+            {
+                "isAlarm": true,
+                "isImportant": true,
+                "isPassed": true,
+                "_id": "60f1871e0c589a08c05865fe",
+                "title": "서현 생일 🍰",
+                "date": "07.17"
+            },
+            {
+                "isAlarm": true,
+                "isImportant": false,
+                "isPassed": true,
+                "_id": "60f25a066b1f1128386d77b4",
+                "title": "데모데이",
+                "date": "07.17"
             }
         ]
     }
