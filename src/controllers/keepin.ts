@@ -52,8 +52,6 @@ const createKeepin = async (req, res) => {
 
   let { title, taken, date, category, record, friendIdx } = req.body;
 
-  console.log(req.files);
-
   if (!title || taken == undefined || !date || !friendIdx) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
@@ -63,7 +61,7 @@ const createKeepin = async (req, res) => {
   }
 
   //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
-  // let photo = null;
+  let photo = null;
 
   var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
@@ -745,6 +743,8 @@ const modifyKeepin = async (req, res) => {
     return;
   }
 
+  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  let photo = null;
   var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
   if (req.files !== undefined) {
@@ -772,7 +772,16 @@ const modifyKeepin = async (req, res) => {
       friendIdx, //수정된 친구 배열이 다시 덮어쓰기 됨 : [실버영, 김씨워터]
     });
 
-    for (var friendId of friendIdx) {
+    console.log(typeof friendIdx);
+    let friendArray = [];
+
+    if (typeof friendIdx == 'string') {
+      friendArray.push(friendIdx);
+    } else {
+      friendArray = friendIdx;
+    }
+
+    for (var friendId of friendArray) {
       const friendResult = await friendService.saveKeepinInFriend({ keepinIdx: keepinId, friendIdx: friendId });
     }
 
