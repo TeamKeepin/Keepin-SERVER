@@ -250,7 +250,7 @@ const deleteUserData = (data: reminderFindInput) => {
 };
 
 const findAlarmReminder = (data: reminderAlarmInput) => {
-  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1 });
+  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1, sendDate: 1 });
 };
 
 export default {
