@@ -235,6 +235,7 @@ const modifyReminderAlarm = (data: reminderModifyAlarmInput) => {
     {
       isAlarm: data.isAlarm,
       sendDate: data.sendDate,
+      daysAgo: data.daysAgo,
     },
     { new: true }
   );
