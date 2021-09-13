@@ -1205,7 +1205,9 @@ const modifyReminderAlarm = async (req, res) => {
 
       // date는 2021-03-21
       // realDate = date - daysAgo
-      var realDate = moment(reminderDetail.date).format('YYYY-MM-DD');
+      var realDate = reminderDetail[0].date;
+
+      console.log(realDate);
 
       resultAlarm = await reminderService.modifyReminderAlarm({
         reminderId,
@@ -1227,6 +1229,8 @@ const modifyReminderAlarm = async (req, res) => {
         sendDate,
         daysAgo,
       });
+
+      console.log(resultAlarm);
     }
 
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 알람 수정 성공' });
