@@ -612,6 +612,7 @@ const editPassword = async (req, res) => {
  *{
  *   "status": 200,
  *   "message": "임시 비밀번호 전송 성공",
+ *   "tempPassword": "a4059b8490eb3756f586" 
  *}
  *
  * @apiErrorExample Error-Response:
@@ -669,6 +670,7 @@ const findPassword = async (req, res) => {
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
       message: '임시 비밀번호 전송 성공',
+      tempPassword: tempPassword
     });
     
   } catch (err) {

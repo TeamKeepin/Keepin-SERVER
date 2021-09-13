@@ -13,6 +13,7 @@ export interface reminderCreateInputWithDaysAgo {
   month: string;
   daysAgo: string;
   fcm: string;
+  isPassed: boolean;
 }
 
 export interface reminderModifyInputWithDaysAgo {
@@ -25,6 +26,7 @@ export interface reminderModifyInputWithDaysAgo {
   daysAgo: string;
   year: string;
   month: string;
+  isPassed: boolean;
 }
 
 export interface reminderModifyInput {
@@ -35,6 +37,14 @@ export interface reminderModifyInput {
   isImportant: boolean;
   year: string;
   month: string;
+  isPassed: boolean;
+}
+
+export interface reminderModifyAlarmInput {
+  reminderId: string;
+  isAlarm: boolean;
+  sendDate: string;
+  daysAgo: string;
 }
 
 export interface reminderCreateInput {
@@ -47,6 +57,7 @@ export interface reminderCreateInput {
   year: string;
   month: string;
   fcm: string;
+  isPassed: boolean;
 }
 
 export interface reminderFindInput {
@@ -90,8 +101,7 @@ const saveReminder = (data: reminderCreateInput) => {
 const findReminder = (data: reminderFindInput) => {
   const result = Reminder.find({
     userIdx: data.userIdx,
-  }).sort({ date: 1,
-    createdAt: 1}); //가까운 순으로 정렬
+  }).sort({ date: 1, createdAt: 1 }); //가까운 순으로 정렬
   return result;
 };
 
@@ -100,7 +110,7 @@ const findDetailReminder = (data: reminderFindInputByReminderId) => {
     {
       _id: data.reminderIdx,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1}
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, daysAgo: 1, isPassed: 1 }
   ).sort({ date: 1, createdAt: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -112,7 +122,7 @@ const findMonthReminder = (data: reminderMonthFindInput) => {
       year: data.year,
       month: data.month,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1 }
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, isPassed: 1 }
   ).sort({ date: 1, createdAt: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -123,7 +133,7 @@ const findYearReminder = (data: reminderYearFindInput) => {
       userIdx: data.userIdx,
       year: data.year,
     },
-    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, month: 1 }
+    { _id: 1, title: 1, date: 1, isAlarm: 1, isImportant: 1, month: 1, isPassed: 1 }
   ).sort({ date: 1 }); //가까운 순으로 정렬
   return result;
 };
@@ -135,15 +145,48 @@ const findReminderOncoming = (data: reminderOncomingFindInput) => {
       userIdx: data.userIdx,
       date: { $gte: data.start },
     },
-    { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 }
+    { _id: 1, title: 1, date: 1, year: 1, isImportant: 1, isPassed: 1 }
   )
-  .sort({ date: 1, createdAt: 1 })
-  .limit(2); //가까운 순으로 정렬, 2개만 나오게
+    .sort({ date: 1, createdAt: 1 })
+    .limit(2); //가까운 순으로 정렬, 2개만 나오게
   return result;
 };
 
+//
 const findReminderbyReminderId = (data: reminderFindInputByReminderId) => {
   return Reminder.findOne({ _id: data.reminderIdx });
+};
+
+// 매일 00시에 지나거나 지나지 않은 리마인더를 구별해내기 위한, 서비스
+const findAllReminder = () => {
+  return Reminder.find({}, { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 });
+};
+
+// 지나지 않은 리마인더들을 받을 수 있음.
+const findIsPassedReminder = () => {
+  return Reminder.find({ isPassed: 0 }, { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 });
+};
+
+// 리마인더 수정
+const modifyReminderChangeIsNotPassed = (data: reminderFindInputByReminderId) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderIdx },
+    {
+      isPassed: 0,
+    }
+  );
+  return result;
+};
+
+// 리마인더 수정
+const modifyReminderChangeIsPassed = (data: reminderFindInputByReminderId) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderIdx },
+    {
+      isPassed: 1,
+    }
+  );
+  return result;
 };
 
 // 리마인더 수정 -> 알람이 true일 때, with daysago
@@ -159,6 +202,7 @@ const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
       sendDate: data.sendDate,
       year: data.year,
       month: data.month,
+      isPassed: data.isPassed,
     },
     { new: true }
   );
@@ -177,6 +221,20 @@ const modifyReminder = (data: reminderModifyInput) => {
       sendDate: '0',
       year: data.year,
       month: data.month,
+      isPassed: data.isPassed,
+    },
+    { new: true }
+  );
+  return result;
+};
+
+// 리마인더 알람만 수정.
+const modifyReminderAlarm = (data: reminderModifyAlarmInput) => {
+  const result = Reminder.findOneAndUpdate(
+    { _id: data.reminderId },
+    {
+      isAlarm: data.isAlarm,
+      sendDate: data.sendDate,
     },
     { new: true }
   );
@@ -208,5 +266,10 @@ export default {
   deleteUserData,
   modifyReminder,
   modifyReminderWithDaysAgo,
+  modifyReminderAlarm,
   findAlarmReminder,
+  findAllReminder,
+  modifyReminderChangeIsNotPassed,
+  modifyReminderChangeIsPassed,
+  findIsPassedReminder,
 };
