@@ -111,7 +111,6 @@ const createKeepin = async (req, res) => {
   }
 };
 
-
 /**
  * @api {post} /keepin 키핀하기 텍스트 생성
  * 
@@ -155,50 +154,50 @@ const createKeepin = async (req, res) => {
  * 
  */
 
-//키핀 등록하기 
- const createKeepinText = async (req, res) => {
-    const userIdx = req._id;
-    const errors = validationResult(req);
-    console.log(req.body);
-    let { title, taken, date, category, record, friendIdx } = req.body;
-  
-    if (!title || taken == undefined || !date || !friendIdx) {
-      res.status(returnCode.BAD_REQUEST).json({
-        status: returnCode.BAD_REQUEST,
-        message: '필수 정보를 입력하세요.',
-      });
-      return;
+//키핀 등록하기
+const createKeepinText = async (req, res) => {
+  const userIdx = req._id;
+  const errors = validationResult(req);
+  console.log(req.body);
+  let { title, taken, date, category, record, friendIdx } = req.body;
+
+  if (!title || taken == undefined || !date || !friendIdx) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보를 입력하세요.',
+    });
+    return;
+  }
+
+  try {
+    const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx });
+    const friends = keepin.friendIdx;
+    const keepinIdx = keepin._id;
+    for (const friendId of friends) {
+      const friendIdx = friendId.toString();
+      const friend = await friendService.findFriendByFriendIdx({ friendIdx });
+      const keepins = friend.keepinIdx;
+      keepins.push(keepinIdx);
+      await friend.save();
     }
 
-    try {
-      const keepin = await keepinService.saveKeepinText({ title, taken, date, category, record, userIdx, friendIdx});
-      const friends = keepin.friendIdx;
-      const keepinIdx = keepin._id;
-      for (const friendId of friends) {
-        const friendIdx = friendId.toString();
-        const friend = await friendService.findFriendByFriendIdx({ friendIdx });
-        const keepins = friend.keepinIdx;
-        keepins.push(keepinIdx);
-        await friend.save();
-      }
-  
-      // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
-      // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
-      const data = {keepinIdx};
-      return res.status(returnCode.OK).json({
-        status: returnCode.OK,
-        message: '키핀하기 생성 반 성공',
-        data,
-      });
-    } catch (err) {
-      console.error(err.message);
-      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
-        status: returnCode.INTERNAL_SERVER_ERROR,
-        message: err.message,
-      });
-      return;
-    }
-  };
+    // await friend.save()를 서비스 호출로 변경하면 좋겠다 !
+    // await friendService.saveKeepinInFriend({friendIdx: friendIdx, keepinArray:keepins}); //keepins배열을 서비스에 넘김
+    const data = { keepinIdx };
+    return res.status(returnCode.OK).json({
+      status: returnCode.OK,
+      message: '키핀하기 생성 반 성공',
+      data,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
 
 /**
  * @api {post}  /keepin/photo/:keepinIdx 키핀하기 이미지 생성
@@ -233,7 +232,7 @@ const createKeepin = async (req, res) => {
  * 
  */
 
-//키핀 사진 올리기 
+//키핀 사진 올리기
 const createKeepinPhoto = async (req, res) => {
   const userIdx = req._id;
   const keepinIdx = req.params.keepinIdx;
@@ -246,11 +245,11 @@ const createKeepinPhoto = async (req, res) => {
   }
 
   try {
-    const keepin = await keepinService.saveKeepinPhoto({photo:locationArray, keepinIdx:keepinIdx });
+    const keepin = await keepinService.saveKeepinPhoto({ photo: locationArray, keepinIdx: keepinIdx });
 
     return res.status(returnCode.OK).json({
       status: returnCode.OK,
-      message: '키핀하기 생성 완전 성공'
+      message: '키핀하기 생성 완전 성공',
     });
   } catch (err) {
     console.error(err.message);
@@ -261,11 +260,6 @@ const createKeepinPhoto = async (req, res) => {
     return;
   }
 };
-
-
-
-
-
 
 /**
  * @api {get} /keepin?taken=true&recent=true 모아보기 준/받은 및 최신순/오래된순 조회
@@ -695,7 +689,7 @@ const getDetailKeepin = async (req, res) => {
 };
 
 /**
- * @api {put} /keepin/modify/:keepinId 키핀 수정
+ * @api {put} /keepin/modify/:keepinIdx 키핀 수정
  * 
  * @apiVersion 1.0.0
  * @apiName modifyKeepin
@@ -709,7 +703,7 @@ const getDetailKeepin = async (req, res) => {
  * 
  * @apiParamExample {json} Request-Example:
  * * url: /keepin/modify/60e5bdc46c3cdb135f1da1dc
- * * keepinId : 키핀 Id
+ * * keepinIdx : 키핀 Id
  * 
  * {
     "title": "가장 달콤했던 생일 선물",
