@@ -59,6 +59,7 @@ const createFriend = async (req, res) => {
 
   try {
     const alFriend = await friendService.findFriendByNameAnduserIdx({ name, userIdx });
+    console.log(alFriend.length);
     if (alFriend.length > 0) {
       return res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
@@ -460,7 +461,7 @@ const editFriendMemo = async (req, res) => {
  * }
  */
 const editFriendName = async (req, res) => {
-  const userIdx = req._Id;
+  const userIdx = req._id;
   const friendIdx = req.params.friendId;
   const { name } = req.body;
   try {
@@ -474,6 +475,7 @@ const editFriendName = async (req, res) => {
 
     //중복 check   //이거 name 하고 userIdx로 해야 함 !
     const alFriend = await friendService.findFriendByNameAnduserIdx({ name, userIdx });
+    console.log(alFriend.length);
     if (alFriend.length > 0) {
       return res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
