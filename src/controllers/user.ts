@@ -667,6 +667,11 @@ const findPassword = async (req, res) => {
     transporter.sendMail(emailOptions, (error, info) => {
       if (error) {
         console.log(error);
+
+        return res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: '이메일 전송 실패' + error,
+        });
       }
     });
 
