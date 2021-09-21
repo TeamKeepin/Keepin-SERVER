@@ -670,7 +670,7 @@ const findPassword = async (req, res) => {
 
         return res.status(returnCode.INTERNAL_SERVER_ERROR).json({
           status: returnCode.INTERNAL_SERVER_ERROR,
-          message: error,
+          message: '이메일 전송 실패' + error,
         });
       }
     });
