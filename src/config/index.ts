@@ -29,4 +29,6 @@ export default {
   jwtAlgorithm: process.env.JWT_ALGO,
 
   keepinPassword: process.env.Keepin_Password,
+
+  KAKAO_CLIENT: process.env.KAKAO_CLIENT,
 };
