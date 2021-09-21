@@ -664,7 +664,11 @@ const findPassword = async (req, res) => {
         '</h2>' +
         '<img style="border: 1px solid black !important; " src="https://user-images.githubusercontent.com/37949197/125971169-54c2fa76-6519-44df-840a-9804f6a13063.png" width="600px" />',
     };
-    transporter.sendMail(emailOptions, res);
+    transporter.sendMail(emailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      }
+    });
 
     const salt = await bcrypt.genSalt(10);
     const hashPwd = await bcrypt.hash(tempPassword, salt);
