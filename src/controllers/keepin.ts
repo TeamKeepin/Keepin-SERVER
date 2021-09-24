@@ -702,10 +702,9 @@ const getDetailKeepin = async (req, res) => {
  * @apiParamExample {json} Request-Example:
  * * url: /keepin/modify/60e5bdc46c3cdb135f1da1dc
  * * keepinIdx : 키핀 Id
- * 
+ * * Essential info: title, taken, date, friendIdx 
  * {
     "title": "가장 달콤했던 생일 선물",
-    "photo": ["KakaoTalk_20210109_164556314_01.jpg"],  (file로 올려주세요)
     "taken": true,
     "date": "2021-06-07",
     "category": ["생일", "축하"],
@@ -743,23 +742,25 @@ const modifyKeepin = async (req, res) => {
     return;
   }
 
-  //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
-  let photo = null;
-  var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
+  // //이미지가 안들어 왔을때 null로 저장, 들어오면 S3 url 저장
+  // let photo = null;
+  // var locationArray; // 함수 안에 있는거 호출 못함. 지역변수임.
 
-  if (req.files !== undefined) {
-    locationArray = req.files.map((img) => img.location);
+  // if (req.files !== undefined) {
+  //   locationArray = req.files.map((img) => img.location);
 
-    /*
-    //형식은 고려해보자
-    const type = req.files.mimetype.split('/')[1];
-    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
-      return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
-    }*/
-  }
+    
+  //   // //형식은 고려해보자
+  //   // const type = req.files.mimetype.split('/')[1];
+  //   // if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+  //   //   return res.status(401).send(util.fail(401, '유효하지 않은 형식입니다.'));
+  //   // }
+  // }
 
   try {
-    const ll = await friendService.findFriendsByKeepinIdx({ keepinIdx: keepinId }); // keepinId 하나씩 삭제
+    await friendService.findFriendsByKeepinIdx({ keepinIdx: keepinId }); // 기존 키핀의 친구 목록의 keepinId 하나씩 삭제
+    const keepin = await keepinService.findPhotosByKeepinIdx({ keepinIdx: keepinId });
+    const locationArray = keepin.photo;
 
     var data = await keepinService.modifyKeepinByKeepinIdx({
       keepinIdx: keepinId,
@@ -772,7 +773,7 @@ const modifyKeepin = async (req, res) => {
       friendIdx, //수정된 친구 배열이 다시 덮어쓰기 됨 : [실버영, 김씨워터]
     });
 
-    console.log(typeof friendIdx);
+    // console.log(typeof friendIdx);
     let friendArray = [];
 
     if (typeof friendIdx == 'string') {
