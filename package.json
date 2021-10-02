@@ -7,7 +7,7 @@
     "build": "tsc && node --max-old-space-size=12000 dist",
     "test": "nodemon",
     "docs": "apidoc -i src/controllers -o apidoc",
-    "restart": "yarn run build && pm2 restart dist"
+    "restart": "pm2 stop dist && yarn run build"
   },
   "dependencies": {
     "apidoc": "^0.28.1",
