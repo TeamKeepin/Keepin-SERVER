@@ -59,7 +59,6 @@ const createFriend = async (req, res) => {
 
   try {
     const alFriend = await friendService.findFriendByNameAnduserIdx({ name, userIdx });
-    console.log(alFriend.length);
     if (alFriend.length > 0) {
       return res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
@@ -475,7 +474,6 @@ const editFriendName = async (req, res) => {
 
     //중복 check   //이거 name 하고 userIdx로 해야 함 !
     const alFriend = await friendService.findFriendByNameAnduserIdx({ name, userIdx });
-    console.log(alFriend.length);
     if (alFriend.length > 0) {
       return res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,

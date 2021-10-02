@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import { check, validationResult } from 'express-validator';
-import { userService } from '../services';
+import { reminderService, userService } from '../services';
 import { keepinService } from '../services';
 import returnCode from '../library/returnCode';
 import crypto from 'crypto';
@@ -106,6 +106,7 @@ const signUp = async (req: Request, res: Response) => {
  * {
  *  "email": "android@naver.com",
  *  "password": "1234567",
+ *  "fcm": "dZGGF2WCR8a84hOFVRqP1g:APA91bHwjngfusM32br8TnRxEJ8PhiwBc06eBhtksQHWI8-9dakjCA8-bGD35FRojdPslE72fGt0y2GW9pP1N9yDaBHjgREhc7tUBaOfrkkN1DZam6a5VnOuxoFJIIx9uJhLF7nYHgs-"
  * }
  *
  * @apiSuccess {String} jwt
@@ -138,7 +139,15 @@ const signIn = async (req, res) => {
       message: '요청바디가 없습니다.',
     });
   }
-  const { email, password } = req.body;
+  const { email, password, fcm } = req.body;
+
+  if (!email|| !password || !fcm) {
+    res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '파라미터(email, password, fcm)를 입력하세요.',
+    });
+  }
+
   try {
     const user = await userService.findUser({ email });
 
@@ -158,10 +167,19 @@ const signIn = async (req, res) => {
       });
     }
 
+    //fcm != user.phonetoken일 경우 
+    if(fcm !== user.phoneToken){
+      // 1. UserService에서 phoneToken바꿔주기 
+      await userService.editPhoneToken({userIdx: user._id, phoneToken: fcm});
+      // 2. user._id로 지나지 않은 리마인더 조회헤서 그 라미인더에 있는 fcm을 req body 받은 fcm으로 변경 
+      await reminderService.findSpecificIsPassedReminder({userIdx: user._id, phoneToken: fcm});
+    }
+
+
     // Return jsonwebtoken
     const payload = {
       id: user._id,
-      fcm: user.phoneToken,
+      fcm: fcm,
     };
 
     const result = {
