@@ -76,7 +76,6 @@ import returnCode from '../library/returnCode';
 const createReminder = async (req, res) => {
   const userId = req._id;
   const fcm = req.fcm;
-  console.log(fcm);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -1229,8 +1228,6 @@ const modifyReminderAlarm = async (req, res) => {
         sendDate,
         daysAgo,
       });
-
-      console.log(resultAlarm);
     }
 
     return res.status(returnCode.OK).json({ status: returnCode.OK, message: '리마인더 알람 수정 성공' });

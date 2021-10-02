@@ -156,7 +156,6 @@ const createKeepin = async (req, res) => {
 const createKeepinText = async (req, res) => {
   const userIdx = req._id;
   const errors = validationResult(req);
-  console.log(req.body);
   let { title, taken, date, category, record, friendIdx } = req.body;
 
   if (!title || taken == undefined || !date || !friendIdx) {
@@ -644,17 +643,6 @@ const getDetailKeepin = async (req, res) => {
 
   try {
     const detail = await keepinService.findDetailKeepin({ userIdx: userIdx, keepinIdx: keepinIdx });
-
-    //friend의 이름 가져오기
-    // var friendNames = [];
-    // const friendIds = detail.friendIdx;
-    // var frienddata;
-    // for (var i=0; i<friendIds.length; i++) {
-    //   frienddata =  await friendService.findKeepinFriend({ friendIdx : friendIds[i].toString() });
-    //   console.log(friendIds[i])
-    //   friendNames.push(frienddata.name);
-    // }
-
     const year = detail.date.substring(0, 4);
     const month = detail.date.substring(5, 7);
     const day = detail.date.substring(8, 10);
@@ -773,7 +761,6 @@ const modifyKeepin = async (req, res) => {
       friendIdx, //수정된 친구 배열이 다시 덮어쓰기 됨 : [실버영, 김씨워터]
     });
 
-    // console.log(typeof friendIdx);
     let friendArray = [];
 
     if (typeof friendIdx == 'string') {

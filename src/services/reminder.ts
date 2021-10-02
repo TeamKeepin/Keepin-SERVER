@@ -64,6 +64,11 @@ export interface reminderFindInput {
   userIdx: string;
 }
 
+export interface reminderPhoneTokenInput {
+  userIdx: string;
+  phoneToken: string;
+}
+
 export interface reminderOncomingFindInput {
   userIdx: string;
   start: string; //시스템 시간 now() 이후.
@@ -166,6 +171,18 @@ const findAllReminder = () => {
 const findIsPassedReminder = () => {
   return Reminder.find({ isPassed: 0 }, { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 });
 };
+
+// 특정 사용자의 지나지 않은 리마인더들을 받을 수 있음.
+const findSpecificIsPassedReminder = (data: reminderPhoneTokenInput ) => {
+  const filter = {
+    userIdx:  mongoose.Types.ObjectId(data.userIdx),
+    isPassed: false
+  };
+
+  const result = Reminder.updateMany(filter, { $set: { fcm: data.phoneToken } }, { multi: true });
+  return result
+};
+
 
 // 리마인더 수정
 const modifyReminderChangeIsNotPassed = (data: reminderFindInputByReminderId) => {
@@ -273,4 +290,5 @@ export default {
   modifyReminderChangeIsNotPassed,
   modifyReminderChangeIsPassed,
   findIsPassedReminder,
+  findSpecificIsPassedReminder
 };

@@ -66,7 +66,6 @@ export default {
 
       const user = await userService.findUserbyIdx({ userIdx: result.id });
       if (refreshToken !== user.refreshToken) {
-        console.log('invalid refresh token');
         return TOKEN_INVALID;
       }
       const payload = {
@@ -76,14 +75,11 @@ export default {
       return jwt.sign(payload, config.jwtSecret);
     } catch (err) {
       if (err.message === 'jwt expired') {
-        console.log('expired token');
         return TOKEN_EXPIRED;
       } else if (err.message === 'invalid token') {
-        console.log('invalid token');
         console.log(TOKEN_INVALID);
         return TOKEN_INVALID;
       } else {
-        console.log('invalid token');
         return TOKEN_INVALID;
       }
     }

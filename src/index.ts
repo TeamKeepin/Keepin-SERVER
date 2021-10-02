@@ -61,7 +61,6 @@ const isDatePassed = async () => {
     // 오늘 기준으로 지났는지 안지났는지, 체크하는 함수
     const today = moment().format('YYYY-MM-DD');
 
-    //console.log();
 
     for (var remind of resultArray) {
       if (remind.date < today) {
@@ -70,8 +69,6 @@ const isDatePassed = async () => {
         await reminderService.modifyReminderChangeIsNotPassed({ reminderIdx: remind._id });
       }
     }
-
-    console.log('지난 것, 지나지 않은 것 구별 성공!');
   } catch (err) {
     console.error(err.message);
   }
