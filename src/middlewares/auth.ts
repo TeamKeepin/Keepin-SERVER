@@ -14,39 +14,16 @@ export default {
       const token = req.header('jwt');
       // Check if not token
       if (!token) {
-        return res.status(401).json({ message: '토큰이 없습니다.' });
+        return res.status(401).json({
+          status: returnCode.UNAUTHORIZED,
+          message: '토큰이 없습니다.',
+        });
       }
 
       // Verify token
       const user = await jwt.verify(token, config.jwtSecret);
-
-      if (user === undefined) {
-        res.status(401).json({
-          status: returnCode.UNAUTHORIZED,
-          message: '만료된 토큰입니다.',
-        });
-
-        return TOKEN_INVALID;
-      }
-
-      if (user === TOKEN_EXPIRED) {
-        return res.status(401).json({
-          status: returnCode.UNAUTHORIZED,
-          message: '만료된 토큰입니다.',
-        });
-      }
-      if (user === TOKEN_INVALID) {
-        return res.status(401).json({
-          status: returnCode.UNAUTHORIZED,
-          message: '유효하지 않은 토큰입니다.',
-        });
-      }
-
       const userIdx = user.id;
       const fcm = user.fcm;
-
-      // console.log(fcm);
-    
 
       if (!userIdx) {
         return res.status(401).json({
@@ -61,15 +38,20 @@ export default {
       }
     } catch (err) {
       if (err.message === 'jwt expired') {
-        console.log('expired token');
-        return TOKEN_EXPIRED;
+        return res.status(401).json({
+          status: returnCode.UNAUTHORIZED,
+          message: '만료된 토큰입니다.',
+        });
       } else if (err.message === 'invalid token') {
-        console.log('invalid token');
-        console.log(TOKEN_INVALID);
-        return TOKEN_INVALID;
+        return res.status(401).json({
+          status: returnCode.UNAUTHORIZED,
+          message: '유효하지 않은 토큰입니다.',
+        });
       } else {
-        console.log('invalid token');
-        return TOKEN_INVALID;
+        return res.status(401).json({
+          status: returnCode.UNAUTHORIZED,
+          message: '유효하지 않은 토큰입니다.',
+        });
       }
     }
   },
@@ -84,7 +66,6 @@ export default {
 
       const user = await userService.findUserbyIdx({ userIdx: result.id });
       if (refreshToken !== user.refreshToken) {
-        console.log('invalid refresh token');
         return TOKEN_INVALID;
       }
       const payload = {
@@ -94,14 +75,11 @@ export default {
       return jwt.sign(payload, config.jwtSecret);
     } catch (err) {
       if (err.message === 'jwt expired') {
-        console.log('expired token');
         return TOKEN_EXPIRED;
       } else if (err.message === 'invalid token') {
-        console.log('invalid token');
         console.log(TOKEN_INVALID);
         return TOKEN_INVALID;
       } else {
-        console.log('invalid token');
         return TOKEN_INVALID;
       }
     }

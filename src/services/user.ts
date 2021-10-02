@@ -47,6 +47,11 @@ export interface userEditPhoneInput {
   phone: string,
 }
 
+export interface userEditPhoneTokenInput {
+  userIdx: string,
+  phoneToken: string
+}
+
 
 const saveUser = (data: userCreateInput) => {
     return User.create( data );
@@ -94,6 +99,10 @@ const saveRefreshToken = (data: refreshTokenInput) => {
   return result;
 };
 
+const editPhoneToken = (data: userEditPhoneTokenInput) => {
+  return User.findOneAndUpdate({_id: data.userIdx}, {phoneToken: data.phoneToken});
+}
+
 const editUser = (data: userEditNameInput) => {
   return User.findOneAndUpdate({_id: data.userIdx},{name: data.name}, {
     new: true,
@@ -131,6 +140,7 @@ export default {
   editPassword,
   editPhone,
   deleteUser,
-  findUserEmail
+  findUserEmail,
+  editPhoneToken
   // savePasswordToken
 }
