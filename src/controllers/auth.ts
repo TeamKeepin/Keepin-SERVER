@@ -23,7 +23,7 @@ passport.use(
 );
 
 /**
- * @api {get} /retoken 토큰 재발급
+ * @api {get} /auth 토큰 재발급
  * 
  * @apiVersion 1.0.0
  * @apiName retoken
