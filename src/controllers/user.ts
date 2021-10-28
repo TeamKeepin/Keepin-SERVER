@@ -182,7 +182,7 @@ const signIn = async (req, res) => {
     };
 
     const result = {
-      accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '30m' }),
+      accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '5m' }),
       refreshToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '7d' }),
     };
 
