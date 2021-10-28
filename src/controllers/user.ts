@@ -141,7 +141,7 @@ const signIn = async (req, res) => {
   }
   const { email, password, fcm } = req.body;
 
-  if (!email|| !password || !fcm) {
+  if (!email || !password || !fcm) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
       message: '파라미터(email, password, fcm)를 입력하세요.',
@@ -167,14 +167,13 @@ const signIn = async (req, res) => {
       });
     }
 
-    //fcm != user.phonetoken일 경우 
-    if(fcm !== user.phoneToken){
-      // 1. UserService에서 phoneToken바꿔주기 
-      await userService.editPhoneToken({userIdx: user._id, phoneToken: fcm});
-      // 2. user._id로 지나지 않은 리마인더 조회헤서 그 라미인더에 있는 fcm을 req body 받은 fcm으로 변경 
-      await reminderService.findSpecificIsPassedReminder({userIdx: user._id, phoneToken: fcm});
+    //fcm != user.phonetoken일 경우
+    if (fcm !== user.phoneToken) {
+      // 1. UserService에서 phoneToken바꿔주기
+      await userService.editPhoneToken({ userIdx: user._id, phoneToken: fcm });
+      // 2. user._id로 지나지 않은 리마인더 조회헤서 그 라미인더에 있는 fcm을 req body 받은 fcm으로 변경
+      await reminderService.findSpecificIsPassedReminder({ userIdx: user._id, phoneToken: fcm });
     }
-
 
     // Return jsonwebtoken
     const payload = {
@@ -183,7 +182,7 @@ const signIn = async (req, res) => {
     };
 
     const result = {
-      accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '7d' }),
+      accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '30m' }),
       refreshToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '7d' }),
     };
 
