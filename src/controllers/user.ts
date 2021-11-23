@@ -182,9 +182,9 @@ const signIn = async (req, res) => {
     };
 
     const result = {
-      accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '30m' }),
-      refreshToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '7d' }),
-    };
+      accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '5d' }),
+      refreshToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '10d' }),
+
 
     // refreshToken을 DB에 저장
     const userInfo = await userService.saveRefreshToken({ id: payload.id, refreshToken: result.refreshToken });
