@@ -76,7 +76,6 @@ import returnCode from '../library/returnCode';
 const createReminder = async (req, res) => {
   const userId = req._id;
   const fcm = req.fcm;
-  console.log(fcm);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -1136,9 +1135,7 @@ const modifyReminder = async (req, res) => {
  * * reminderId : 리마인더 Id
  * 
  * 
- * * isAlarm : 푸쉬알람 여부(true/false) -> true일 경우, daysAgo 값 요청
- * * isImportant : 중요 여부(true/false)
- * * daysAgo: 0(당일),1(1일전),2(2일전),3(3일전),7(7일전) -> String으로 요청
+ * * isAlarm : 푸쉬알람 여부(true/false) -> true일 경우 리마인더 당일 알람.
  * 
  * - 알람 받는 경우
  * {
@@ -1203,12 +1200,11 @@ const modifyReminderAlarm = async (req, res) => {
         reminderIdx: reminderId,
       });
 
-      // date는 2021-03-21
-      // realDate = date - daysAgo
-      var realDate = moment(reminderDetail.date).subtract(daysAgo, 'd').format('YYYY-MM-DD');
-
       daysAgo = '0';
 
+      // date는 2021-03-21
+      // realDate = date - daysAgo
+      var realDate = reminderDetail[0].date;
       resultAlarm = await reminderService.modifyReminderAlarm({
         reminderId,
         isAlarm,

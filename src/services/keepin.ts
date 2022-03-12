@@ -176,6 +176,10 @@ const findKeepinsByFriendIdxAndTaken = (data: keepinFindByFriendIdxAndTakenInput
         createdAt: -1 });
 };
 
+const findPhotosByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
+  return Keepin.findOne({ _id: data.keepinIdx }, { photo: 1});
+}
+
 // 키핀 수정
 const modifyKeepinByKeepinIdx = (data: keepinModifyInput) => {
   const keepins = Keepin.findOneAndUpdate(
@@ -193,6 +197,7 @@ const modifyKeepinByKeepinIdx = (data: keepinModifyInput) => {
   );
   return keepins;
 };
+
 
 // 키핀 삭제
 const deleteKeepinByKeepinIdx = (data: keepinFindByKeepinIdxInput) => {
@@ -230,4 +235,5 @@ export default {
   deleteUserData,
   saveKeepinText,
   saveKeepinPhoto,
+  findPhotosByKeepinIdx
 };

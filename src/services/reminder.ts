@@ -64,6 +64,11 @@ export interface reminderFindInput {
   userIdx: string;
 }
 
+export interface reminderPhoneTokenInput {
+  userIdx: string;
+  phoneToken: string;
+}
+
 export interface reminderOncomingFindInput {
   userIdx: string;
   start: string; //시스템 시간 now() 이후.
@@ -167,6 +172,18 @@ const findIsPassedReminder = () => {
   return Reminder.find({ isPassed: 0 }, { _id: 1, title: 1, date: 1, year: 1, isImportant: 1 });
 };
 
+// 특정 사용자의 지나지 않은 리마인더들을 받을 수 있음.
+const findSpecificIsPassedReminder = (data: reminderPhoneTokenInput ) => {
+  const filter = {
+    userIdx:  mongoose.Types.ObjectId(data.userIdx),
+    isPassed: false
+  };
+
+  const result = Reminder.updateMany(filter, { $set: { fcm: data.phoneToken } }, { multi: true });
+  return result
+};
+
+
 // 리마인더 수정
 const modifyReminderChangeIsNotPassed = (data: reminderFindInputByReminderId) => {
   const result = Reminder.findOneAndUpdate(
@@ -235,6 +252,7 @@ const modifyReminderAlarm = (data: reminderModifyAlarmInput) => {
     {
       isAlarm: data.isAlarm,
       sendDate: data.sendDate,
+      daysAgo: data.daysAgo,
     },
     { new: true }
   );
@@ -250,7 +268,7 @@ const deleteUserData = (data: reminderFindInput) => {
 };
 
 const findAlarmReminder = (data: reminderAlarmInput) => {
-  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1 });
+  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1, sendDate: 1 });
 };
 
 export default {
@@ -272,4 +290,5 @@ export default {
   modifyReminderChangeIsNotPassed,
   modifyReminderChangeIsPassed,
   findIsPassedReminder,
+  findSpecificIsPassedReminder
 };

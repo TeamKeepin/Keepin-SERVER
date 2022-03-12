@@ -460,7 +460,7 @@ const editFriendMemo = async (req, res) => {
  * }
  */
 const editFriendName = async (req, res) => {
-  const userIdx = req._Id;
+  const userIdx = req._id;
   const friendIdx = req.params.friendId;
   const { name } = req.body;
   try {

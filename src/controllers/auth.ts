@@ -1,12 +1,29 @@
 import jwt from 'jsonwebtoken';
 import returnCode from '../library/returnCode';
 import auth from '../middlewares/auth';
+import config from '../config';
+const passport = require('passport');
+const KakaoStrategy = require('passport-kakao').Strategy;
 
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
+passport.use(
+  'kakao',
+  new KakaoStrategy(
+    {
+      clientID: config.KAKAO_CLIENT,
+      callbackURL: '/auth/kakao/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      console.log(accessToken);
+      console.log(profile);
+    }
+  )
+);
+
 /**
- * @api {get} /retoken 토큰 재발급
+ * @api {get} /auth 토큰 재발급
  * 
  * @apiVersion 1.0.0
  * @apiName retoken
