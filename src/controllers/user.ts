@@ -24,7 +24,7 @@ import nodemailer from 'nodemailer';
  * 
  * @apiParamExample {json} Request-Example:
  * {
-    "email": "android@naver.com",
+    "email": "abcde@naver.com",
     "password": "1234567",
     "name": "android",
     "birth": "1997-12-22",
@@ -184,8 +184,7 @@ const signIn = async (req, res) => {
     const result = {
       accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '5d' }),
       refreshToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '10d' }),
-
-
+    }
     // refreshToken을 DB에 저장
     const userInfo = await userService.saveRefreshToken({ id: payload.id, refreshToken: result.refreshToken });
 
