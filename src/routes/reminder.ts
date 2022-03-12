@@ -36,4 +36,7 @@ router.put('/modify/alarm/:reminderId', auth.checkToken, reminderController.modi
 //sendDate가 오늘인 것 조회
 router.get('/sendDate', reminderController.getSendDate);
 
+//sendDate가 오늘인 것 조회
+router.get('/putAlarmTime', reminderController.putAlarmTime);
+
 export default router;

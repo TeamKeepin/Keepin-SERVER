@@ -6,6 +6,7 @@ export interface IReminder {
   alarm: boolean;
   important: boolean;
   daysAgo: string;
+  alarmTime: string;
   userIdx: mongoose.Types.ObjectId;
   fcm: string;
 }

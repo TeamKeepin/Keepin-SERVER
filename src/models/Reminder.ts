@@ -49,6 +49,7 @@ const ReminderSchema = new mongoose.Schema(
     },
     alarmTime: {
       type: String,
+      default: 9
     }
   },
   {
