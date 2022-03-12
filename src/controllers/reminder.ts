@@ -28,6 +28,7 @@ import returnCode from '../library/returnCode';
     "date": "2021-08-22",
     "isAlarm": true,
     "daysAgo": "2",
+    "alarmTime": "14:00",
     "isImportant": true
  * }
  * 
@@ -85,7 +86,7 @@ const createReminder = async (req, res) => {
     });
   }
 
-  let { title, date, daysAgo, isAlarm, isImportant } = req.body;
+  let { title, date, daysAgo, alarmTime, isAlarm, isImportant } = req.body;
   // 파라미터 확인
   if (!title || !date || isAlarm == undefined || isImportant == undefined) {
     res.status(returnCode.BAD_REQUEST).json({
@@ -154,6 +155,7 @@ const createReminder = async (req, res) => {
         year,
         month,
         daysAgo,
+        alarmTime,
         fcm,
         isPassed: ispassed,
       });
@@ -997,6 +999,7 @@ const deleteReminder = async (req, res) => {
     "date": "2021-08-22",
     "isAlarm": true,
     "daysAgo": "2",
+    "alarmTime": "14:00",
     "isImportant": true
  * }
  * 

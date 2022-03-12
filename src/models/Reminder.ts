@@ -47,6 +47,9 @@ const ReminderSchema = new mongoose.Schema(
       type: Boolean,
       default: 0,
     },
+    alarmTime: {
+      type: String,
+    }
   },
   {
     timestamps: {

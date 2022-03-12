@@ -12,6 +12,7 @@ export interface reminderCreateInputWithDaysAgo {
   year: string;
   month: string;
   daysAgo: string;
+  alarmTime: string;
   fcm: string;
   isPassed: boolean;
 }
