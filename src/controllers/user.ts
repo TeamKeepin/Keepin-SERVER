@@ -24,7 +24,7 @@ import nodemailer from 'nodemailer';
  * 
  * @apiParamExample {json} Request-Example:
  * {
-    "email": "android@naver.com",
+    "email": "abcde@naver.com",
     "password": "1234567",
     "name": "android",
     "birth": "1997-12-22",
