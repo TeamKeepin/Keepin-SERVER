@@ -9,6 +9,15 @@ export interface userCreateInput {
     phoneToken: string,
     phone: string
 }
+
+export interface socialUserCreateInput {
+    socialToken: string,
+    name: string,
+    birth: string,
+    phoneToken: string,
+    phone: string
+}
+
 export interface userFindInput {
     email: string
 }
@@ -55,6 +64,10 @@ export interface userEditPhoneTokenInput {
 
 const saveUser = (data: userCreateInput) => {
     return User.create( data );
+};
+
+const saveSocialUser = (data: socialUserCreateInput) => {
+  return User.create( data );
 };
 
 const findUser = (data: userFindInput) => {
@@ -131,6 +144,7 @@ const deleteUser = (data: userIdxInput) => {
 
 export default {
   saveUser,
+  saveSocialUser,
   findUser,
   findUserbyIdx,
   findUserbyEmail,

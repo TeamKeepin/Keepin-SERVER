@@ -6,6 +6,7 @@ export interface IUser {
     phone: string;
     phoneToken: string;
     refreshToken: string;
+    socialToken: string;
     // passwordToken: string;
   }
   

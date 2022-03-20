@@ -9,6 +9,7 @@ import { keepinService } from '../services';
 import returnCode from '../library/returnCode';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import axios from 'axios';
 
 /**
  * @api {post} /user/signup 회원가입
@@ -89,6 +90,111 @@ const signUp = async (req: Request, res: Response) => {
     return;
   }
 };
+
+/**
+ * @api {post} /user/signup/social 소셜 회원가입
+ * 
+ * @apiVersion 1.0.0
+ * @apiName SocialSignUp
+ * @apiGroup User
+ * 
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json"
+ * }
+ * 
+ * @apiParamExample {json} Request-Example:
+ * {
+    "accessToeken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ",
+    "phoneToken": "cvkmjS2aTkrdqHrguqdlO4:APA91bG5SOTKPBc_Z_EL5_aQdKlXPF1Y5-Ujvo8gFYVn3i8Q--rlFfrruIoc41qqy7NZcXcPUSXo7oGbhA8HtOpaabI8ISbhmHkWX0btVJVhFAJkHrbObkcTWJ829rT8juvTvBD-izZC" ,
+ * }
+ *
+ * @apiSuccess {String} jwt
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ * 200 OK
+ * {
+ *  "status": 200,
+ *  "message": "회원가입 성공",
+ *  "socialToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ",
+ * }
+ * 
+ * @apiErrorExample Error-Response:
+ * 
+ * 400 accessToken의 정보가 틀렸을 때 
+ * {
+    "status": 400,
+    "message": "올바르지 않은 accessToken입니다."
+ * }
+ */
+  const socialSignUp = async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      errors: [{ msg: '요청바디가 없습니다.' }],
+      });
+    }
+
+    const { accessToken, phoneToken } = req.body;
+
+    // 파라미터 확인
+    if ( !accessToken || !phoneToken) {
+      res.status(returnCode.BAD_REQUEST).json({
+      status: returnCode.BAD_REQUEST,
+      message: '필수 정보를 입력하세요.',
+      });
+      return;
+    }
+    
+    // 카카오로 부터 유저 정보를 받아온다. 
+    let userKakaoInfo = null;
+
+    try{
+      userKakaoInfo = await axios.get("https://kapi.kakao.com/v2/user/me", {
+        headers: {
+          'Authorization': 'Bearer ${accessToken}',
+        }
+      });
+    } catch(err) {
+      res.status(returnCode.BAD_REQUEST).json({
+        status: returnCode.BAD_REQUEST,
+        message: '올바르지 않은 accessToken입니다.',
+      });
+      return;
+    }
+   
+    const {kakao_account} = userKakaoInfo.data;
+    const { name, email, birthyear,  birthday, phone_number} = kakao_account.name;
+
+    //형식: "1997-12-22"
+    const delimeter = '-';
+    const birth = birthyear + delimeter + birthday.substring(0,2) + delimeter + birthday.substring(2);
+
+    //형식: 010-1234-5678
+    const phone = phone_number.subString(4);
+
+    // 이메일 암호화하여 토큰 발행 
+    const salt = await bcrypt.genSalt(10);
+    const socialToken = await bcrypt.hash(email, salt);
+    await userService.saveSocialUser({ socialToken, name, birth, phoneToken, phone });
+
+
+   try {
+    res.json({
+      status: returnCode.OK,
+      message: '회원가입 성공',
+      accessToken: accessToken,
+    });
+    } catch (err) {
+      console.error(err.message);
+      res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+      return;
+    }
+  };
 
 /**
  * @api {post} /user/signin 로그인

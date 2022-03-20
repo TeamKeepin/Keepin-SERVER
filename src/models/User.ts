@@ -30,6 +30,9 @@ const UserSchema = new mongoose.Schema({
     refreshToken: {
       type: String,
     },
+    socialToken: {
+      type: String,
+    }
     // passwordToken: {
     //   type: String,
     // }
