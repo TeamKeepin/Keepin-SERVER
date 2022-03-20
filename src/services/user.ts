@@ -12,6 +12,7 @@ export interface userCreateInput {
 
 export interface socialUserCreateInput {
     socialToken: string,
+    email: string,
     name: string,
     birth: string,
     phoneToken: string,
