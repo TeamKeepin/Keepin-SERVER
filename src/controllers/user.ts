@@ -177,7 +177,7 @@ const signUp = async (req: Request, res: Response) => {
     // 이메일 암호화하여 토큰 발행 
     const salt = await bcrypt.genSalt(10);
     const socialToken = await bcrypt.hash(email, salt);
-    await userService.saveSocialUser({ socialToken, name, birth, phoneToken, phone });
+    await userService.saveSocialUser({ socialToken, email, name, birth, phoneToken, phone });
 
 
    try {
@@ -195,12 +195,11 @@ const signUp = async (req: Request, res: Response) => {
       return;
     }
   };
-
 /**
- * @api {post} /user/signin 로그인
+ * @api {post} /user/signin/social 소셜 로그인
  *
  * @apiVersion 1.0.0
- * @apiName SignIn
+ * @apiName SocialSignIn
  * @apiGroup User
  *
  * @apiHeaderExample {json} Header-Example:
@@ -210,8 +209,7 @@ const signUp = async (req: Request, res: Response) => {
  *
  * @apiParamExample {json} Request-Example:
  * {
- *  "email": "android@naver.com",
- *  "password": "1234567",
+ *  "socialToken": "A91bHwjngfusM32br8TnRxEJ8PhiwBc06e",  
  *  "fcm": "dZGGF2WCR8a84hOFVRqP1g:APA91bHwjngfusM32br8TnRxEJ8PhiwBc06eBhtksQHWI8-9dakjCA8-bGD35FRojdPslE72fGt0y2GW9pP1N9yDaBHjgREhc7tUBaOfrkkN1DZam6a5VnOuxoFJIIx9uJhLF7nYHgs-"
  * }
  *
@@ -234,10 +232,11 @@ const signUp = async (req: Request, res: Response) => {
  * 400 이메일이 틀렸거나 비밀번호 틀릴 때
  * {
     "status": 400,
-    "message": "이메일/비밀번호를 다시 확인해주세요."
+    "message": "토큰 값을 확인해 주세요."
  * }
  */
-const signIn = async (req, res) => {
+
+const socialSignIn = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({
@@ -245,31 +244,31 @@ const signIn = async (req, res) => {
       message: '요청바디가 없습니다.',
     });
   }
-  const { email, password, fcm } = req.body;
+  const { socialToken, fcm } = req.body;
 
-  if (!email || !password || !fcm) {
+  if (!socialToken || !fcm) {
     res.status(returnCode.BAD_REQUEST).json({
       status: returnCode.BAD_REQUEST,
-      message: '파라미터(email, password, fcm)를 입력하세요.',
+      message: '파라미터(socialToken, fcm)를 입력하세요.',
     });
   }
 
   try {
-    const user = await userService.findUser({ email });
+    const user = await userService.findUserbySocialToken({ socialToken });
 
     if (!user) {
       res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
-        message: '이메일/비밀번호를 다시 확인해주세요.',
+        message: '토큰 값을 다시 확인해주세요.',
       });
     }
     // Encrpyt password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(socialToken, user.socialToken);
 
     if (!isMatch) {
       res.status(returnCode.BAD_REQUEST).json({
         status: returnCode.BAD_REQUEST,
-        message: '이메일/비밀번호를 다시 확인해주세요.',
+        message: '토큰 값을 다시 확인해주세요.',
       });
     }
 
@@ -312,6 +311,128 @@ const signIn = async (req, res) => {
     return;
   }
 };
+
+/**
+ * @api {post} /user/signin 로그인
+ *
+ * @apiVersion 1.0.0
+ * @apiName SignIn
+ * @apiGroup User
+ *
+ * @apiHeaderExample {json} Header-Example:
+ * {
+ *  "Content-Type": "application/json"
+ * }
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+ *  "email": "android@naver.com",
+ *  "password": "1234567",
+ *  "fcm": "dZGGF2WCR8a84hOFVRqP1g:APA91bHwjngfusM32br8TnRxEJ8PhiwBc06eBhtksQHWI8-9dakjCA8-bGD35FRojdPslE72fGt0y2GW9pP1N9yDaBHjgREhc7tUBaOfrkkN1DZam6a5VnOuxoFJIIx9uJhLF7nYHgs-"
+ * }
+ *
+ * @apiSuccess {String} jwt
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * 200 OK
+ * {
+    "status": 200,
+    "message": "로그인 성공",
+    "data": {
+        "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWQ5YzQwNGIzNjA1NzZkMDgwNWI3YyIsImVtYWlsIjoiYW5kcm9pZEBuYXZlci5jb20iLCJpYXQiOjE2MjYxODUxMjgsImV4cCI6MTYyNjc4OTkyOH0.a9ON9hTHggsO5DlqdVfIeh6rnsI1KB8v8Z8NN8QMKzI",
+        "name": "android"
+    }
+ * }
+ *
+ * @apiErrorExample Error-Response:
+ * 
+ * 400 이메일이 틀렸거나 비밀번호 틀릴 때
+ * {
+    "status": 400,
+    "message": "이메일/비밀번호를 다시 확인해주세요."
+ * }
+ */
+
+    const signIn = async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        res.status(400).json({
+          status: returnCode.BAD_REQUEST,
+          message: '요청바디가 없습니다.',
+        });
+      }
+      const { email, password, fcm } = req.body;
+    
+      if (!email || !password || !fcm) {
+        res.status(returnCode.BAD_REQUEST).json({
+          status: returnCode.BAD_REQUEST,
+          message: '파라미터(email, password, fcm)를 입력하세요.',
+        });
+      }
+    
+      try {
+        const user = await userService.findUser({ email });
+    
+        if (!user) {
+          res.status(returnCode.BAD_REQUEST).json({
+            status: returnCode.BAD_REQUEST,
+            message: '이메일/비밀번호를 다시 확인해주세요.',
+          });
+        }
+        // Encrpyt password
+        const isMatch = await bcrypt.compare(password, user.password);
+    
+        if (!isMatch) {
+          res.status(returnCode.BAD_REQUEST).json({
+            status: returnCode.BAD_REQUEST,
+            message: '이메일/비밀번호를 다시 확인해주세요.',
+          });
+        }
+    
+        //fcm != user.phonetoken일 경우
+        if (fcm !== user.phoneToken) {
+          // 1. UserService에서 phoneToken바꿔주기
+          await userService.editPhoneToken({ userIdx: user._id, phoneToken: fcm });
+          // 2. user._id로 지나지 않은 리마인더 조회헤서 그 라미인더에 있는 fcm을 req body 받은 fcm으로 변경
+          await reminderService.findSpecificIsPassedReminder({ userIdx: user._id, phoneToken: fcm });
+        }
+    
+        // Return jsonwebtoken
+        const payload = {
+          id: user._id,
+          fcm: fcm,
+        };
+    
+        const result = {
+          accessToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '5d' }),
+          refreshToken: jwt.sign(payload, config.jwtSecret, { expiresIn: '10d' }),
+        }
+        // refreshToken을 DB에 저장
+        const userInfo = await userService.saveRefreshToken({ id: payload.id, refreshToken: result.refreshToken });
+    
+        res.json({
+          status: returnCode.OK,
+          message: '로그인 성공',
+          data: {
+            jwt: result.accessToken,
+            refreshToken: result.refreshToken,
+            name: user.name,
+          },
+        });
+      } catch (err) {
+        console.error(err.message);
+        res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+          status: returnCode.INTERNAL_SERVER_ERROR,
+          message: err.message,
+        });
+        return;
+      }
+    };
+
+
+
+
 
 /**
  * @api {post} /user/email/check 이메일 중복 체크
