@@ -28,6 +28,7 @@ import returnCode from '../library/returnCode';
     "date": "2021-08-22",
     "isAlarm": true,
     "daysAgo": "2",
+    "alarmTime": "14",
     "isImportant": true
  * }
  * 
@@ -85,7 +86,7 @@ const createReminder = async (req, res) => {
     });
   }
 
-  let { title, date, daysAgo, isAlarm, isImportant } = req.body;
+  let { title, date, daysAgo, alarmTime, isAlarm, isImportant } = req.body;
   // 파라미터 확인
   if (!title || !date || isAlarm == undefined || isImportant == undefined) {
     res.status(returnCode.BAD_REQUEST).json({
@@ -154,6 +155,7 @@ const createReminder = async (req, res) => {
         year,
         month,
         daysAgo,
+        alarmTime,
         fcm,
         isPassed: ispassed,
       });
@@ -997,6 +999,7 @@ const deleteReminder = async (req, res) => {
     "date": "2021-08-22",
     "isAlarm": true,
     "daysAgo": "2",
+    "alarmTime": "14",
     "isImportant": true
  * }
  * 
@@ -1041,7 +1044,7 @@ const modifyReminder = async (req, res) => {
     });
   }
 
-  let { title, date, daysAgo, isAlarm, isImportant } = req.body;
+  let { title, date, daysAgo, alarmTime, isAlarm, isImportant } = req.body;
   // 파라미터 확인
   if (!title || !date || isAlarm == undefined || isImportant == undefined) {
     res.status(returnCode.BAD_REQUEST).json({
@@ -1101,6 +1104,7 @@ const modifyReminder = async (req, res) => {
       isAlarm,
       isImportant,
       daysAgo,
+      alarmTime,
       year,
       month,
       isPassed: ispassed,
@@ -1241,6 +1245,7 @@ const modifyReminderAlarm = async (req, res) => {
 //SendDate 조회
 const getSendDate = async (req, res) => {
   const today = moment().format('YYYY-MM-DD');
+  const todayHour = String(moment().hours()) // 10
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -1251,9 +1256,27 @@ const getSendDate = async (req, res) => {
   }
 
   try {
-    const resultArray = await reminderService.findAlarmReminder({ today });
+    const resultArray = await reminderService.findAlarmReminder({ today, todayHour });
 
     return res.status(returnCode.OK).json(resultArray);
+  } catch (err) {
+    console.error(err.message);
+    res.status(returnCode.INTERNAL_SERVER_ERROR).json({
+      status: returnCode.INTERNAL_SERVER_ERROR,
+      message: err.message,
+    });
+    return;
+  }
+};
+
+//putAlarmTime 조회
+const putAlarmTime = async (req, res) => {
+  const errors = validationResult(req);
+
+  try {
+    const resultArray = await reminderService.firstUpdateAlarmTime();
+
+    return res.status(returnCode.OK).json({ status: returnCode.OK, message: 'alarmTime 9 세팅 성공' });
   } catch (err) {
     console.error(err.message);
     res.status(returnCode.INTERNAL_SERVER_ERROR).json({
@@ -1275,4 +1298,5 @@ export default {
   modifyReminder,
   modifyReminderAlarm,
   getSendDate,
+  putAlarmTime
 };

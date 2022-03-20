@@ -12,6 +12,7 @@ export interface reminderCreateInputWithDaysAgo {
   year: string;
   month: string;
   daysAgo: string;
+  alarmTime: string;
   fcm: string;
   isPassed: boolean;
 }
@@ -24,6 +25,7 @@ export interface reminderModifyInputWithDaysAgo {
   isAlarm: boolean;
   isImportant: boolean;
   daysAgo: string;
+  alarmTime: string;
   year: string;
   month: string;
   isPassed: boolean;
@@ -91,6 +93,7 @@ export interface reminderFindInputByReminderId {
 
 export interface reminderAlarmInput {
   today: string;
+  todayHour: string;
 }
 
 const saveReminderWithDaysAgo = (data: reminderCreateInputWithDaysAgo) => {
@@ -216,6 +219,7 @@ const modifyReminderWithDaysAgo = (data: reminderModifyInputWithDaysAgo) => {
       title: data.title,
       date: data.date,
       daysAgo: data.daysAgo,
+      alarmTime: data.alarmTime,
       sendDate: data.sendDate,
       year: data.year,
       month: data.month,
@@ -268,7 +272,12 @@ const deleteUserData = (data: reminderFindInput) => {
 };
 
 const findAlarmReminder = (data: reminderAlarmInput) => {
-  return Reminder.find({ sendDate: data.today }, { title: 1, daysAgo: 1, fcm: 1, sendDate: 1 });
+  return Reminder.find({ sendDate: data.today, alarmTime: data.todayHour }, { title: 1, daysAgo: 1, fcm: 1, sendDate: 1, alarmTime: 1 });
+};
+
+const firstUpdateAlarmTime = ( ) => {
+  const result = Reminder.updateMany({}, { $set: { alarmTime: "9" } }, { multi: true });
+  return result
 };
 
 export default {
@@ -290,5 +299,6 @@ export default {
   modifyReminderChangeIsNotPassed,
   modifyReminderChangeIsPassed,
   findIsPassedReminder,
-  findSpecificIsPassedReminder
+  findSpecificIsPassedReminder,
+  firstUpdateAlarmTime
 };
