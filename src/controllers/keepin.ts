@@ -3,7 +3,6 @@ import { friendService, keepinService } from '../services';
 import returnCode from '../library/returnCode';
 import mongoose from 'mongoose';
 import moment from 'moment';
-import { LexRuntime } from 'aws-sdk';
 
 /**
  * @api {post} /keepin/all 키핀하기 생성

@@ -25,5 +25,8 @@ yarn.lock
 
 .env
 
+/src/middlewares/multer.ts
+
 /src/s3config
-/dist
+
+s3config.json
