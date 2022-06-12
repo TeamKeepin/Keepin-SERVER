@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const multerS3 = require('multer-s3');
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
-aws_sdk_1.default.config.loadFromPath('./s3config.json');
+aws_sdk_1.default.config.loadFromPath(__dirname + '/s3config.json');
 const s3 = new aws_sdk_1.default.S3();
 const upload = (0, multer_1.default)({
     storage: multerS3({
